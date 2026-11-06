@@ -158,3 +158,28 @@ def test_status_warns_when_wmp_moves_files(system, monkeypatch) -> None:
     result = runner.invoke(cli.app, ["status", "--port", "1"])
     assert result.exit_code == 0
     assert "AutoRename" in result.output and "AutoOrganize" in result.output
+
+
+def test_background_printer_never_blocks_the_caller() -> None:
+    """Regressione 2026-11-06: una selezione nella console ha fermato il server."""
+    import threading
+    import time
+
+    release = threading.Event()
+    printed: list[str] = []
+
+    class FrozenConsole:
+        def print(self, *args, **kwargs) -> None:
+            release.wait(5)  # come una console in modalità selezione
+            printed.append(args[0])
+
+    printer = cli.BackgroundPrinter(FrozenConsole())  # type: ignore[arg-type]
+    start = time.monotonic()
+    for i in range(50):
+        printer.print(f"riga {i}")
+    assert time.monotonic() - start < 0.5  # il chiamante (il server) non aspetta
+    release.set()
+    deadline = time.monotonic() + 5
+    while len(printed) < 50 and time.monotonic() < deadline:
+        time.sleep(0.01)
+    assert printed == [f"riga {i}" for i in range(50)]  # niente perso, in ordine

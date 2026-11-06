@@ -7,9 +7,11 @@ import contextlib
 import datetime as dt
 import io
 import json
+import queue
 import shutil
 import socket
 import sys
+import threading
 import urllib.parse
 from enum import StrEnum
 from pathlib import Path
@@ -34,6 +36,41 @@ app = typer.Typer(
     help="Server locale di metadati per Windows Media Player Legacy.",
 )
 console = Console()
+
+
+class BackgroundPrinter:
+    """Stampa in console da un thread a parte, senza mai bloccare chi chiama.
+
+    Su Windows, selezionare del testo nella finestra (Modifica rapida) sospende chi scrive su
+    quella console finché la selezione resta: il 2026-11-06 il server si è fermato a metà di
+    una ricerca dopo che l'utente aveva copiato una riga del log. Le righe ora vanno in coda e
+    il server continua a rispondere a WMP.
+    """
+
+    def __init__(self, target: Console) -> None:
+        self._target = target
+        self._queue: queue.SimpleQueue[tuple[tuple[Any, ...], dict[str, Any]]] = queue.SimpleQueue()
+        self._thread = threading.Thread(target=self._run, name="console", daemon=True)
+        self._thread.start()
+
+    def print(self, *args: Any, **kwargs: Any) -> None:
+        self._queue.put((args, kwargs))
+
+    def _run(self) -> None:
+        while True:
+            args, kwargs = self._queue.get()
+            with contextlib.suppress(Exception):
+                self._target.print(*args, **kwargs)
+
+
+_background: BackgroundPrinter | None = None
+
+
+def background_print(*args: Any, **kwargs: Any) -> None:
+    global _background
+    if _background is None:
+        _background = BackgroundPrinter(console)
+    _background.print(*args, **kwargs)
 
 
 class StoreChoice(StrEnum):
@@ -239,7 +276,7 @@ def _print_record(record: dict[str, Any], dest: Path) -> None:
     upstream = f" ← server {record['upstream']['status']}" if "upstream" in record else ""
     error = f" [red]({record['upstream_error']})[/red]" if "upstream_error" in record else ""
     stamp = dt.datetime.now().strftime("%H:%M:%S")
-    console.print(
+    background_print(
         f"[dim]{stamp}[/dim] {req['method']} {req['raw_path']} → {record['response']['status']}{upstream}{error}"
         f"  [dim]{dest.name}[/dim]",
         markup=True,
@@ -273,7 +310,7 @@ def record(
 
     def hello(sni: str | None) -> None:
         stamp = dt.datetime.now().strftime("%H:%M:%S")
-        console.print(
+        background_print(
             f"[dim]{stamp} TLS ClientHello (SNI {sni or '-'}). Se non segue una richiesta, il client "
             "ha rifiutato il certificato.[/dim]",
             highlight=False,
@@ -340,7 +377,7 @@ def serve(
         extra = ""
         if req["path"].lower() == "/fai/log":
             extra = f"  [bold]{urllib.parse.unquote(req['query_string'])}[/bold]"
-        console.print(
+        background_print(
             f"[dim]{stamp}[/dim] {req['method']} {req['path']} → {record_['response']['status']}{extra}"
             f"  [dim]{dest.name}[/dim]",
             highlight=False,
