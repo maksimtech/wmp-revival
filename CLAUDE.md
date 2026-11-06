@@ -662,6 +662,8 @@ sono diventate tutte "Long Way to Happy" (traccia 3).
   Fire* resta intatto), artista dell'album; mai "Various Artists". Le ricerche
   provano le combinazioni artista × titolo, al massimo 5 per richiesta.
 - Edizione scelta: `f121c662` (2012-03-30), **confermata dall'utente**.
+- **Verificato su WMP dall'utente (2026-11-06)**: dopo il riavvio di `serve`,
+  *Arrival* viene trovato e applicato correttamente.
 
 - Lookup `/ws/2/discid/<id>?inc=recordings+artist-credits+labels+release-groups+work-rels+artist-rels`
   sull'**API pubblica** con cache (mirror rimandato, indirizzo configurabile).
