@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "recorder": "wmprevival/2026.11.0",
+  "received_at": "2026-11-06T16:09:14.707629+01:00",
+  "client": "127.0.0.1",
+  "tls": {
+    "version": "TLSv1.3",
+    "cipher": "TLS_AES_256_GCM_SHA384",
+    "sni": "musicmatch-ssl.xboxlive.com"
+  },
+  "request": {
+    "method": "POST",
+    "http_version": "1.1",
+    "raw_path": "/cdinfo/GetMDRCD.aspx?locale=410&geoid=76&version=12.0.26100.9549&userlocale=410&requestID=00000000-0000-0000-0000-000000000001",
+    "path": "/cdinfo/GetMDRCD.aspx",
+    "query_string": "locale=410&geoid=76&version=12.0.26100.9549&userlocale=410&requestID=00000000-0000-0000-0000-000000000001",
+    "headers": [
+      [
+        "Accept",
+        "*/*"
+      ],
+      [
+        "User-Agent",
+        "Windows-Media-Player/12.0.26100.9711"
+      ],
+      [
+        "Content-Type",
+        "text/xml"
+      ],
+      [
+        "Accept-Encoding",
+        "gzip, deflate"
+      ],
+      [
+        "Host",
+        "musicmatch-ssl.xboxlive.com"
+      ],
+      [
+        "Content-Length",
+        "1162"
+      ],
+      [
+        "Connection",
+        "Keep-Alive"
+      ]
+    ],
+    "body": {
+      "length": 1162,
+      "base64": "PE1FVEFEQVRBPg0KICAgIDxNRFEtQ0Q+DQogICAgICAgIDxtZHFSZXF1ZXN0SUQ+MDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAxPC9tZHFSZXF1ZXN0SUQ+DQogICAgICAgIDxhbGJ1bT4NCiAgICAgICAgICAgIDx0aXRsZT4NCiAgICAgICAgICAgICAgICA8dGV4dD5BcnJpdmFsPC90ZXh0Pg0KICAgICAgICAgICAgICAgIDx3b3JkPkFycml2YWw8L3dvcmQ+DQogICAgICAgICAgICA8L3RpdGxlPg0KICAgICAgICAgICAgPGFydGlzdD4NCiAgICAgICAgICAgICAgICA8dGV4dD5BQkJBLCBBYmJhPC90ZXh0Pg0KICAgICAgICAgICAgICAgIDx3b3JkPkFCQkE8L3dvcmQ+DQogICAgICAgICAgICAgICAgPHdvcmQ+QWJiYTwvd29yZD4NCiAgICAgICAgICAgIDwvYXJ0aXN0Pg0KICAgICAgICA8L2FsYnVtPg0KICAgICAgICA8dHJhY2s+DQogICAgICAgICAgICA8dGl0bGU+DQogICAgICAgICAgICAgICAgPHRleHQ+QXJyaXZhbDwvdGV4dD4NCiAgICAgICAgICAgICAgICA8d29yZD5BcnJpdmFsPC93b3JkPg0KICAgICAgICAgICAgPC90aXRsZT4NCiAgICAgICAgICAgIDxhcnRpc3Q+DQogICAgICAgICAgICAgICAgPHRleHQ+QUJCQSwgQWJiYTwvdGV4dD4NCiAgICAgICAgICAgICAgICA8d29yZD5BQkJBPC93b3JkPg0KICAgICAgICAgICAgICAgIDx3b3JkPkFiYmE8L3dvcmQ+DQogICAgICAgICAgICA8L2FydGlzdD4NCiAgICAgICAgICAgIDx0cmFja051bWJlcj4xMDwvdHJhY2tOdW1iZXI+DQogICAgICAgICAgICA8ZmlsZW5hbWU+MTAuIEFCQkEsIEFiYmEgLSBBcnJpdmFsLmZsYWM8L2ZpbGVuYW1lPg0KICAgICAgICAgICAgPHRyYWNlPjQwMiA0MzEgNDE2OSA4NTMgMzAzNSAzMTM1IDI0NDMgMjU2OCA1NzggMjQ2MiAxNzMyIDMyNjEgMTc4MSAzNjgxIDIyMjggMTg5IDEzOSA2ODkxIDE1NzIgMjk2MiAxNzExIDczMDIgMzQ1MCAyNzUgMTY0NyA2MjUgMjg4NiAxMjMzIDk1MyA5MjY8L3RyYWNlPg0KICAgICAgICAgICAgPHRyYWNrRHVyYXRpb24+MTgwMDAwPC90cmFja0R1cmF0aW9uPg0KICAgICAgICAgICAgPGJpdHJhdGU+OTcwMjMyPC9iaXRyYXRlPg0KICAgICAgICAgICAgPHRyYWNrUmVxdWVzdElEPjA8L3RyYWNrUmVxdWVzdElEPg0KICAgICAgICA8L3RyYWNrPg0KICAgIDwvTURRLUNEPg0KPC9NRVRBREFUQT4NCg==",
+      "text": "<METADATA>\r\n    <MDQ-CD>\r\n        <mdqRequestID>00000000-0000-0000-0000-000000000001</mdqRequestID>\r\n        <album>\r\n            <title>\r\n                <text>Arrival</text>\r\n                <word>Arrival</word>\r\n            </title>\r\n            <artist>\r\n                <text>ABBA, Abba</text>\r\n                <word>ABBA</word>\r\n                <word>Abba</word>\r\n            </artist>\r\n        </album>\r\n        <track>\r\n            <title>\r\n                <text>Arrival</text>\r\n                <word>Arrival</word>\r\n            </title>\r\n            <artist>\r\n                <text>ABBA, Abba</text>\r\n                <word>ABBA</word>\r\n                <word>Abba</word>\r\n            </artist>\r\n            <trackNumber>10</trackNumber>\r\n            <filename>10. ABBA, Abba - Arrival.flac</filename>\r\n            <trace>402 431 4169 853 3035 3135 2443 2568 578 2462 1732 3261 1781 3681 2228 189 139 6891 1572 2962 1711 7302 3450 275 1647 625 2886 1233 953 926</trace>\r\n            <trackDuration>180000</trackDuration>\r\n            <bitrate>970232</bitrate>\r\n            <trackRequestID>0</trackRequestID>\r\n        </track>\r\n    </MDQ-CD>\r\n</METADATA>\r\n",
+      "text_encoding": "utf-8"
+    }
+  },
+  "forwarded": false,
+  "served_locally": true,
+  "served": {
+    "headers": [
+      [
+        "Cache-Control",
+        "no-cache, no-store"
+      ],
+      [
+        "Content-Type",
+        "text/xml; charset=us-ascii"
+      ]
+    ],
+    "body": {
+      "length": 178,
+      "base64": "PD94bWwgdmVyc2lvbj0iMS4wIj8+CjxNRVRBREFUQT48QmFja29mZj48VGltZT41PC9UaW1lPjwvQmFja29mZj48bWRxUmVxdWVzdElEPjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMTwvbWRxUmVxdWVzdElEPjxSZXNwb25zZUNvZGU+Tm8gbWF0Y2g8L1Jlc3BvbnNlQ29kZT48L01FVEFEQVRBPg==",
+      "text": "<?xml version=\"1.0\"?>\n<METADATA><Backoff><Time>5</Time></Backoff><mdqRequestID>00000000-0000-0000-0000-000000000001</mdqRequestID><ResponseCode>No match</ResponseCode></METADATA>",
+      "text_encoding": "us-ascii"
+    }
+  },
+  "response": {
+    "status": 200
+  }
+}

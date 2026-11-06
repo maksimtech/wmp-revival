@@ -652,6 +652,17 @@ sono diventate tutte "Long Way to Happy" (traccia 3).
   vale per l'abbinamento, che non dà mai la stessa traccia a due file. Al
   massimo 4 ricerche per richiesta. Fixture `fai_file_pink_rovinati.json`.
 
+### Artisti con valori multipli (*Arrival*, ABBA, 2026-11-06)
+
+- WMP unisce i valori multipli del tag artista con `, `: i FLAC di *Arrival*
+  arrivavano come `ABBA, Abba`, e `artist:"ABBA, Abba"` su MusicBrainz non dà
+  risultati.
+- `service.artist_candidates`: artista della traccia, sua forma compattata (solo
+  se tutte le parti separate da `,` `;` `/` sono lo stesso nome: *Earth, Wind &
+  Fire* resta intatto), artista dell'album; mai "Various Artists". Le ricerche
+  provano le combinazioni artista × titolo, al massimo 5 per richiesta.
+- Edizione scelta: `f121c662` (2012-03-30), **confermata dall'utente**.
+
 - Lookup `/ws/2/discid/<id>?inc=recordings+artist-credits+labels+release-groups+work-rels+artist-rels`
   sull'**API pubblica** con cache (mirror rimandato, indirizzo configurabile).
 - Se più release corrispondono: scelta deterministica e documentata (paese,

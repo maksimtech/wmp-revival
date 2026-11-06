@@ -1,0 +1,4436 @@
+{
+  "recorded_at": "2026-11-06T15:21:33+00:00",
+  "url": "https://musicbrainz.org/ws/2/recording?query=recording%3A%22Arrival%22%20AND%20artist%3A%22ABBA%22%20AND%20release%3A%22Arrival%22&limit=10&fmt=json",
+  "status": 200,
+  "body": {
+    "created": "2026-11-06T15:21:26.498Z",
+    "count": 3,
+    "offset": 0,
+    "recordings": [
+      {
+        "id": "6b8da52b-a9c8-4c11-a7a2-75bf89dc96b3",
+        "score": 100,
+        "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+        "title": "Arrival Television Commercial II (UK)",
+        "length": 15000,
+        "video": true,
+        "artist-credit": [
+          {
+            "name": "ABBA",
+            "artist": {
+              "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+              "name": "ABBA",
+              "sort-name": "ABBA",
+              "disambiguation": "Swedish pop group",
+              "aliases": [
+                {
+                  "sort-name": "아바",
+                  "type-id": "894afba6-2816-3c24-8072-eadb66bd04bc",
+                  "name": "아바",
+                  "locale": "ko",
+                  "type": "Artist name",
+                  "primary": true,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "Björn Benny & Agnetha Frida",
+                  "name": "Björn Benny & Agnetha Frida",
+                  "locale": null,
+                  "type": null,
+                  "primary": null,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "Björn + Benny + Anna + Frieda",
+                  "name": "Björn + Benny + Anna + Frieda",
+                  "locale": null,
+                  "type": null,
+                  "primary": null,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "ABBA",
+                  "type-id": "894afba6-2816-3c24-8072-eadb66bd04bc",
+                  "name": "АББА",
+                  "locale": "bg",
+                  "type": "Artist name",
+                  "primary": true,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "Björn Benny Agnetha & Anni-Frid",
+                  "name": "Björn Benny Agnetha & Anni-Frid",
+                  "locale": null,
+                  "type": null,
+                  "primary": null,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "Abba",
+                  "name": "Abba",
+                  "locale": null,
+                  "type": null,
+                  "primary": null,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "ᗅᗺᗷᗅ",
+                  "type-id": "1937e404-b981-3cb7-8151-4c86ebfc8d8e",
+                  "name": "ᗅᗺᗷᗅ",
+                  "locale": null,
+                  "type": "Search hint",
+                  "primary": null,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "アバ",
+                  "type-id": "894afba6-2816-3c24-8072-eadb66bd04bc",
+                  "name": "アバ",
+                  "locale": "ja",
+                  "type": "Artist name",
+                  "primary": true,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "ABBA",
+                  "type-id": "894afba6-2816-3c24-8072-eadb66bd04bc",
+                  "name": "АББА",
+                  "locale": "ru",
+                  "type": "Artist name",
+                  "primary": null,
+                  "begin-date": null,
+                  "end-date": null
+                }
+              ]
+            }
+          }
+        ],
+        "first-release-date": "2006-10-16",
+        "releases": [
+          {
+            "id": "908ae31d-f9a9-46ed-9b5a-a31bc17f6452",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 2,
+            "title": "Arrival",
+            "status": "Official",
+            "disambiguation": "deluxe edition",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "2006-10-16",
+            "country": "XE",
+            "release-events": [
+              {
+                "date": "2006-10-16",
+                "area": {
+                  "id": "89a675c2-3e37-3518-b83c-418bad59a85a",
+                  "name": "Europe",
+                  "sort-name": "Europe",
+                  "iso-3166-1-codes": [
+                    "XE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 33,
+            "media": [
+              {
+                "id": "4a469f0e-006d-3d15-85e2-8ac4c6dc2b9f",
+                "position": 2,
+                "format": "DVD",
+                "track": [
+                  {
+                    "id": "a069c342-2e57-3dee-852a-5382ddea2122",
+                    "number": "16",
+                    "title": "Arrival Television Commercial II (UK)",
+                    "length": 15000
+                  }
+                ],
+                "track-count": 17,
+                "track-offset": 15
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "78b7848e-c4a0-4717-b15c-e55b4c02359d",
+        "score": 100,
+        "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+        "title": "Arrival Television Commercial I (UK)",
+        "length": 30000,
+        "video": true,
+        "artist-credit": [
+          {
+            "name": "ABBA",
+            "artist": {
+              "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+              "name": "ABBA",
+              "sort-name": "ABBA",
+              "disambiguation": "Swedish pop group",
+              "aliases": [
+                {
+                  "sort-name": "아바",
+                  "type-id": "894afba6-2816-3c24-8072-eadb66bd04bc",
+                  "name": "아바",
+                  "locale": "ko",
+                  "type": "Artist name",
+                  "primary": true,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "Björn Benny & Agnetha Frida",
+                  "name": "Björn Benny & Agnetha Frida",
+                  "locale": null,
+                  "type": null,
+                  "primary": null,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "Björn + Benny + Anna + Frieda",
+                  "name": "Björn + Benny + Anna + Frieda",
+                  "locale": null,
+                  "type": null,
+                  "primary": null,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "ABBA",
+                  "type-id": "894afba6-2816-3c24-8072-eadb66bd04bc",
+                  "name": "АББА",
+                  "locale": "bg",
+                  "type": "Artist name",
+                  "primary": true,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "Björn Benny Agnetha & Anni-Frid",
+                  "name": "Björn Benny Agnetha & Anni-Frid",
+                  "locale": null,
+                  "type": null,
+                  "primary": null,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "Abba",
+                  "name": "Abba",
+                  "locale": null,
+                  "type": null,
+                  "primary": null,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "ᗅᗺᗷᗅ",
+                  "type-id": "1937e404-b981-3cb7-8151-4c86ebfc8d8e",
+                  "name": "ᗅᗺᗷᗅ",
+                  "locale": null,
+                  "type": "Search hint",
+                  "primary": null,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "アバ",
+                  "type-id": "894afba6-2816-3c24-8072-eadb66bd04bc",
+                  "name": "アバ",
+                  "locale": "ja",
+                  "type": "Artist name",
+                  "primary": true,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "ABBA",
+                  "type-id": "894afba6-2816-3c24-8072-eadb66bd04bc",
+                  "name": "АББА",
+                  "locale": "ru",
+                  "type": "Artist name",
+                  "primary": null,
+                  "begin-date": null,
+                  "end-date": null
+                }
+              ]
+            }
+          }
+        ],
+        "first-release-date": "2006-10-16",
+        "releases": [
+          {
+            "id": "908ae31d-f9a9-46ed-9b5a-a31bc17f6452",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 2,
+            "title": "Arrival",
+            "status": "Official",
+            "disambiguation": "deluxe edition",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "2006-10-16",
+            "country": "XE",
+            "release-events": [
+              {
+                "date": "2006-10-16",
+                "area": {
+                  "id": "89a675c2-3e37-3518-b83c-418bad59a85a",
+                  "name": "Europe",
+                  "sort-name": "Europe",
+                  "iso-3166-1-codes": [
+                    "XE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 33,
+            "media": [
+              {
+                "id": "4a469f0e-006d-3d15-85e2-8ac4c6dc2b9f",
+                "position": 2,
+                "format": "DVD",
+                "track": [
+                  {
+                    "id": "0a523741-3023-32ab-95ed-62f5e99ae737",
+                    "number": "15",
+                    "title": "Arrival Television Commercial I (UK)",
+                    "length": 30000
+                  }
+                ],
+                "track-count": 17,
+                "track-offset": 14
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ccccc2ca-9c11-4e1e-a84a-dc17099c945a",
+        "score": 84,
+        "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+        "title": "Arrival",
+        "length": 181640,
+        "video": null,
+        "artist-credit": [
+          {
+            "name": "ABBA",
+            "artist": {
+              "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+              "name": "ABBA",
+              "sort-name": "ABBA",
+              "disambiguation": "Swedish pop group",
+              "aliases": [
+                {
+                  "sort-name": "아바",
+                  "type-id": "894afba6-2816-3c24-8072-eadb66bd04bc",
+                  "name": "아바",
+                  "locale": "ko",
+                  "type": "Artist name",
+                  "primary": true,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "Björn Benny & Agnetha Frida",
+                  "name": "Björn Benny & Agnetha Frida",
+                  "locale": null,
+                  "type": null,
+                  "primary": null,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "Björn + Benny + Anna + Frieda",
+                  "name": "Björn + Benny + Anna + Frieda",
+                  "locale": null,
+                  "type": null,
+                  "primary": null,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "ABBA",
+                  "type-id": "894afba6-2816-3c24-8072-eadb66bd04bc",
+                  "name": "АББА",
+                  "locale": "bg",
+                  "type": "Artist name",
+                  "primary": true,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "Björn Benny Agnetha & Anni-Frid",
+                  "name": "Björn Benny Agnetha & Anni-Frid",
+                  "locale": null,
+                  "type": null,
+                  "primary": null,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "Abba",
+                  "name": "Abba",
+                  "locale": null,
+                  "type": null,
+                  "primary": null,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "ᗅᗺᗷᗅ",
+                  "type-id": "1937e404-b981-3cb7-8151-4c86ebfc8d8e",
+                  "name": "ᗅᗺᗷᗅ",
+                  "locale": null,
+                  "type": "Search hint",
+                  "primary": null,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "アバ",
+                  "type-id": "894afba6-2816-3c24-8072-eadb66bd04bc",
+                  "name": "アバ",
+                  "locale": "ja",
+                  "type": "Artist name",
+                  "primary": true,
+                  "begin-date": null,
+                  "end-date": null
+                },
+                {
+                  "sort-name": "ABBA",
+                  "type-id": "894afba6-2816-3c24-8072-eadb66bd04bc",
+                  "name": "АББА",
+                  "locale": "ru",
+                  "type": "Artist name",
+                  "primary": null,
+                  "begin-date": null,
+                  "end-date": null
+                }
+              ]
+            }
+          }
+        ],
+        "first-release-date": "1976-10-11",
+        "releases": [
+          {
+            "id": "80e73db6-ad13-4e65-b90d-5c2888d49392",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "disambiguation": "2011 remastered",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "2011",
+            "country": "XE",
+            "release-events": [
+              {
+                "date": "2011",
+                "area": {
+                  "id": "89a675c2-3e37-3518-b83c-418bad59a85a",
+                  "name": "Europe",
+                  "sort-name": "Europe",
+                  "iso-3166-1-codes": [
+                    "XE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 10,
+            "media": [
+              {
+                "id": "0a9041f7-bd3f-4cf4-9d0c-3f9e20a2e7da",
+                "position": 1,
+                "format": "12\" Vinyl",
+                "track": [
+                  {
+                    "id": "301a294d-7cc5-4b3d-9e58-89436c56591c",
+                    "number": "B5",
+                    "title": "Arrival",
+                    "length": 181640
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "5403f011-f841-4948-ba62-f1fe7971e490",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "The Hits 2",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "b090af08-4dee-3b53-89d4-bc4313220336",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "The Hits, Volume 2",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "1991",
+            "country": "GB",
+            "release-events": [
+              {
+                "date": "1991",
+                "area": {
+                  "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+                  "name": "United Kingdom",
+                  "sort-name": "United Kingdom",
+                  "iso-3166-1-codes": [
+                    "GB"
+                  ]
+                }
+              }
+            ],
+            "track-count": 14,
+            "media": [
+              {
+                "id": "565d4803-20f4-4c90-852d-936a52eea7ac",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "f1158465-d73a-4bb4-905d-36f982a3502e",
+                    "number": "2",
+                    "title": "Arrival",
+                    "length": 183440
+                  }
+                ],
+                "track-count": 14,
+                "track-offset": 1
+              }
+            ]
+          },
+          {
+            "id": "f121c662-eaa3-4b58-836f-c20eea68d78a",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "2012-03-30",
+            "country": "XW",
+            "release-events": [
+              {
+                "date": "2012-03-30",
+                "area": {
+                  "id": "525d4e18-3d00-31b9-a58b-a146a916de8f",
+                  "name": "[Worldwide]",
+                  "sort-name": "[Worldwide]",
+                  "iso-3166-1-codes": [
+                    "XW"
+                  ]
+                }
+              }
+            ],
+            "track-count": 12,
+            "media": [
+              {
+                "id": "a5bbb55f-cfec-4867-881e-e6b753ca817d",
+                "position": 1,
+                "format": "Digital Media",
+                "track": [
+                  {
+                    "id": "57e7d582-485d-43b7-9ef9-94f6e3d8a0fd",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 180426
+                  }
+                ],
+                "track-count": 12,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "fa71e386-81fb-4adb-9eef-44c991dff2e2",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Ring Ring",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "a3d7d8c3-8e29-46b1-b75b-754a0bc04ef1",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Ring Ring",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "1998",
+            "country": "NL",
+            "release-events": [
+              {
+                "date": "1998",
+                "area": {
+                  "id": "ef1b7cc0-cd26-36f4-8ea0-04d9623786c7",
+                  "name": "Netherlands",
+                  "sort-name": "Netherlands",
+                  "iso-3166-1-codes": [
+                    "NL"
+                  ]
+                }
+              }
+            ],
+            "track-count": 16,
+            "media": [
+              {
+                "id": "b23aec98-8c3e-30ac-aa28-296ede35940a",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "d31b9e5e-b7ea-4ce1-b4a8-b5bf23e0a5e2",
+                    "number": "16",
+                    "title": "Arrival",
+                    "length": 180000
+                  }
+                ],
+                "track-count": 16,
+                "track-offset": 15
+              }
+            ]
+          },
+          {
+            "id": "4657187a-c437-4f9c-805f-7c8abe28607d",
+            "status-id": "518ffc83-5cde-34df-8627-81bff5093d92",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Promotion",
+            "disambiguation": "test pressing",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "1976",
+            "country": "SE",
+            "release-events": [
+              {
+                "date": "1976",
+                "area": {
+                  "id": "23d10872-f5ae-3f0c-bf55-332788a16ecb",
+                  "name": "Sweden",
+                  "sort-name": "Sweden",
+                  "iso-3166-1-codes": [
+                    "SE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 10,
+            "media": [
+              {
+                "id": "b579f1ca-1a36-4cfc-9261-72ec47a9748e",
+                "position": 1,
+                "format": "12\" Vinyl",
+                "track": [
+                  {
+                    "id": "b484d3ce-9692-4feb-8eb0-aedd1a285cba",
+                    "number": "B5",
+                    "title": "Arrival",
+                    "length": 183000
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "d217245f-198d-4022-8b7c-89877bccb150",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 9,
+            "title": "The Collection",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "a798748a-f745-4ccd-9b8c-a1de616582b7",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "The Collection",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "track-count": 163,
+            "media": [
+              {
+                "id": "96424789-aa1e-3e49-8f6b-fdafa4cc3775",
+                "position": 5,
+                "format": "Digital Media",
+                "track": [
+                  {
+                    "id": "5ef6c54c-b5fe-4027-ab6b-11139de133b8",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 185066
+                  }
+                ],
+                "track-count": 15,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "12cb0b78-caf6-4d41-a43f-d80f6d78a17d",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 5,
+            "title": "Die Story",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "51dcd769-bf5c-32e2-b5a4-a40de70d37a3",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Die Story",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "1992",
+            "country": "DE",
+            "release-events": [
+              {
+                "date": "1992",
+                "area": {
+                  "id": "85752fda-13c4-31a3-bee5-0e5cb1f51dad",
+                  "name": "Germany",
+                  "sort-name": "Germany",
+                  "iso-3166-1-codes": [
+                    "DE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 82,
+            "media": [
+              {
+                "id": "35f79f6e-9aab-31cb-9491-699d3c4d9e1e",
+                "position": 4,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "b860e337-3382-3e14-87ae-cb4f3110cb9e",
+                    "number": "1",
+                    "title": "Arrival",
+                    "length": 183000
+                  }
+                ],
+                "track-count": 17,
+                "track-offset": 0
+              }
+            ]
+          },
+          {
+            "id": "f4a58921-b1d7-4e32-aa02-e8c735cb14e3",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 5,
+            "title": "The Best of ABBA",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "a5f2ced9-7408-4fa7-90a2-a3361180dfb7",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "The Best of ABBA",
+              "disambiguation": "Reader’s Digest box set",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "1982",
+            "country": "GB",
+            "release-events": [
+              {
+                "date": "1982",
+                "area": {
+                  "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+                  "name": "United Kingdom",
+                  "sort-name": "United Kingdom",
+                  "iso-3166-1-codes": [
+                    "GB"
+                  ]
+                }
+              }
+            ],
+            "track-count": 70,
+            "media": [
+              {
+                "id": "c25cf72f-e55c-35da-b01d-933388909011",
+                "position": 3,
+                "format": "12\" Vinyl",
+                "track": [
+                  {
+                    "id": "4f9cc109-a7c2-4a03-9099-0f10fe1e95b7",
+                    "number": "E1",
+                    "title": "Arrival"
+                  }
+                ],
+                "track-count": 14,
+                "track-offset": 0
+              }
+            ]
+          },
+          {
+            "id": "ac5a97cc-619e-4b6f-89a8-a11c0812a9e5",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 8,
+            "title": "The Studio Albums",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "31d5e29e-32d3-4624-889b-1e6f7080092c",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "The Studio Albums",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "2020-07-24",
+            "country": "XE",
+            "release-events": [
+              {
+                "date": "2020-07-24",
+                "area": {
+                  "id": "89a675c2-3e37-3518-b83c-418bad59a85a",
+                  "name": "Europe",
+                  "sort-name": "Europe",
+                  "iso-3166-1-codes": [
+                    "XE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 83,
+            "media": [
+              {
+                "id": "30a87135-6e24-3875-b385-32dbbdd7e068",
+                "position": 4,
+                "format": "12\" Vinyl",
+                "track": [
+                  {
+                    "id": "cd57f677-efda-4779-95f7-c6729593dbb3",
+                    "number": "H5",
+                    "title": "Arrival",
+                    "length": 180000
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "1ace9a8b-27d0-4a8d-95cf-db6f565d05d6",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 2,
+            "title": "ABBA / Arrival",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "4ea795e6-e673-4644-b2ca-d0ee78bafecc",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "ABBA / Arrival",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "2009",
+            "country": "ZA",
+            "release-events": [
+              {
+                "date": "2009",
+                "area": {
+                  "id": "50cc7852-862e-30ae-aa82-385fe7135b7f",
+                  "name": "South Africa",
+                  "sort-name": "South Africa",
+                  "iso-3166-1-codes": [
+                    "ZA"
+                  ]
+                }
+              }
+            ],
+            "track-count": 25,
+            "media": [
+              {
+                "id": "9936b552-5d5e-32d9-ab4b-843c3b95796c",
+                "position": 2,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "1598825b-5e4b-4d4b-8423-ac34db554bef",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 185066
+                  }
+                ],
+                "track-count": 12,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "15046257-f136-4b0b-beec-a3fb8fdd55e1",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "1984",
+            "country": "DE",
+            "release-events": [
+              {
+                "date": "1984",
+                "area": {
+                  "id": "85752fda-13c4-31a3-bee5-0e5cb1f51dad",
+                  "name": "Germany",
+                  "sort-name": "Germany",
+                  "iso-3166-1-codes": [
+                    "DE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 10,
+            "media": [
+              {
+                "id": "f3ac93f2-a683-38a5-9ff6-105f9ba55d2e",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "30bc6ef9-bac4-4be6-b951-7d7676d9173f",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 180000
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "71d2b6e8-f763-4190-a89a-0daaa0434d85",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 10,
+            "title": "ABBA CD Album Box Set",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "7536bcb0-df84-4b9f-a450-cd7b86f3cb1b",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "ABBA CD Album Box Set",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "2022-05-25",
+            "country": "XE",
+            "release-events": [
+              {
+                "date": "2022-05-25",
+                "area": {
+                  "id": "89a675c2-3e37-3518-b83c-418bad59a85a",
+                  "name": "Europe",
+                  "sort-name": "Europe",
+                  "iso-3166-1-codes": [
+                    "XE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 103,
+            "media": [
+              {
+                "id": "610b0dcd-1791-3b72-b8ab-e59eb84e5756",
+                "position": 4,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "9ce983a1-b92e-45df-ae5a-d65dc99c4f52",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 182146
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "1d2d8e45-c73a-445f-9807-0121d9e63935",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "1984",
+            "country": "XE",
+            "release-events": [
+              {
+                "date": "1984",
+                "area": {
+                  "id": "89a675c2-3e37-3518-b83c-418bad59a85a",
+                  "name": "Europe",
+                  "sort-name": "Europe",
+                  "iso-3166-1-codes": [
+                    "XE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 10,
+            "media": [
+              {
+                "id": "f4014a85-e2f0-30c6-af0b-b5d33f440b6c",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "ce6cc850-2e78-4f36-8ec5-79960bb48c25",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 180000
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "9916cd7a-b4dd-4e07-b235-d4b3ed582ea9",
+            "status-id": "1156806e-d06a-38bd-83f0-cf2284a808b9",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Greatest ABBA! Collection",
+            "status": "Bootleg",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "538a7492-3052-4c23-a2dc-e3d0fef8ec46",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Greatest ABBA! Collection",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "track-count": 75,
+            "media": [
+              {
+                "id": "89b3be31-dcba-39c0-aa6f-d053bd03dc7c",
+                "position": 1,
+                "format": "Digital Media",
+                "track": [
+                  {
+                    "id": "731c3cb0-bd5f-407b-af5a-11a025b5b440",
+                    "number": "64",
+                    "title": "Arrival",
+                    "length": 187000
+                  }
+                ],
+                "track-count": 75,
+                "track-offset": 63
+              }
+            ]
+          },
+          {
+            "id": "73e6ad59-f743-4775-9d46-d275be350842",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "I Love ABBA",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "704240b0-bb2e-482c-b92d-3bff5c7b485c",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "I Love ABBA",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "1984",
+            "country": "DE",
+            "release-events": [
+              {
+                "date": "1984",
+                "area": {
+                  "id": "85752fda-13c4-31a3-bee5-0e5cb1f51dad",
+                  "name": "Germany",
+                  "sort-name": "Germany",
+                  "iso-3166-1-codes": [
+                    "DE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 16,
+            "media": [
+              {
+                "id": "d582dece-2b20-3cbd-9aff-6b03e769c924",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "28188cc2-7056-4008-8626-d7ee0c0b88bd",
+                    "number": "9",
+                    "title": "Arrival",
+                    "length": 182026
+                  }
+                ],
+                "track-count": 16,
+                "track-offset": 8
+              }
+            ]
+          },
+          {
+            "id": "81604bf3-8c72-4f69-9875-a875e990aaa2",
+            "status-id": "1156806e-d06a-38bd-83f0-cf2284a808b9",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "VIP Collection: MP3 Premium Edition",
+            "status": "Bootleg",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "0301d2f9-25db-49a6-828e-6ea154145bf0",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "VIP Collection: MP3 Premium Edition",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "2006",
+            "country": "RU",
+            "release-events": [
+              {
+                "date": "2006",
+                "area": {
+                  "id": "1f1fc3a4-9500-39b8-9f10-f0a465557eef",
+                  "name": "Russia",
+                  "sort-name": "Russia",
+                  "iso-3166-1-codes": [
+                    "RU"
+                  ]
+                }
+              }
+            ],
+            "track-count": 124,
+            "media": [
+              {
+                "id": "726914ba-1575-38fd-9d5f-62738fbfa425",
+                "position": 1,
+                "format": "CD-R",
+                "track": [
+                  {
+                    "id": "2a096aa5-2de0-3a0e-a430-ca177bf2afc8",
+                    "number": "46",
+                    "title": "Arrival",
+                    "length": 185000
+                  }
+                ],
+                "track-count": 124,
+                "track-offset": 45
+              }
+            ]
+          },
+          {
+            "id": "10e53054-bf31-496e-8be2-6f0d80da18c1",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 9,
+            "title": "The Vinyl Collection",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "f19e423c-7210-4985-ab1f-d920ce9aa7f6",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "The Vinyl Collection",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "2010-12-06",
+            "country": "XE",
+            "release-events": [
+              {
+                "date": "2010-12-06",
+                "area": {
+                  "id": "89a675c2-3e37-3518-b83c-418bad59a85a",
+                  "name": "Europe",
+                  "sort-name": "Europe",
+                  "iso-3166-1-codes": [
+                    "XE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 93,
+            "media": [
+              {
+                "id": "f38b3354-07ce-3f60-b938-1d54552eb993",
+                "position": 4,
+                "format": "12\" Vinyl",
+                "track": [
+                  {
+                    "id": "0625f2a2-661e-49c5-a883-5e1d7cf38e9f",
+                    "number": "B5",
+                    "title": "Arrival",
+                    "length": 181368
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "a96e2985-1196-4179-8110-dac01449dc32",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "949a7fd5-fe73-3e8f-922e-01ff4ca958f7",
+            "count": 2,
+            "title": "Moods: A World of Emotions",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "Various Artists",
+                "artist": {
+                  "id": "89ad4ac3-39f7-470e-963a-56509c546377",
+                  "name": "Various Artists",
+                  "sort-name": "Various Artists",
+                  "disambiguation": "add compilations to this artist"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "c0fec5c4-b450-4524-8eee-50f5645f4b05",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Moods: A World of Emotions",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "2014-10-20",
+            "country": "GB",
+            "release-events": [
+              {
+                "date": "2014-10-20",
+                "area": {
+                  "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+                  "name": "United Kingdom",
+                  "sort-name": "United Kingdom",
+                  "iso-3166-1-codes": [
+                    "GB"
+                  ]
+                }
+              }
+            ],
+            "track-count": 40,
+            "media": [
+              {
+                "id": "fb3f1ce9-fa98-3214-b7af-228c4a9728d0",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "620154bc-5db1-4611-98c2-5816528d9592",
+                    "number": "7",
+                    "title": "Arrival",
+                    "length": 181946
+                  }
+                ],
+                "track-count": 20,
+                "track-offset": 6
+              }
+            ]
+          },
+          {
+            "id": "35a70166-074b-407d-b45b-1d12411296b1",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 9,
+            "title": "The Albums",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "a9a2f2c5-9589-3377-a807-23d07dead17a",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "The Albums",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "2008",
+            "country": "US",
+            "release-events": [
+              {
+                "date": "2008",
+                "area": {
+                  "id": "489ce91b-6658-3307-9877-795b68554c98",
+                  "name": "United States",
+                  "sort-name": "United States",
+                  "iso-3166-1-codes": [
+                    "US"
+                  ]
+                }
+              },
+              {
+                "date": "2008-10-27",
+                "area": {
+                  "id": "89a675c2-3e37-3518-b83c-418bad59a85a",
+                  "name": "Europe",
+                  "sort-name": "Europe",
+                  "iso-3166-1-codes": [
+                    "XE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 99,
+            "media": [
+              {
+                "id": "f7f15c88-cf5b-304a-a831-d63040df885f",
+                "position": 4,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "e2046cd5-c803-3170-b522-294525165f95",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 186733
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "ce54edd1-3008-4033-a7aa-286224c2bc13",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 2,
+            "title": "The Collection",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "9ca1db15-e5e6-45dc-9c27-6b10722de8d5",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "The Collection",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "1987",
+            "country": "GB",
+            "release-events": [
+              {
+                "date": "1987",
+                "area": {
+                  "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+                  "name": "United Kingdom",
+                  "sort-name": "United Kingdom",
+                  "iso-3166-1-codes": [
+                    "GB"
+                  ]
+                }
+              }
+            ],
+            "track-count": 24,
+            "media": [
+              {
+                "id": "07941733-9b9b-3b15-bcba-455d7f4bd207",
+                "position": 2,
+                "format": "12\" Vinyl",
+                "track": [
+                  {
+                    "id": "68c75887-0f64-4ca0-a7c5-02c8966e49b8",
+                    "number": "D1",
+                    "title": "Arrival",
+                    "length": 180000
+                  }
+                ],
+                "track-count": 12,
+                "track-offset": 6
+              }
+            ]
+          },
+          {
+            "id": "1751d4cb-0401-4b1a-ab16-dee4b70fa8d4",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "disambiguation": "made in Germany",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "1984",
+            "country": "DE",
+            "release-events": [
+              {
+                "date": "1984",
+                "area": {
+                  "id": "85752fda-13c4-31a3-bee5-0e5cb1f51dad",
+                  "name": "Germany",
+                  "sort-name": "Germany",
+                  "iso-3166-1-codes": [
+                    "DE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 10,
+            "media": [
+              {
+                "id": "cc3a846e-25c8-31bd-b247-5c373e0bb73d",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "abec3625-d4fb-4b32-af34-6c99b0be3288",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 181640
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "807d6953-df7b-45cd-87d0-9bc0ee75e20a",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "1977-06-05",
+            "country": "JP",
+            "release-events": [
+              {
+                "date": "1977-06-05",
+                "area": {
+                  "id": "2db42837-c832-3c27-b4a3-08198f75693c",
+                  "name": "Japan",
+                  "sort-name": "Japan",
+                  "iso-3166-1-codes": [
+                    "JP"
+                  ]
+                }
+              }
+            ],
+            "track-count": 10,
+            "media": [
+              {
+                "id": "90b60a4c-8243-3a4a-a2e3-0dc0c97b3e9b",
+                "position": 1,
+                "format": "12\" Vinyl",
+                "track": [
+                  {
+                    "id": "03fcec7b-c7aa-4f33-a27c-5bd55068f847",
+                    "number": "B5",
+                    "title": "Arrival",
+                    "length": 180000
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "ca13ae2b-5177-4011-bb4a-979f528a83c8",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "1976",
+            "country": "DE",
+            "release-events": [
+              {
+                "date": "1976",
+                "area": {
+                  "id": "85752fda-13c4-31a3-bee5-0e5cb1f51dad",
+                  "name": "Germany",
+                  "sort-name": "Germany",
+                  "iso-3166-1-codes": [
+                    "DE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 10,
+            "media": [
+              {
+                "id": "92bc89ab-8d6e-39e5-9d04-820a4b6dcfa1",
+                "position": 1,
+                "format": "12\" Vinyl",
+                "track": [
+                  {
+                    "id": "2d38ea15-c714-4b81-b647-e59264cdf2d4",
+                    "number": "B5",
+                    "title": "Arrival",
+                    "length": 181640
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "78efeb49-dadb-4a03-8542-ae89cb489f23",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "1976",
+            "country": "NL",
+            "release-events": [
+              {
+                "date": "1976",
+                "area": {
+                  "id": "ef1b7cc0-cd26-36f4-8ea0-04d9623786c7",
+                  "name": "Netherlands",
+                  "sort-name": "Netherlands",
+                  "iso-3166-1-codes": [
+                    "NL"
+                  ]
+                }
+              }
+            ],
+            "track-count": 10,
+            "media": [
+              {
+                "id": "99311dae-3163-31a6-a881-98f35fa4ef48",
+                "position": 1,
+                "format": "12\" Vinyl",
+                "track": [
+                  {
+                    "id": "d62f6f56-4a7a-45e1-b0a9-f058a0d58386",
+                    "number": "B5",
+                    "title": "Arrival",
+                    "length": 180000
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "6b20bda1-a377-49a2-bb86-3f4982353987",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 4,
+            "title": "4 Original Albums",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "a5e784ec-ddfc-44fb-b6c4-e88b3122f8d2",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "4 Original Albums",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "2010-09-27",
+            "country": "XE",
+            "release-events": [
+              {
+                "date": "2010-09-27",
+                "area": {
+                  "id": "89a675c2-3e37-3518-b83c-418bad59a85a",
+                  "name": "Europe",
+                  "sort-name": "Europe",
+                  "iso-3166-1-codes": [
+                    "XE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 54,
+            "media": [
+              {
+                "id": "aeca4fa7-4868-3c23-b5bc-babb59da25b3",
+                "position": 4,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "70b451f6-3967-423d-9b3b-ff0b37c927fb",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 181640
+                  }
+                ],
+                "track-count": 12,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "90030269-878c-4c71-92e9-9c93be376fa3",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "track-count": 10,
+            "media": [
+              {
+                "id": "56181da6-096f-33ca-911b-e3fd0d1f487e",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "a4b63c93-0f83-4717-98c8-36b710068582",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 181640
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "da754e62-92f8-4f1f-9cb0-8936e0bf62ab",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "The Collection",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "9ca1db15-e5e6-45dc-9c27-6b10722de8d5",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "The Collection",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "1987",
+            "country": "GB",
+            "release-events": [
+              {
+                "date": "1987",
+                "area": {
+                  "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+                  "name": "United Kingdom",
+                  "sort-name": "United Kingdom",
+                  "iso-3166-1-codes": [
+                    "GB"
+                  ]
+                }
+              }
+            ],
+            "track-count": 24,
+            "media": [
+              {
+                "id": "97a44cdb-b817-3357-8ca3-7f10181f3762",
+                "position": 1,
+                "format": "Cassette",
+                "track": [
+                  {
+                    "id": "d0cdcc84-8f0f-4b72-82af-316e4db9280e",
+                    "number": "B7",
+                    "title": "Arrival"
+                  }
+                ],
+                "track-count": 24,
+                "track-offset": 18
+              }
+            ]
+          },
+          {
+            "id": "9374c828-1470-4284-a737-08bb1b46f3d9",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "1976",
+            "country": "IT",
+            "release-events": [
+              {
+                "date": "1976",
+                "area": {
+                  "id": "c6500277-9a3d-349b-bf30-41afdbf42add",
+                  "name": "Italy",
+                  "sort-name": "Italy",
+                  "iso-3166-1-codes": [
+                    "IT"
+                  ]
+                }
+              }
+            ],
+            "track-count": 10,
+            "media": [
+              {
+                "id": "85a012a6-13e0-3b54-bac3-ffe322d4d8d8",
+                "position": 1,
+                "format": "12\" Vinyl",
+                "track": [
+                  {
+                    "id": "788b327c-da80-429c-a419-0963ee2f0adb",
+                    "number": "B5",
+                    "title": "Arrival",
+                    "length": 181640
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "50b8bc4d-3275-49c4-af75-0b2feb570ea1",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "disambiguation": "2001 remaster",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "2001",
+            "country": "XE",
+            "release-events": [
+              {
+                "date": "2001",
+                "area": {
+                  "id": "89a675c2-3e37-3518-b83c-418bad59a85a",
+                  "name": "Europe",
+                  "sort-name": "Europe",
+                  "iso-3166-1-codes": [
+                    "XE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 12,
+            "media": [
+              {
+                "id": "d59475ba-8c2d-3ab9-a479-3812ccaaf0c3",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "628ad550-66f2-4cfd-9d94-615987c11698",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 180000
+                  }
+                ],
+                "track-count": 12,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "540937db-4f86-45bc-b1bc-0c6d8d8e1424",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "1992",
+            "country": "JP",
+            "release-events": [
+              {
+                "date": "1992",
+                "area": {
+                  "id": "2db42837-c832-3c27-b4a3-08198f75693c",
+                  "name": "Japan",
+                  "sort-name": "Japan",
+                  "iso-3166-1-codes": [
+                    "JP"
+                  ]
+                }
+              }
+            ],
+            "track-count": 10,
+            "media": [
+              {
+                "id": "dabe16dd-1c03-3eb6-bc96-b0ed54a2be88",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "7e47a474-de96-40f8-8cd8-b156847a0797",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 184000
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "aa29cf23-dda8-45bd-a61b-4ad99c087c2e",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "track-count": 16,
+            "media": [
+              {
+                "id": "d105f54e-eaf1-345a-bcf2-456f7659df9c",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "f986f340-238c-4c3b-9b22-9cf26cc1adee",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 186733
+                  }
+                ],
+                "track-count": 16,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "95557bc8-c763-46c2-a189-5333f1245bc6",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 11,
+            "title": "The Complete Studio Recordings",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "d786372d-ebb1-3129-b5c8-36ab02e5bef9",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "The Complete Studio Recordings",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "2005-11-07",
+            "country": "XE",
+            "release-events": [
+              {
+                "date": "2005-11-07",
+                "area": {
+                  "id": "89a675c2-3e37-3518-b83c-418bad59a85a",
+                  "name": "Europe",
+                  "sort-name": "Europe",
+                  "iso-3166-1-codes": [
+                    "XE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 176,
+            "media": [
+              {
+                "id": "8a4510b9-ef07-3261-a5cf-cdf7a300ef4d",
+                "position": 4,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "d3e47162-75f8-3ec8-839d-b7c2c98700a8",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 186733
+                  }
+                ],
+                "track-count": 15,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "019bccfb-4f32-414c-a08b-b5a9823a9490",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "The Hits 2",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "b090af08-4dee-3b53-89d4-bc4313220336",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "The Hits, Volume 2",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "1988",
+            "country": "GB",
+            "release-events": [
+              {
+                "date": "1988",
+                "area": {
+                  "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+                  "name": "United Kingdom",
+                  "sort-name": "United Kingdom",
+                  "iso-3166-1-codes": [
+                    "GB"
+                  ]
+                }
+              }
+            ],
+            "track-count": 14,
+            "media": [
+              {
+                "id": "ad63eccf-2cf5-3713-a2bb-4e69d7a8a235",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "465f0d01-3d5e-3d34-a8d8-78a7dd6c5bdd",
+                    "number": "2",
+                    "title": "Arrival",
+                    "length": 183440
+                  }
+                ],
+                "track-count": 14,
+                "track-offset": 1
+              }
+            ]
+          },
+          {
+            "id": "17c6d9f0-3d00-381e-892d-b40fdf995257",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "1976",
+            "country": "US",
+            "release-events": [
+              {
+                "date": "1976",
+                "area": {
+                  "id": "489ce91b-6658-3307-9877-795b68554c98",
+                  "name": "United States",
+                  "sort-name": "United States",
+                  "iso-3166-1-codes": [
+                    "US"
+                  ]
+                }
+              }
+            ],
+            "track-count": 10,
+            "media": [
+              {
+                "id": "edbbd3e0-e9fe-3367-b143-4d152a3dac49",
+                "position": 1,
+                "format": "12\" Vinyl",
+                "track": [
+                  {
+                    "id": "c46c57a7-74e7-38cf-99a6-8b694421de02",
+                    "number": "B5",
+                    "title": "Arrival",
+                    "length": 181640
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "3e9a51e7-d239-4c1c-982f-83ecf8b28dd2",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 3,
+            "title": "The Hits Box",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "19a50b84-0001-4b93-a594-91c3a2ef2cdb",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "The Hits Box",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "1992",
+            "country": "GB",
+            "release-events": [
+              {
+                "date": "1992",
+                "area": {
+                  "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+                  "name": "United Kingdom",
+                  "sort-name": "United Kingdom",
+                  "iso-3166-1-codes": [
+                    "GB"
+                  ]
+                }
+              }
+            ],
+            "track-count": 40,
+            "media": [
+              {
+                "id": "a1a76a08-30bf-3379-9de0-c0f758c4d893",
+                "position": 2,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "c22544ce-b11b-3b5b-95bd-fef8c02d4584",
+                    "number": "2",
+                    "title": "Arrival",
+                    "length": 183000
+                  }
+                ],
+                "track-count": 14,
+                "track-offset": 1
+              }
+            ]
+          },
+          {
+            "id": "c6259fcf-19c2-3f1f-aa29-0f36f7932293",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "disambiguation": "2001 remaster",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "2001-07-25",
+            "country": "DE",
+            "release-events": [
+              {
+                "date": "2001-07-25",
+                "area": {
+                  "id": "85752fda-13c4-31a3-bee5-0e5cb1f51dad",
+                  "name": "Germany",
+                  "sort-name": "Germany",
+                  "iso-3166-1-codes": [
+                    "DE"
+                  ]
+                }
+              },
+              {
+                "date": "",
+                "area": {
+                  "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+                  "name": "United Kingdom",
+                  "sort-name": "United Kingdom",
+                  "iso-3166-1-codes": [
+                    "GB"
+                  ]
+                }
+              }
+            ],
+            "track-count": 12,
+            "media": [
+              {
+                "id": "ba5a4d98-8737-369c-897c-32d95f8f1ec0",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "31979144-47ec-3091-b9cd-1c852c17f6db",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 185066
+                  }
+                ],
+                "track-count": 12,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "3c502dd0-4135-497a-af3a-a31671bf83ac",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "disambiguation": "2001 remaster",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "2001-10-16",
+            "country": "US",
+            "release-events": [
+              {
+                "date": "2001-10-16",
+                "area": {
+                  "id": "489ce91b-6658-3307-9877-795b68554c98",
+                  "name": "United States",
+                  "sort-name": "United States",
+                  "iso-3166-1-codes": [
+                    "US"
+                  ]
+                }
+              }
+            ],
+            "track-count": 12,
+            "media": [
+              {
+                "id": "fad2f8ce-2863-3578-af9b-4b921882476c",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "af82bc88-d16c-3ec4-991e-73715f11642b",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 185066
+                  }
+                ],
+                "track-count": 12,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "226f8b47-f825-44b6-a5be-df65df1a606e",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 2,
+            "title": "ABBA / Arrival",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "4ea795e6-e673-4644-b2ca-d0ee78bafecc",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "ABBA / Arrival",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "2011-06-17",
+            "country": "NL",
+            "release-events": [
+              {
+                "date": "2011-06-17",
+                "area": {
+                  "id": "ef1b7cc0-cd26-36f4-8ea0-04d9623786c7",
+                  "name": "Netherlands",
+                  "sort-name": "Netherlands",
+                  "iso-3166-1-codes": [
+                    "NL"
+                  ]
+                }
+              }
+            ],
+            "track-count": 25,
+            "media": [
+              {
+                "id": "7ed46a2a-fc1b-3bb0-88c6-2d4bdae5597b",
+                "position": 2,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "68301533-7ea8-4229-abbe-45d8fcbf9587",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 185066
+                  }
+                ],
+                "track-count": 12,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "0b271f81-2f25-4bb3-b362-272961f878e1",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "2014",
+            "country": "XW",
+            "release-events": [
+              {
+                "date": "2014",
+                "area": {
+                  "id": "525d4e18-3d00-31b9-a58b-a146a916de8f",
+                  "name": "[Worldwide]",
+                  "sort-name": "[Worldwide]",
+                  "iso-3166-1-codes": [
+                    "XW"
+                  ]
+                }
+              }
+            ],
+            "track-count": 12,
+            "media": [
+              {
+                "id": "9d2636c3-dc0e-3482-a346-d9ba9cbc804d",
+                "position": 1,
+                "format": "Digital Media",
+                "track": [
+                  {
+                    "id": "e4372e5e-fac6-4b5c-bdf7-75ce1eefb496",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 182000
+                  }
+                ],
+                "track-count": 12,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "12b4461d-00d3-40b3-893c-684cc964eb3b",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 9,
+            "title": "The Complete Studio Recordings",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "d786372d-ebb1-3129-b5c8-36ab02e5bef9",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "The Complete Studio Recordings",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "2006",
+            "country": "XE",
+            "release-events": [
+              {
+                "date": "2006",
+                "area": {
+                  "id": "89a675c2-3e37-3518-b83c-418bad59a85a",
+                  "name": "Europe",
+                  "sort-name": "Europe",
+                  "iso-3166-1-codes": [
+                    "XE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 133,
+            "media": [
+              {
+                "id": "f51bdf28-814f-37c9-b1a9-dcb5c1532b83",
+                "position": 4,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "3111f4c8-b2ba-44d4-ad4b-a20dcf727dad",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 186733
+                  }
+                ],
+                "track-count": 15,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "b93be4f5-9430-48ea-a5b1-a7e1733b063b",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "The Music Still Goes On",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "89547370-1c69-3151-8ee2-a6af9c8aab50",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "The Music Still Goes On",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "1996",
+            "country": "XE",
+            "release-events": [
+              {
+                "date": "1996",
+                "area": {
+                  "id": "89a675c2-3e37-3518-b83c-418bad59a85a",
+                  "name": "Europe",
+                  "sort-name": "Europe",
+                  "iso-3166-1-codes": [
+                    "XE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 16,
+            "media": [
+              {
+                "id": "e725fe47-fdf5-3641-8690-b05f43e0faf2",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "e6f926b8-5aa6-48ce-b93d-1fb9df355ed3",
+                    "number": "16",
+                    "title": "Arrival",
+                    "length": 181440
+                  }
+                ],
+                "track-count": 16,
+                "track-offset": 15
+              }
+            ]
+          },
+          {
+            "id": "36e3bcab-1208-4330-a098-6340a8263b26",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival · Ring, Ring · Does Your Mother Know und 13 weitere ABBA-Hits",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "89547370-1c69-3151-8ee2-a6af9c8aab50",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "The Music Still Goes On",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "1996",
+            "country": "DE",
+            "release-events": [
+              {
+                "date": "1996",
+                "area": {
+                  "id": "85752fda-13c4-31a3-bee5-0e5cb1f51dad",
+                  "name": "Germany",
+                  "sort-name": "Germany",
+                  "iso-3166-1-codes": [
+                    "DE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 16,
+            "media": [
+              {
+                "id": "45f72081-9a0d-354d-98d7-3774d48a16e6",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "57158d85-7d63-3293-8bcf-bcea6afa9c97",
+                    "number": "16",
+                    "title": "Arrival",
+                    "length": 181440
+                  }
+                ],
+                "track-count": 16,
+                "track-offset": 15
+              }
+            ]
+          },
+          {
+            "id": "b4a1e89c-7cb7-41c3-81c6-d0d969cfe4cd",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "The ABBA Collection",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "89547370-1c69-3151-8ee2-a6af9c8aab50",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "The Music Still Goes On",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "",
+            "country": "IT",
+            "release-events": [
+              {
+                "date": "",
+                "area": {
+                  "id": "c6500277-9a3d-349b-bf30-41afdbf42add",
+                  "name": "Italy",
+                  "sort-name": "Italy",
+                  "iso-3166-1-codes": [
+                    "IT"
+                  ]
+                }
+              }
+            ],
+            "track-count": 16,
+            "media": [
+              {
+                "id": "a36f44b3-4e6d-39c2-bde3-0ecf210de278",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "ce545b92-3dc7-4e34-99fe-5a7d7f6973ac",
+                    "number": "16",
+                    "title": "Arrival",
+                    "length": 181440
+                  }
+                ],
+                "track-count": 16,
+                "track-offset": 15
+              }
+            ]
+          },
+          {
+            "id": "ad5da872-23a7-3119-a9f0-7b5b7b7855a9",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "The Music Still Goes On",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "89547370-1c69-3151-8ee2-a6af9c8aab50",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "The Music Still Goes On",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "1996-04-16",
+            "country": "DE",
+            "release-events": [
+              {
+                "date": "1996-04-16",
+                "area": {
+                  "id": "85752fda-13c4-31a3-bee5-0e5cb1f51dad",
+                  "name": "Germany",
+                  "sort-name": "Germany",
+                  "iso-3166-1-codes": [
+                    "DE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 16,
+            "media": [
+              {
+                "id": "87d105fa-c488-3da6-8091-3c87910046b9",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "3e586491-ccd7-3702-b551-bbb5cc7b49af",
+                    "number": "16",
+                    "title": "Arrival",
+                    "length": 182240
+                  }
+                ],
+                "track-count": 16,
+                "track-offset": 15
+              }
+            ]
+          },
+          {
+            "id": "541324c9-fbc8-4757-9280-af545703c463",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "The Music Still Goes On",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "89547370-1c69-3151-8ee2-a6af9c8aab50",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "The Music Still Goes On",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "1996-03",
+            "country": "GB",
+            "release-events": [
+              {
+                "date": "1996-03",
+                "area": {
+                  "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+                  "name": "United Kingdom",
+                  "sort-name": "United Kingdom",
+                  "iso-3166-1-codes": [
+                    "GB"
+                  ]
+                }
+              }
+            ],
+            "track-count": 16,
+            "media": [
+              {
+                "id": "5573d572-bf39-3969-b01e-9f5e07d8150f",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "3de1e054-375a-3200-93df-7336a5178697",
+                    "number": "16",
+                    "title": "Arrival",
+                    "length": 182240
+                  }
+                ],
+                "track-count": 16,
+                "track-offset": 15
+              }
+            ]
+          },
+          {
+            "id": "03e645f2-1d71-423f-bc6c-6dcb37793a9b",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 4,
+            "title": "The Ultimate Collection",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "dbf09c2a-5a16-36c0-b3f8-2025f0dd47aa",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "The ABBA Collection",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "2003",
+            "country": "GB",
+            "release-events": [
+              {
+                "date": "2003",
+                "area": {
+                  "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+                  "name": "United Kingdom",
+                  "sort-name": "United Kingdom",
+                  "iso-3166-1-codes": [
+                    "GB"
+                  ]
+                }
+              }
+            ],
+            "track-count": 80,
+            "media": [
+              {
+                "id": "9c4fc1d6-966a-3487-b4c3-c25fe1d96712",
+                "position": 4,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "c405f578-dbc8-3130-936b-a909d2613eee",
+                    "number": "5",
+                    "title": "Arrival",
+                    "length": 183693
+                  }
+                ],
+                "track-count": 19,
+                "track-offset": 4
+              }
+            ]
+          },
+          {
+            "id": "235e0767-a383-4543-87a0-366813fb3778",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 4,
+            "title": "The ABBA Collection",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "dbf09c2a-5a16-36c0-b3f8-2025f0dd47aa",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "The ABBA Collection",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "1992",
+            "country": "XE",
+            "release-events": [
+              {
+                "date": "1992",
+                "area": {
+                  "id": "89a675c2-3e37-3518-b83c-418bad59a85a",
+                  "name": "Europe",
+                  "sort-name": "Europe",
+                  "iso-3166-1-codes": [
+                    "XE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 80,
+            "media": [
+              {
+                "id": "a8e6aa8d-1749-3469-83fa-2071c85bd890",
+                "position": 4,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "7f3018c5-e411-3296-9b63-caaa160aa9da",
+                    "number": "5",
+                    "title": "Arrival",
+                    "length": 182800
+                  }
+                ],
+                "track-count": 19,
+                "track-offset": 4
+              }
+            ]
+          },
+          {
+            "id": "268a60bb-b6b9-44aa-9ff9-e1eacccf6e67",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "1984-06-21",
+            "country": "JP",
+            "release-events": [
+              {
+                "date": "1984-06-21",
+                "area": {
+                  "id": "2db42837-c832-3c27-b4a3-08198f75693c",
+                  "name": "Japan",
+                  "sort-name": "Japan",
+                  "iso-3166-1-codes": [
+                    "JP"
+                  ]
+                }
+              }
+            ],
+            "track-count": 10,
+            "media": [
+              {
+                "id": "a95b23bd-4b42-38f8-9514-061f35559c3f",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "297d07fd-e792-456d-9a79-150c0e782aa2",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 182240
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "21b344bf-387b-33e6-949a-55661aaea7b7",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "1976",
+            "country": "AU",
+            "release-events": [
+              {
+                "date": "1976",
+                "area": {
+                  "id": "106e0bec-b638-3b37-b731-f53d507dc00e",
+                  "name": "Australia",
+                  "sort-name": "Australia",
+                  "iso-3166-1-codes": [
+                    "AU"
+                  ]
+                }
+              }
+            ],
+            "track-count": 10,
+            "media": [
+              {
+                "id": "1bd94169-3d8c-3f11-8361-9633ea11b4ee",
+                "position": 1,
+                "format": "12\" Vinyl",
+                "track": [
+                  {
+                    "id": "98aa5138-70e7-3d29-accb-d48bf8e21ac5",
+                    "number": "B5",
+                    "title": "Arrival",
+                    "length": 181640
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "90aaf390-7c74-4d7a-a7d2-d8897861a959",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "disambiguation": "remastered",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "2009-01-21",
+            "country": "JP",
+            "release-events": [
+              {
+                "date": "2009-01-21",
+                "area": {
+                  "id": "2db42837-c832-3c27-b4a3-08198f75693c",
+                  "name": "Japan",
+                  "sort-name": "Japan",
+                  "iso-3166-1-codes": [
+                    "JP"
+                  ]
+                }
+              }
+            ],
+            "track-count": 12,
+            "media": [
+              {
+                "id": "5d28e1a4-f885-3dd0-819a-7e1e49cce6d8",
+                "position": 1,
+                "format": "SHM-CD",
+                "track": [
+                  {
+                    "id": "1e9d33c9-23b4-4de6-954d-6e4defa09cdd",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 185066
+                  }
+                ],
+                "track-count": 12,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "9f606574-1a02-4e8f-ba37-e969a92acd9a",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "1976-10-11",
+            "country": "FR",
+            "release-events": [
+              {
+                "date": "1976-10-11",
+                "area": {
+                  "id": "08310658-51eb-3801-80de-5a0739207115",
+                  "name": "France",
+                  "sort-name": "France",
+                  "iso-3166-1-codes": [
+                    "FR"
+                  ]
+                }
+              }
+            ],
+            "track-count": 10,
+            "media": [
+              {
+                "id": "8ab9781c-4fd9-37d2-b814-adf34b637c60",
+                "position": 1,
+                "format": "12\" Vinyl",
+                "track": [
+                  {
+                    "id": "f4f67deb-a8e8-4e10-ba34-6c01e0267a2d",
+                    "number": "B5",
+                    "title": "Arrival",
+                    "length": 181640
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "bc141786-124f-4690-aa6f-828afb9b3297",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "1976-10-11",
+            "country": "SE",
+            "release-events": [
+              {
+                "date": "1976-10-11",
+                "area": {
+                  "id": "23d10872-f5ae-3f0c-bf55-332788a16ecb",
+                  "name": "Sweden",
+                  "sort-name": "Sweden",
+                  "iso-3166-1-codes": [
+                    "SE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 10,
+            "media": [
+              {
+                "id": "9c9ae002-f380-3747-a4ef-857f6cb7b1ac",
+                "position": 1,
+                "format": "12\" Vinyl",
+                "track": [
+                  {
+                    "id": "a8f1e36c-7cf3-357d-812b-3d4c92940ed0",
+                    "number": "B5",
+                    "title": "Arrival",
+                    "length": 181640
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "cea3881c-98e9-3fd9-a322-403a39d59806",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "1976",
+            "country": "GB",
+            "release-events": [
+              {
+                "date": "1976",
+                "area": {
+                  "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+                  "name": "United Kingdom",
+                  "sort-name": "United Kingdom",
+                  "iso-3166-1-codes": [
+                    "GB"
+                  ]
+                }
+              }
+            ],
+            "track-count": 10,
+            "media": [
+              {
+                "id": "aa698710-2938-38ee-b23e-d729e824bca9",
+                "position": 1,
+                "format": "12\" Vinyl",
+                "track": [
+                  {
+                    "id": "66cca69d-1ba0-3577-8f9f-08b64cb1a095",
+                    "number": "B5",
+                    "title": "Arrival",
+                    "length": 181640
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "be116efd-c7ce-3a33-95e6-5c448cf91c04",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "1976",
+            "country": "DE",
+            "release-events": [
+              {
+                "date": "1976",
+                "area": {
+                  "id": "85752fda-13c4-31a3-bee5-0e5cb1f51dad",
+                  "name": "Germany",
+                  "sort-name": "Germany",
+                  "iso-3166-1-codes": [
+                    "DE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 10,
+            "media": [
+              {
+                "id": "26ea5c99-1dd4-3eba-a616-dfa30edc5df8",
+                "position": 1,
+                "format": "12\" Vinyl",
+                "track": [
+                  {
+                    "id": "1c6174d9-7767-33a5-a586-7fe3587bbc3b",
+                    "number": "B5",
+                    "title": "Arrival",
+                    "length": 181640
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "989e44d9-dfad-37cd-91ca-a3a8e797180d",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "1976",
+            "country": "YU",
+            "release-events": [
+              {
+                "date": "1976",
+                "area": {
+                  "id": "885dce63-c211-3033-8cf7-46cb82d440c7",
+                  "name": "Yugoslavia",
+                  "sort-name": "Yugoslavia",
+                  "iso-3166-1-codes": [
+                    "YU"
+                  ]
+                }
+              }
+            ],
+            "track-count": 10,
+            "media": [
+              {
+                "id": "6d34e2a4-4887-3c8a-9d3b-61c7d97fe0b0",
+                "position": 1,
+                "format": "12\" Vinyl",
+                "track": [
+                  {
+                    "id": "c305cf3d-e84a-386c-a2ce-8575e32a1b3b",
+                    "number": "B5",
+                    "title": "Arrival",
+                    "length": 181640
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "f2e7464f-d63b-426b-9a11-6c12c3b5bb84",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "disambiguation": "1997 remaster",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "1997",
+            "country": "ZA",
+            "release-events": [
+              {
+                "date": "1997",
+                "area": {
+                  "id": "50cc7852-862e-30ae-aa82-385fe7135b7f",
+                  "name": "South Africa",
+                  "sort-name": "South Africa",
+                  "iso-3166-1-codes": [
+                    "ZA"
+                  ]
+                }
+              }
+            ],
+            "track-count": 11,
+            "media": [
+              {
+                "id": "fe91c29f-cff2-3750-a001-4f258eca492b",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "da48a7d6-6891-308f-91cb-db8501f7811f",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 185066
+                  }
+                ],
+                "track-count": 11,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "0640e31e-e4cb-32f4-be23-e11e4aef8c1b",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "disambiguation": "made in W. Germany by PolyGram",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "1984",
+            "country": "DE",
+            "release-events": [
+              {
+                "date": "1984",
+                "area": {
+                  "id": "85752fda-13c4-31a3-bee5-0e5cb1f51dad",
+                  "name": "Germany",
+                  "sort-name": "Germany",
+                  "iso-3166-1-codes": [
+                    "DE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 10,
+            "media": [
+              {
+                "id": "e1f69ae8-50f2-35fc-95b0-e7370d5978aa",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "8931933b-7167-3141-9101-c5091d679f5b",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 181640
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "efbc7110-6a38-41c1-8649-0dd6fb3e655e",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "1992-11",
+            "country": "ZA",
+            "release-events": [
+              {
+                "date": "1992-11",
+                "area": {
+                  "id": "50cc7852-862e-30ae-aa82-385fe7135b7f",
+                  "name": "South Africa",
+                  "sort-name": "South Africa",
+                  "iso-3166-1-codes": [
+                    "ZA"
+                  ]
+                }
+              }
+            ],
+            "track-count": 10,
+            "media": [
+              {
+                "id": "f66fec40-2e74-352b-99f1-f16f75cb99b5",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "fa0d48ab-b899-4e66-acf1-ccec4b7127cf",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 181640
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "c3a06dac-041f-4a94-b8a6-fa665414664e",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "disambiguation": "1997 remaster",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "1997-03-24",
+            "country": "GB",
+            "release-events": [
+              {
+                "date": "1997-03-24",
+                "area": {
+                  "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+                  "name": "United Kingdom",
+                  "sort-name": "United Kingdom",
+                  "iso-3166-1-codes": [
+                    "GB"
+                  ]
+                }
+              }
+            ],
+            "track-count": 11,
+            "media": [
+              {
+                "id": "f16f9946-4971-3660-807d-be18491d8ec8",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "f0b211c0-bc39-3ff9-9af6-2861b0d766ac",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 185066
+                  }
+                ],
+                "track-count": 11,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "8d13507e-26a1-4e0d-98b6-59ea878c5576",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "949a7fd5-fe73-3e8f-922e-01ff4ca958f7",
+            "count": 1,
+            "title": "Reflections",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "Various Artists",
+                "artist": {
+                  "id": "89ad4ac3-39f7-470e-963a-56509c546377",
+                  "name": "Various Artists",
+                  "sort-name": "Various Artists",
+                  "disambiguation": "add compilations to this artist"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "7e7b0fb0-cc5b-4b9f-9c95-a2e0995b70f1",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Reflections",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "1990",
+            "country": "GB",
+            "release-events": [
+              {
+                "date": "1990",
+                "area": {
+                  "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+                  "name": "United Kingdom",
+                  "sort-name": "United Kingdom",
+                  "iso-3166-1-codes": [
+                    "GB"
+                  ]
+                }
+              }
+            ],
+            "track-count": 18,
+            "media": [
+              {
+                "id": "c1a786ab-386a-39a2-81a4-da78c89557b6",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "d2ee6be3-ae27-355f-acf1-15accb5ea6e6",
+                    "number": "18",
+                    "title": "Arrival",
+                    "length": 180733
+                  }
+                ],
+                "track-count": 18,
+                "track-offset": 17
+              }
+            ]
+          },
+          {
+            "id": "908ae31d-f9a9-46ed-9b5a-a31bc17f6452",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 2,
+            "title": "Arrival",
+            "status": "Official",
+            "disambiguation": "deluxe edition",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "2006-10-16",
+            "country": "XE",
+            "release-events": [
+              {
+                "date": "2006-10-16",
+                "area": {
+                  "id": "89a675c2-3e37-3518-b83c-418bad59a85a",
+                  "name": "Europe",
+                  "sort-name": "Europe",
+                  "iso-3166-1-codes": [
+                    "XE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 33,
+            "media": [
+              {
+                "id": "a24dc772-e7f4-3e0b-a23d-9b250e49849f",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "f3bf92ad-eafc-32a6-8c77-750d5e63730f",
+                    "number": "10",
+                    "title": "Arrival",
+                    "length": 186733
+                  }
+                ],
+                "track-count": 16,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "2cbe3c78-aded-4e80-af2c-aa047df98eb0",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "1976",
+            "country": "US",
+            "release-events": [
+              {
+                "date": "1976",
+                "area": {
+                  "id": "489ce91b-6658-3307-9877-795b68554c98",
+                  "name": "United States",
+                  "sort-name": "United States",
+                  "iso-3166-1-codes": [
+                    "US"
+                  ]
+                }
+              }
+            ],
+            "track-count": 10,
+            "media": [
+              {
+                "id": "ebafc4af-d3d9-3789-a715-b6307f5fa5d3",
+                "position": 1,
+                "format": "12\" Vinyl",
+                "track": [
+                  {
+                    "id": "75c0b5c5-fcea-3218-aab7-50f5bdf118d5",
+                    "number": "B5",
+                    "title": "Arrival",
+                    "length": 180000
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          },
+          {
+            "id": "5aedf44c-e343-451f-a39b-584199e905f3",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "The Collection",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "9ca1db15-e5e6-45dc-9c27-6b10722de8d5",
+              "type-id": "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "The Collection",
+              "primary-type": "Album",
+              "secondary-types": [
+                "Compilation"
+              ],
+              "secondary-type-ids": [
+                "dd2a21e1-0c00-3729-a7a0-de60b84eb5d1"
+              ]
+            },
+            "date": "1987",
+            "country": "XE",
+            "release-events": [
+              {
+                "date": "1987",
+                "area": {
+                  "id": "89a675c2-3e37-3518-b83c-418bad59a85a",
+                  "name": "Europe",
+                  "sort-name": "Europe",
+                  "iso-3166-1-codes": [
+                    "XE"
+                  ]
+                }
+              }
+            ],
+            "track-count": 18,
+            "media": [
+              {
+                "id": "e56987c9-030c-3356-8a6c-0ad430806ed0",
+                "position": 1,
+                "format": "CD",
+                "track": [
+                  {
+                    "id": "58dd4270-665a-3f6b-8d3c-4d0570b5b4be",
+                    "number": "15",
+                    "title": "Arrival",
+                    "length": 183000
+                  }
+                ],
+                "track-count": 18,
+                "track-offset": 14
+              }
+            ]
+          },
+          {
+            "id": "7bd8d33e-ae9e-4357-a547-9d3fb0bf6be3",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "6c7a1871-1858-3139-a51c-5181f6804ee7",
+            "count": 1,
+            "title": "Arrival",
+            "status": "Official",
+            "disambiguation": "half-speed remaster",
+            "artist-credit": [
+              {
+                "name": "ABBA",
+                "artist": {
+                  "id": "d87e52c5-bb8d-4da8-b941-9f4928627dc8",
+                  "name": "ABBA",
+                  "sort-name": "ABBA",
+                  "disambiguation": "Swedish pop group"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "e464e167-83ab-3b59-88bd-262cf552056e",
+              "type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+              "title": "Arrival",
+              "primary-type": "Album"
+            },
+            "date": "2016-10-07",
+            "country": "XW",
+            "release-events": [
+              {
+                "date": "2016-10-07",
+                "area": {
+                  "id": "525d4e18-3d00-31b9-a58b-a146a916de8f",
+                  "name": "[Worldwide]",
+                  "sort-name": "[Worldwide]",
+                  "iso-3166-1-codes": [
+                    "XW"
+                  ]
+                }
+              }
+            ],
+            "track-count": 10,
+            "media": [
+              {
+                "id": "a7910750-d084-33f7-9c6d-a41f039e2a47",
+                "position": 1,
+                "format": "12\" Vinyl",
+                "track": [
+                  {
+                    "id": "9912868a-2ac1-4526-b24f-15a42a2d175c",
+                    "number": "D3",
+                    "title": "Arrival",
+                    "length": 181640
+                  }
+                ],
+                "track-count": 10,
+                "track-offset": 9
+              }
+            ]
+          }
+        ],
+        "isrcs": [
+          "SEAYD7601100"
+        ],
+        "tags": [
+          {
+            "count": 1,
+            "name": "rock"
+          },
+          {
+            "count": 8,
+            "name": "pop"
+          },
+          {
+            "count": 2,
+            "name": "dance"
+          },
+          {
+            "count": 1,
+            "name": "folk rock"
+          },
+          {
+            "count": 1,
+            "name": "disco"
+          },
+          {
+            "count": 1,
+            "name": "dance-pop"
+          },
+          {
+            "count": 2,
+            "name": "pop rock"
+          },
+          {
+            "count": 1,
+            "name": "am pop"
+          },
+          {
+            "count": 1,
+            "name": "celtic new age"
+          }
+        ]
+      }
+    ]
+  }
+}

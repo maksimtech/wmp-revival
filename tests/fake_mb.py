@@ -59,6 +59,8 @@ class FixtureMB:
             ("Mine All Day", "search_mine_all_day.json"),
             ('recording:"Long Way to Happy"', "search_long_way_to_happy.json"),
             ('recording:"Stupid Girls"', "search_stupid_girls.json"),
+            ('artist:"ABBA, Abba"', "search_arrival_abba_doppio.json"),  # zero risultati, come dal vivo
+            ('recording:"Arrival" AND artist:"ABBA"', "search_arrival_abba.json"),
         ):
             if needle in query:
                 recordings: list[dict[str, Any]] = body(name)["recordings"]

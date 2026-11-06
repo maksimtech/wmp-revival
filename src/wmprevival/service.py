@@ -71,7 +71,32 @@ def lucene_phrase(text: str) -> str:
 
 
 MAX_ANCHORS = 3  # file da cui partire con la ricerca, se il primo non trova niente
-MAX_SEARCHES = 4  # ricerche al massimo per una richiesta (1 al secondo sull'API pubblica)
+MAX_SEARCHES = 5  # ricerche al massimo per una richiesta (1 al secondo sull'API pubblica)
+
+_ARTIST_SEPARATORS = re.compile(r"\s*[;/]\s*|,\s+")
+_VARIOUS = {"various artists", "artisti vari", "various", "va", "verschiedene interpreten"}
+
+
+def collapse_artist(artist: str) -> str:
+    """'ABBA, Abba' -> 'ABBA': WMP unisce con ', ' i valori multipli del tag artista.
+
+    Solo se tutte le parti sono lo stesso nome: 'Earth, Wind & Fire' resta com'è.
+    """
+    parts = [p for p in _ARTIST_SEPARATORS.split(artist) if p.strip()]
+    if len(parts) > 1 and len({norm(p) for p in parts}) == 1:
+        return parts[0].strip()
+    return artist
+
+
+def artist_candidates(track: MdqTrack) -> list[str]:
+    """Artista della traccia, sua forma compattata, artista dell'album (tranne 'Various Artists')."""
+    found: list[str] = []
+    raw = (track.artist, collapse_artist(track.artist), track.album_artist, collapse_artist(track.album_artist))
+    for artist in raw:
+        if artist and norm(artist) not in _VARIOUS and norm(artist) not in {norm(a) for a in found}:
+            found.append(artist)
+    return found or [""]
+
 
 _FILENAME_NUMBER = re.compile(r"^\s*(?:\d+\s*-\s*)?(\d{1,3})\s*[.\-_)]?\s+")
 _EXTENSION = re.compile(r"\.[A-Za-z0-9]{2,5}$")
@@ -161,8 +186,8 @@ class MetadataService:
 
     def _query(self, track: MdqTrack, with_album: bool) -> str:
         parts = [f"recording:{lucene_phrase(strip_store_markers(track.title))}"]
-        if track.artist or track.album_artist:
-            parts.append(f"artist:{lucene_phrase(track.artist or track.album_artist)}")
+        if track.artist:
+            parts.append(f"artist:{lucene_phrase(track.artist)}")
         if with_album and track.album:
             parts.append(f"release:{lucene_phrase(strip_store_markers(track.album))}")
         return " AND ".join(parts)
@@ -247,11 +272,16 @@ class MetadataService:
         """
         attempts: list[tuple[MdqTrack, bool]] = []
         for track in mdq.tracks[:MAX_ANCHORS]:
-            for title in title_candidates(track):
-                attempts.append((replace(track, title=title), True))
+            for artist in artist_candidates(track):
+                for title in title_candidates(track):
+                    attempts.append((replace(track, title=title, artist=artist), True))
         for track in mdq.tracks[:1]:
             if track.album:
-                attempts += [(replace(track, title=title), False) for title in title_candidates(track)]
+                attempts += [
+                    (replace(track, title=title, artist=artist), False)
+                    for artist in artist_candidates(track)
+                    for title in title_candidates(track)
+                ]
         tried: set[str] = set()
         for variant, with_album in attempts:
             query = self._query(variant, with_album)

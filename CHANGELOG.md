@@ -43,6 +43,8 @@ Versioni: [CalVer](https://calver.org/) `YYYY.MM.PATCH`.
   un documento precedente con i `trackRequestID` della richiesta nuova (tre file di P!nk diventati
   tutti "Long Way to Happy"). Ora ogni risposta sui file ha un `WMCollectionID` proprio; la
   release resta in `dataProviderParams`.
+- Gli album con l'artista ripetuto nel tag (WMP manda "ABBA, Abba") si trovano: la ricerca prova
+  anche la forma compattata e l'artista dell'album.
 - I tag già rovinati si riparano: se il titolo del tag non è compatibile con la durata, la
   ricerca e l'abbinamento usano il titolo ricavato dal nome del file, provando fino a tre file.
 - `serve` e `record` non stampano più un traceback di asyncio quando WMP chiude la connessione
