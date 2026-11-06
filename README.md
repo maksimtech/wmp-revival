@@ -63,7 +63,7 @@ nelle sessioni di cattura: TOC e impronte audio inviati da WMP arrivano a Micros
 Per trasformare una cattura in fixture di test, togliendo i GUID:
 
 ```powershell
-uv run wmprevival fixture <cattura.json> tests/fixtures/<nome>.json
+uv run wmprevival fixture --drop-upstream-body <cattura.json> tests/fixtures/captures/<nome>.json
 ```
 
 ## Strumenti

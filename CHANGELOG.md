@@ -6,6 +6,22 @@ Versioni: [CalVer](https://calver.org/) `YYYY.MM.PATCH`.
 
 ## [Unreleased]
 
+### Aggiunto
+
+- `record` segnala ogni ClientHello TLS: se non segue una richiesta, il client ha
+  rifiutato il certificato.
+- `scripts/cattura.cmd` per una sessione di cattura completa da un prompt amministratore.
+- `fixture --drop-upstream-body` toglie le pagine e gli script del server Microsoft dalle
+  fixture. Prime fixture reali in `tests/fixtures/captures/` (tre `GetMDRCD` e un FAI su CD)
+  con i test del formato osservato.
+- `CLAUDE.md`: risultati della prima cattura (query del CD, risposta "Gracenote provider has
+  been removed", pagina FAI in modalità IE7, `WriteNamesEx(2, "", mdr, true)`).
+
+### Corretto
+
+- La CLI non si interrompe più con `UnicodeEncodeError` quando l'output va su una console
+  cp1252: i simboli non rappresentabili diventano `?`.
+
 ## [2026.11.0] - 2026-11-06
 
 ### Aggiunto

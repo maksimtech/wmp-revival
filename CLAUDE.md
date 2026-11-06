@@ -31,7 +31,10 @@ WMP (x86) ──HTTPS──> musicmatch-ssl.xboxlive.com
    `wmploc.dll.mui`, ecc.). Sono firmati tramite catalogo e Windows Update li
    sovrascrive. Si lavora solo per **interoperabilità**: file hosts, certificato
    locale, server che risponde.
-2. **Non mettere binari Microsoft nel repository.**
+2. **Non mettere binari Microsoft nel repository**, e nemmeno pagine, CSS o
+   script del server Microsoft (es. `suggestions.js`, firmato da Microsoft).
+   Le fixture si creano con `wmprevival fixture --drop-upstream-body`; i nostri
+   HTML/JS si scrivono da zero, rispettando solo l'interfaccia osservata.
 3. **Segreti fuori dal codice.** Il token Discogs si legge da variabile
    d'ambiente (`DISCOGS_TOKEN`) o da un file di configurazione escluso da git.
    Mai nei log, mai nelle risposte a WMP.
@@ -354,6 +357,89 @@ gestore skin), `wmpdxm.dll` (compatibilità WMP 6.4 / NetShow `NSPlay`),
 `wmprph.exe` (anteprima in Esplora risorse), `wmpnetwk.exe` (server DLNA, solo
 64 bit; legge i tag dall'indice di Windows Search).
 
+## Prima cattura (2026-11-06, `setup` + `record --forward`)
+
+WMP a 32 bit, CD *Joy* nel lettore, poi "Trova informazioni album" sul CD.
+Catture in `%LOCALAPPDATA%\WMPRevival\captures`, fixture (senza materiale
+Microsoft) in `tests/fixtures/captures/`.
+
+- **WMP accetta la CA locale**: TLS 1.3 completato, SNI
+  `musicmatch-ssl.xboxlive.com`. Nessun pinning (domanda 5 chiusa).
+- **Ricerca automatica del CD: `GET`, senza corpo** (il modello DAI non è stato
+  usato):
+
+  ```text
+  GET /cdinfo/GetMDRCD.aspx?locale=410&geoid=76&version=12.0.26100.9549&userlocale=410&CD=C+96+5370+...+3AC1A
+  Accept: */*
+  User-Agent: Windows-Media-Player/12.0.26100.9711
+  Accept-Encoding: gzip, deflate
+  ```
+
+  - `locale` e `userlocale` sono LCID in esadecimale (0x410 = it-IT), `geoid` è
+    un GEOID in esadecimale (0x76 = 118 = Italia).
+  - `version` è la versione di `SysWOW64\wmp.dll` (9549), mentre lo User-Agent
+    porta 9711 (la versione della `wmp.dll` a 64 bit / del sistema): non fidarsi
+    dello User-Agent per la versione.
+  - `CD=` (maiuscolo) è **esattamente** il TOC salvato in `Album.TOC`, con `+`
+    letterali. Mai decodificarlo con `unquote_plus`/`parse_qsl`.
+  - All'avvio WMP ha richiesto **tutti e tre** i CD visti in giornata (e due
+    volte *Joy*): i dischi "non trovati" vengono richiesti di nuovo.
+- **Risposta del server vero oggi** (200, gzip, `Cache-Control: no-cache, no-store`):
+
+  ```xml
+  <?xml version="1.0"?>
+  <METADATA xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Backoff><Time>5</Time></Backoff>
+    <mdqRequestID>00000000-0000-0000-0000-000000000000</mdqRequestID>
+    <ResponseCode>Gracenote provider has been removed</ResponseCode>
+  </METADATA>
+  ```
+
+  Il servizio era basato su Gracenote, ora rimosso. `<Backoff><Time>` dice a WMP
+  quanto aspettare (unità da capire: probabilmente minuti); è un elemento che
+  possiamo usare anche noi per regolare i tentativi. WMP conta queste risposte
+  come download riusciti (`AutoMetadataCurrentDownloadCount`).
+- **"Trova informazioni album" sul CD: pagina HTML**, non XML:
+
+  ```text
+  GET /FAI/default.aspx?locale=410&geoid=76&version=12.0.26100.9549&userlocale=410&cd=C+96+...+3AC1A
+  User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 10.0; WOW64; Trident/7.0; ...)
+  Accept-Language: it-IT
+  ```
+
+  `cd=` qui è **minuscolo**. Il motore è MSHTML in **modalità documento IE7**:
+  niente `JSON`, `querySelector`, `addEventListener`, `const/let`; solo ES3.
+  La pagina carica `style.css` e `suggestions.js` (percorsi relativi, quindi
+  `/FAI/style.css` e `/FAI/suggestions.js`, con `Referer`).
+- **Struttura della pagina risultati** (oggi vuota, "Nessuna corrispondenza
+  trovata"): uno script inline con
+
+  ```js
+  var mdrcds = [];   // un documento MDR-CD (stringa XML) per ogni album candidato
+  var matches = [];  // per ogni candidato, gli indici delle tracce che corrispondono
+  ```
+
+  due colonne ("Elenco di tracce" con righe `tr.track` id `track-N`, "Album" con
+  elementi id `album-N` selezionabili), pulsante "Fine" (`finish()`, disabilitato
+  finché non si sceglie un album) e "Annulla" (`window.external.ReturnToMainTask()`).
+- **Come la pagina restituisce i dati a WMP** (da `suggestions.js`, letto, non
+  copiato):
+
+  ```js
+  window.external.WriteNamesEx(2, "", EncodeOMI(mdrcds[scelto]), true);
+  window.external.ReturnToMainTask();
+  ```
+
+  - tipo **2 (`WMP_WRITENAMES_TYPE_CD_BY_MDQCD`) anche per un CD**, `bstrTypeId`
+    vuoto, `fRenameRegroupFiles = true`;
+  - `EncodeOMI`: nel testo tra `>` e `<`, ogni carattere con codice > 126
+    diventa un riferimento numerico `&#N;`. L'MDR passato a WMP è quindi ASCII.
+    Il nostro server può produrlo già così (lxml con `encoding="us-ascii"`), e
+    la nostra pagina non ha bisogno di ricodificare.
+- **Non catturato**: "Trova informazioni album" su un **file** (nessuna
+  richiesta registrata per quel passo). La pagina ponte con
+  `GetMDQByRequestID` resta da vedere.
+
 ## Decisioni prese (2026-11-06)
 
 1. Fase 1: registratore con modalità opzionale `--forward` verso il server
@@ -432,8 +518,13 @@ Procedere in quest'ordine. Ogni fase si chiude con test verdi.
     `window.external` (presumibilmente `WriteNamesEx(2, ...)`), eventuale scelta
     tra più candidati, `ReturnToMainTask()`.
 - Pagine generate con Jinja2 e autoescape (regola 8), con test anti-XSS.
-- Pagine adatte al motore HTML di WMP (MSHTML/Trident, modalità documento
-  vecchia): JavaScript ES3, niente `fetch`, niente librerie esterne.
+- Pagine adatte al motore HTML di WMP (MSHTML, **modalità documento IE7**,
+  verificato): JavaScript ES3, niente `JSON`, `fetch`, `querySelector`,
+  `addEventListener`, niente librerie esterne. Servire anche `/FAI/style.css` e
+  `/FAI/suggestions.js` nostri.
+- La stessa pagina risultati serve anche per "Trova informazioni album" su un
+  CD (`?cd=<toc>`), con `WriteNamesEx(2, "", mdr, true)`: va fatta insieme alla
+  fase 3.
 - Ricerca su MusicBrainz per artista/album/titolo con corrispondenza per durata
   e numero traccia, sull'API pubblica (gli indici del mirror servirebbero solo
   con il mirror).
@@ -490,15 +581,17 @@ Procedere in quest'ordine. Ogni fase si chiude con test verdi.
 
 ## Domande aperte (da risolvere nell'ordine)
 
-1. Formato esatto della query dopo `GetMDRCD.aspx?`; il valore `toc` in
-   libreria è noto (test zero), da confermare sul traffico.
-2. Metodo HTTP (GET o POST) e corpo per CD e per FAI.
-3. Dove va `trackRequestID` nella risposta.
-4. Come vengono risolte le copertine.
-5. WMP accetta la CA locale o fa pinning? (nessun pinning evidente in `wmp.dll`)
-6. Come forzare il nuovo tentativo sugli album già marcati "non trovato".
-7. Cosa risponde oggi il server vero a una richiesta di WMP (cattura con `--forward`).
-8. Nome del parametro della query di `FAI/default.aspx` che porta l'id della
-   richiesta MDQ, e cosa restituisce la POST della pagina ponte.
-9. Quale metodo di `window.external` usa la pagina dei risultati per restituire
-   l'MDR (ipotesi: `WriteNamesEx(2, ...)`), e se anche il CD passa da HTML.
+Chiuse dalla prima cattura: formato della query CD (1), metodo per il CD (2,
+GET senza corpo), pinning (5, assente), risposta attuale del server (7), metodo
+`window.external` della pagina risultati (9, `WriteNamesEx(2, "", mdr, true)`).
+
+1. Com'è fatta una risposta `GetMDRCD` **con** dati che WMP accetta: radice
+   `METADATA` con dentro `MDR-CD`? Quale `mdqRequestID`, dato che la richiesta
+   GET non ne porta uno? Da provare con il nostro server, partendo dal modello
+   MDR-CD 4.0 e dai messaggi d'errore di `wmp.dll`.
+2. Dove va `trackRequestID` e quali valori vuole (indice traccia 0-based?).
+3. Come vengono risolte le copertine (`largeCoverParams`/`smallCoverParams`).
+4. Unità di `<Backoff><Time>` e se WMP lo rispetta.
+5. FAI su un **file**: parametri della GET, pagina ponte, POST con `mdq`.
+6. Come forzare il nuovo tentativo sugli album già marcati "non trovato"
+   (all'avvio WMP li richiede da solo: forse basta riaprirlo).

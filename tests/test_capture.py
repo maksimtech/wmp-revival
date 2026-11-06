@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+from typing import Any
 
 from wmprevival import capture, recorder
 
@@ -37,6 +38,21 @@ def test_same_guid_same_placeholder_everywhere() -> None:
     assert out["upstream"]["body"]["form"] == [["mdq", f"<id>{placeholder.upper()}</id>"]]
     assert out["client"] == "127.0.0.1"
     assert warnings == [".binary: corpo binario non anonimizzato"]
+
+
+def test_drop_upstream_body_keeps_metadata_only() -> None:
+    rec: dict[str, Any] = {
+        "upstream": {
+            "status": 200,
+            "headers": [["Content-Type", "text/html"]],
+            "body": recorder.encode_body(b"<html>Microsoft</html>", content_type="text/html"),
+        }
+    }
+    out = capture.drop_upstream_body(rec)
+    assert out["upstream"]["status"] == 200 and out["upstream"]["headers"] == [["Content-Type", "text/html"]]
+    assert out["upstream"]["body"] == {"length": 22, "text_encoding": "utf-8", "omitted": capture.OMITTED}
+    assert "base64" in rec["upstream"]["body"]  # l'originale resta intatto
+    assert capture.drop_upstream_body({"request": {}}) == {"request": {}}
 
 
 def test_original_record_is_not_modified() -> None:

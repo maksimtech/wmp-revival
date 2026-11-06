@@ -66,3 +66,21 @@ def anonymize(record: dict[str, Any]) -> tuple[dict[str, Any], int, list[str]]:
     if isinstance(result, dict) and "client" in result:
         result["client"] = "127.0.0.1"
     return result, len(anon.mapping), anon.warnings
+
+
+OMITTED = "omesso: contenuto del server Microsoft, non ridistribuito nel repository"
+
+
+def drop_upstream_body(record: dict[str, Any]) -> dict[str, Any]:
+    """Toglie il corpo della risposta del server vero (HTML, CSS, JS di Microsoft).
+
+    Restano stato, header e lunghezza: bastano ai test, e il repository non ospita
+    materiale Microsoft (regola 2 di CLAUDE.md, estesa a pagine e script).
+    """
+    out = dict(record)
+    upstream = out.get("upstream")
+    if isinstance(upstream, dict) and isinstance(upstream.get("body"), dict):
+        body = upstream["body"]
+        kept = {k: body[k] for k in ("length", "decoded_length", "text_encoding") if k in body}
+        out["upstream"] = {**upstream, "body": {**kept, "omitted": OMITTED}}
+    return out

@@ -5,9 +5,11 @@ from __future__ import annotations
 import asyncio
 import contextlib
 import datetime as dt
+import io
 import json
 import shutil
 import socket
+import sys
 from enum import StrEnum
 from pathlib import Path
 from typing import Any
@@ -43,7 +45,11 @@ def _version(value: bool) -> None:
 def main(
     version: bool = typer.Option(False, "--version", callback=_version, is_eager=True, help="Mostra la versione."),
 ) -> None:
-    pass
+    # Con l'output rediretto su una console cp1252, simboli come ✓ → ← farebbero fallire
+    # la stampa (UnicodeEncodeError) dopo che il lavoro è già stato fatto: meglio un '?'.
+    for stream in (sys.stdout, sys.stderr):
+        if isinstance(stream, io.TextIOWrapper):
+            stream.reconfigure(errors="replace")
 
 
 def _fail(message: str) -> typer.Exit:
@@ -295,9 +301,14 @@ def record(
 def fixture(
     source: Path = typer.Argument(..., exists=True, dir_okay=False, help="File di cattura."),
     dest: Path = typer.Argument(..., dir_okay=False, help="Fixture da scrivere."),
+    drop_upstream_body: bool = typer.Option(
+        False, "--drop-upstream-body", help="Toglie il corpo della risposta del server vero (materiale Microsoft)."
+    ),
 ) -> None:
     """Copia una cattura come fixture di test, con i GUID sostituiti da segnaposto."""
     data = json.loads(source.read_text(encoding="utf-8"))
+    if drop_upstream_body:
+        data = capture.drop_upstream_body(data)
     result, count, warnings = capture.anonymize(data)
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
