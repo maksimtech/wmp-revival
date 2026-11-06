@@ -329,7 +329,7 @@ modifica al sistema.
   | CD | Disc ID esatto | Ricerca per TOC (`/ws/2/discid/-?toc=`) |
   | --- | --- | --- |
   | 14 tracce | 404, non collegato | 12 release diverse: rumore |
-  | 12 tracce | 404, non collegato | 1 candidata (2 edizioni): Giovanni Allevi, *Joy* (2006, IT) |
+  | 12 tracce | 404, non collegato | 1 candidata (2 edizioni): Giovanni Allevi, *Joy* (2006, IT), **confermato dall'utente** |
   | 21 tracce | solo **CD stub** "Miniclub Compilation" (Various) | - |
 
   Conseguenze per le fasi 2-3: il Disc ID esatto da solo non basta; la ricerca
