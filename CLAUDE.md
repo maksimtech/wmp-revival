@@ -436,9 +436,52 @@ Microsoft) in `tests/fixtures/captures/`.
     diventa un riferimento numerico `&#N;`. L'MDR passato a WMP è quindi ASCII.
     Il nostro server può produrlo già così (lxml con `encoding="us-ascii"`), e
     la nostra pagina non ha bisogno di ricodificare.
-- **Non catturato**: "Trova informazioni album" su un **file** (nessuna
-  richiesta registrata per quel passo). La pagina ponte con
-  `GetMDQByRequestID` resta da vedere.
+- **"Trova informazioni album" su un file** (seconda e terza sessione, FLAC
+  scaricato *Alphaville - Big in Japan*). Attenzione: un brano della libreria
+  ancora legato a un CD usa `cd=<toc>` come sopra; per vedere il flusso dei file
+  serve un brano non estratto da CD.
+  1. `GET /FAI/default.aspx?locale=410&geoid=76&version=...&userlocale=410&requestid=<GUID>`
+     (GUID generato da WMP, maiuscolo, **senza graffe**) → pagina ponte: form
+     `#bridge` (POST, nessuna action) con campo nascosto `mdq`, e lo script
+     `window.external.GetMDQByRequestID("<GUID>")` → valore del campo → `submit()`.
+  2. `POST` **sulla stessa URL** (query compresa), `application/x-www-form-urlencoded`,
+     `Referer` = URL della GET, corpo `mdq=<MDQ-CD url-encoded>`:
+
+     ```xml
+     <METADATA>
+         <MDQ-CD>
+             <mdqRequestID>GUID</mdqRequestID>
+             <track>
+                 <title><text>Big in Japan</text><word>Big</word><word>in</word><word>Japan</word></title>
+                 <artist><text>Alphaville</text><word>Alphaville</word></artist>
+                 <trackNumber>3</trackNumber>
+                 <filename>03. Alphaville - Big in Japan.flac</filename>
+                 <trace>2533 2122 1934 ... 1088</trace>   <!-- 30 interi: impronta audio -->
+                 <trackDuration>286000</trackDuration>      <!-- millisecondi -->
+                 <bitrate>807728</bitrate>
+                 <album>
+                     <title><text>Forever Young</text><word>Forever</word><word>Young</word></title>
+                     <artist><text>Alphaville</text><word>Alphaville</word></artist>
+                 </album>
+                 <trackRequestID>0</trackRequestID>         <!-- indice da 0 della traccia -->
+             </track>
+         </MDQ-CD>
+     </METADATA>
+     ```
+
+     Una sola traccia selezionata → un solo `<track>`; con più file selezionati
+     ci si aspetta più `<track>` con `trackRequestID` 0, 1, ... (da verificare).
+     Righe con CRLF e rientri di 4 spazi. Nessun TOC, nessun GUID utente.
+  3. Il server Microsoft risponde **`410 Gone`** senza corpo (`Connection:
+     close`): è l'"errore 410" che WMP mostra all'utente. Il contatore
+     `AutoMetadataCurrentOtherServerErrorCount` non è salito.
+  - Il nostro server risponderà alla POST con la **pagina risultati** (stessa
+    struttura `mdrcds`/`matches` della pagina CD) e `WriteNamesEx(2, "", mdr, true)`;
+    l'MDR dovrà riportare l'`mdqRequestID` ricevuto e, per ogni traccia, il
+    `trackRequestID` ricevuto.
+- **Contatori dopo le sessioni**: `AutoMetadataCurrentDownloadCount=13`,
+  `NetworkErrorCount=3`. Gli errori di rete vengono dai momenti con il redirect
+  attivo e il registratore fermo: fare sempre `teardown` a fine sessione.
 
 ## Decisioni prese (2026-11-06)
 
@@ -589,9 +632,11 @@ GET senza corpo), pinning (5, assente), risposta attuale del server (7), metodo
    `METADATA` con dentro `MDR-CD`? Quale `mdqRequestID`, dato che la richiesta
    GET non ne porta uno? Da provare con il nostro server, partendo dal modello
    MDR-CD 4.0 e dai messaggi d'errore di `wmp.dll`.
-2. Dove va `trackRequestID` e quali valori vuole (indice traccia 0-based?).
+2. Dove va `trackRequestID` nell'MDR (nella richiesta MDQ è l'indice da 0 della
+   traccia, dentro `<track>`): presumibilmente dentro ogni `<track>` dell'MDR,
+   con lo stesso valore.
 3. Come vengono risolte le copertine (`largeCoverParams`/`smallCoverParams`).
 4. Unità di `<Backoff><Time>` e se WMP lo rispetta.
-5. FAI su un **file**: parametri della GET, pagina ponte, POST con `mdq`.
+5. FAI con **più file** selezionati: un MDQ con più `<track>`?
 6. Come forzare il nuovo tentativo sugli album già marcati "non trovato"
    (all'avvio WMP li richiede da solo: forse basta riaprirlo).

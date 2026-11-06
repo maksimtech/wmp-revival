@@ -1,0 +1,113 @@
+{
+  "schema": 1,
+  "recorder": "wmprevival/2026.11.0",
+  "received_at": "2026-11-06T15:19:39.731207+01:00",
+  "client": "127.0.0.1",
+  "tls": {
+    "version": "TLSv1.3",
+    "cipher": "TLS_AES_256_GCM_SHA384",
+    "sni": "musicmatch-ssl.xboxlive.com"
+  },
+  "request": {
+    "method": "GET",
+    "http_version": "1.1",
+    "raw_path": "/FAI/default.aspx?locale=410&geoid=76&version=12.0.26100.9549&userlocale=410&requestid=00000000-0000-0000-0000-000000000001",
+    "path": "/FAI/default.aspx",
+    "query_string": "locale=410&geoid=76&version=12.0.26100.9549&userlocale=410&requestid=00000000-0000-0000-0000-000000000001",
+    "headers": [
+      [
+        "Accept",
+        "image/gif, image/jpeg, image/pjpeg, application/x-ms-application, application/xaml+xml, application/x-ms-xbap, */*"
+      ],
+      [
+        "Accept-Language",
+        "it-IT"
+      ],
+      [
+        "Accept-Encoding",
+        "gzip, deflate"
+      ],
+      [
+        "User-Agent",
+        "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 10.0; WOW64; Trident/7.0; .NET4.0C; .NET4.0E)"
+      ],
+      [
+        "Host",
+        "musicmatch-ssl.xboxlive.com"
+      ],
+      [
+        "Connection",
+        "Keep-Alive"
+      ]
+    ],
+    "body": {
+      "length": 0,
+      "base64": ""
+    }
+  },
+  "forwarded": true,
+  "upstream": {
+    "addresses": [
+      "184.25.52.9",
+      "2a02:26f0:8d00:594::57",
+      "2a02:26f0:8d00:584::57"
+    ],
+    "status": 200,
+    "reason": "OK",
+    "headers": [
+      [
+        "Content-Type",
+        "text/html; charset=UTF-8"
+      ],
+      [
+        "Content-Length",
+        "298"
+      ],
+      [
+        "Cache-Control",
+        "no-cache, no-store"
+      ],
+      [
+        "Content-Encoding",
+        "gzip"
+      ],
+      [
+        "MS-CV",
+        "0tSU2aFZ/UafFrbQWPEFew.0"
+      ],
+      [
+        "X-Content-Type-Options",
+        "nosniff"
+      ],
+      [
+        "x-azure-ref",
+        "20261106T141944Z-186458d88c99ssjzhC1FRAyvyn0000001nyg000000004r16"
+      ],
+      [
+        "Accept-Ranges",
+        "bytes"
+      ],
+      [
+        "Date",
+        "Fri, 06 Nov 2026 14:19:44 GMT"
+      ],
+      [
+        "Connection",
+        "keep-alive"
+      ],
+      [
+        "Vary",
+        "Accept-Encoding"
+      ]
+    ],
+    "body": {
+      "length": 298,
+      "decoded_length": 456,
+      "text_encoding": "utf-8",
+      "omitted": "omesso: contenuto del server Microsoft, non ridistribuito nel repository"
+    }
+  },
+  "response": {
+    "status": 200
+  }
+}

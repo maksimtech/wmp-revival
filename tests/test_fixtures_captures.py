@@ -69,6 +69,54 @@ def test_fai_on_a_cd_is_an_html_page_requested_by_the_ie7_engine() -> None:
     assert dict(rec["upstream"]["headers"])["Content-Type"] == "text/html; charset=UTF-8"
 
 
+REQUEST_ID = "00000000-0000-0000-0000-000000000001"  # GUID di WMP anonimizzato
+
+
+def test_fai_on_a_file_starts_with_a_get_carrying_the_request_id() -> None:
+    rec = _load("fai_file_1_get_ponte.json")
+    req = rec["request"]
+    assert req["method"] == "GET" and req["path"] == "/FAI/default.aspx"
+    params = _raw_params(req["query_string"])
+    assert [k for k, _ in params] == ["locale", "geoid", "version", "userlocale", "requestid"]
+    assert params[-1] == ("requestid", REQUEST_ID)  # senza parentesi graffe
+    assert rec["upstream"]["status"] == 200  # la pagina ponte (omessa: è di Microsoft)
+
+
+def test_bridge_posts_the_mdq_back_to_the_same_url() -> None:
+    import xml.etree.ElementTree as ET
+
+    rec = _load("fai_file_2_post_mdq.json")
+    req = rec["request"]
+    first = _load("fai_file_1_get_ponte.json")["request"]
+    assert req["method"] == "POST" and req["raw_path"] == first["raw_path"]
+    headers = dict(req["headers"])
+    assert headers["Content-Type"] == "application/x-www-form-urlencoded"
+    assert headers["Referer"] == f"https://musicmatch-ssl.xboxlive.com{first['raw_path']}"
+    [(name, mdq)] = req["body"]["form"]
+    assert name == "mdq"
+
+    root = ET.fromstring(mdq)  # fixture nostra e fidata; il server userà defusedxml
+    assert root.tag == "METADATA"
+    [query] = list(root)
+    assert query.tag == "MDQ-CD"
+    assert query.findtext("mdqRequestID") == REQUEST_ID
+    [track] = query.findall("track")
+    assert track.findtext("title/text") == "Big in Japan"
+    assert [w.text for w in track.findall("title/word")] == ["Big", "in", "Japan"]
+    assert track.findtext("artist/text") == "Alphaville"
+    assert track.findtext("album/title/text") == "Forever Young"
+    assert track.findtext("album/artist/text") == "Alphaville"
+    assert track.findtext("trackNumber") == "3"
+    assert track.findtext("trackDuration") == "286000"  # millisecondi (4:46)
+    assert track.findtext("trackRequestID") == "0"  # indice della traccia nella richiesta
+    assert track.findtext("filename") == "03. Alphaville - Big in Japan.flac"
+    assert len((track.findtext("trace") or "").split()) == 30  # impronta audio
+
+    # Il server Microsoft oggi risponde 410 Gone senza corpo: è l'errore che WMP mostra.
+    assert rec["upstream"]["status"] == 410
+    assert rec["response"] == {"status": 410}
+
+
 def test_toc_hex_count_matches_offsets() -> None:
     for toc in TOCS.values():
         values = [int(v, 16) for v in toc.split("+")]

@@ -1,0 +1,119 @@
+{
+  "schema": 1,
+  "recorder": "wmprevival/2026.11.0",
+  "received_at": "2026-11-06T15:19:39.919396+01:00",
+  "client": "127.0.0.1",
+  "tls": {
+    "version": "TLSv1.3",
+    "cipher": "TLS_AES_256_GCM_SHA384",
+    "sni": "musicmatch-ssl.xboxlive.com"
+  },
+  "request": {
+    "method": "POST",
+    "http_version": "1.1",
+    "raw_path": "/FAI/default.aspx?locale=410&geoid=76&version=12.0.26100.9549&userlocale=410&requestid=00000000-0000-0000-0000-000000000001",
+    "path": "/FAI/default.aspx",
+    "query_string": "locale=410&geoid=76&version=12.0.26100.9549&userlocale=410&requestid=00000000-0000-0000-0000-000000000001",
+    "headers": [
+      [
+        "Accept",
+        "image/gif, image/jpeg, image/pjpeg, application/x-ms-application, application/xaml+xml, application/x-ms-xbap, */*"
+      ],
+      [
+        "Referer",
+        "https://musicmatch-ssl.xboxlive.com/FAI/default.aspx?locale=410&geoid=76&version=12.0.26100.9549&userlocale=410&requestid=00000000-0000-0000-0000-000000000001"
+      ],
+      [
+        "Accept-Language",
+        "it-IT"
+      ],
+      [
+        "Content-Type",
+        "application/x-www-form-urlencoded"
+      ],
+      [
+        "Accept-Encoding",
+        "gzip, deflate"
+      ],
+      [
+        "User-Agent",
+        "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 10.0; WOW64; Trident/7.0; .NET4.0C; .NET4.0E)"
+      ],
+      [
+        "Host",
+        "musicmatch-ssl.xboxlive.com"
+      ],
+      [
+        "Content-Length",
+        "1673"
+      ],
+      [
+        "Connection",
+        "Keep-Alive"
+      ],
+      [
+        "Cache-Control",
+        "no-cache"
+      ]
+    ],
+    "body": {
+      "length": 1673,
+      "base64": "bWRxPSUzQ01FVEFEQVRBJTNFJTBEJTBBKysrKyUzQ01EUS1DRCUzRSUwRCUwQSsrKysrKysrJTNDbWRxUmVxdWVzdElEJTNFMDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAxJTNDJTJGbWRxUmVxdWVzdElEJTNFJTBEJTBBKysrKysrKyslM0N0cmFjayUzRSUwRCUwQSsrKysrKysrKysrKyUzQ3RpdGxlJTNFJTBEJTBBKysrKysrKysrKysrKysrKyUzQ3RleHQlM0VCaWcraW4rSmFwYW4lM0MlMkZ0ZXh0JTNFJTBEJTBBKysrKysrKysrKysrKysrKyUzQ3dvcmQlM0VCaWclM0MlMkZ3b3JkJTNFJTBEJTBBKysrKysrKysrKysrKysrKyUzQ3dvcmQlM0VpbiUzQyUyRndvcmQlM0UlMEQlMEErKysrKysrKysrKysrKysrJTNDd29yZCUzRUphcGFuJTNDJTJGd29yZCUzRSUwRCUwQSsrKysrKysrKysrKyUzQyUyRnRpdGxlJTNFJTBEJTBBKysrKysrKysrKysrJTNDYXJ0aXN0JTNFJTBEJTBBKysrKysrKysrKysrKysrKyUzQ3RleHQlM0VBbHBoYXZpbGxlJTNDJTJGdGV4dCUzRSUwRCUwQSsrKysrKysrKysrKysrKyslM0N3b3JkJTNFQWxwaGF2aWxsZSUzQyUyRndvcmQlM0UlMEQlMEErKysrKysrKysrKyslM0MlMkZhcnRpc3QlM0UlMEQlMEErKysrKysrKysrKyslM0N0cmFja051bWJlciUzRTMlM0MlMkZ0cmFja051bWJlciUzRSUwRCUwQSsrKysrKysrKysrKyUzQ2ZpbGVuYW1lJTNFMDMuK0FscGhhdmlsbGUrLStCaWcraW4rSmFwYW4uZmxhYyUzQyUyRmZpbGVuYW1lJTNFJTBEJTBBKysrKysrKysrKysrJTNDdHJhY2UlM0UyNTMzKzIxMjIrMTkzNCsyNjMxKzIwMTErMTc2OSsxODQyKzI0NjMrMTg3MSsyMTkxKzI1NzIrMjQ1NSsyNDExKzE5OTQrMTk2MiszNTAwKzU4NTMrMjA0MCsyNTc0KzE3MDArMjUyMSsxNDgwKzIwNzQrODgwKzIzMzIrMjIyNisxNTU0KzE2MzUrMTMwNSsxMDg4JTNDJTJGdHJhY2UlM0UlMEQlMEErKysrKysrKysrKyslM0N0cmFja0R1cmF0aW9uJTNFMjg2MDAwJTNDJTJGdHJhY2tEdXJhdGlvbiUzRSUwRCUwQSsrKysrKysrKysrKyUzQ2JpdHJhdGUlM0U4MDc3MjglM0MlMkZiaXRyYXRlJTNFJTBEJTBBKysrKysrKysrKysrJTNDYWxidW0lM0UlMEQlMEErKysrKysrKysrKysrKysrJTNDdGl0bGUlM0UlMEQlMEErKysrKysrKysrKysrKysrKysrKyUzQ3RleHQlM0VGb3JldmVyK1lvdW5nJTNDJTJGdGV4dCUzRSUwRCUwQSsrKysrKysrKysrKysrKysrKysrJTNDd29yZCUzRUZvcmV2ZXIlM0MlMkZ3b3JkJTNFJTBEJTBBKysrKysrKysrKysrKysrKysrKyslM0N3b3JkJTNFWW91bmclM0MlMkZ3b3JkJTNFJTBEJTBBKysrKysrKysrKysrKysrKyUzQyUyRnRpdGxlJTNFJTBEJTBBKysrKysrKysrKysrKysrKyUzQ2FydGlzdCUzRSUwRCUwQSsrKysrKysrKysrKysrKysrKysrJTNDdGV4dCUzRUFscGhhdmlsbGUlM0MlMkZ0ZXh0JTNFJTBEJTBBKysrKysrKysrKysrKysrKysrKyslM0N3b3JkJTNFQWxwaGF2aWxsZSUzQyUyRndvcmQlM0UlMEQlMEErKysrKysrKysrKysrKysrJTNDJTJGYXJ0aXN0JTNFJTBEJTBBKysrKysrKysrKysrJTNDJTJGYWxidW0lM0UlMEQlMEErKysrKysrKysrKyslM0N0cmFja1JlcXVlc3RJRCUzRTAlM0MlMkZ0cmFja1JlcXVlc3RJRCUzRSUwRCUwQSsrKysrKysrJTNDJTJGdHJhY2slM0UlMEQlMEErKysrJTNDJTJGTURRLUNEJTNFJTBEJTBBJTNDJTJGTUVUQURBVEElM0UlMEQlMEE=",
+      "text": "mdq=%3CMETADATA%3E%0D%0A++++%3CMDQ-CD%3E%0D%0A++++++++%3CmdqRequestID%3E00000000-0000-0000-0000-000000000001%3C%2FmdqRequestID%3E%0D%0A++++++++%3Ctrack%3E%0D%0A++++++++++++%3Ctitle%3E%0D%0A++++++++++++++++%3Ctext%3EBig+in+Japan%3C%2Ftext%3E%0D%0A++++++++++++++++%3Cword%3EBig%3C%2Fword%3E%0D%0A++++++++++++++++%3Cword%3Ein%3C%2Fword%3E%0D%0A++++++++++++++++%3Cword%3EJapan%3C%2Fword%3E%0D%0A++++++++++++%3C%2Ftitle%3E%0D%0A++++++++++++%3Cartist%3E%0D%0A++++++++++++++++%3Ctext%3EAlphaville%3C%2Ftext%3E%0D%0A++++++++++++++++%3Cword%3EAlphaville%3C%2Fword%3E%0D%0A++++++++++++%3C%2Fartist%3E%0D%0A++++++++++++%3CtrackNumber%3E3%3C%2FtrackNumber%3E%0D%0A++++++++++++%3Cfilename%3E03.+Alphaville+-+Big+in+Japan.flac%3C%2Ffilename%3E%0D%0A++++++++++++%3Ctrace%3E2533+2122+1934+2631+2011+1769+1842+2463+1871+2191+2572+2455+2411+1994+1962+3500+5853+2040+2574+1700+2521+1480+2074+880+2332+2226+1554+1635+1305+1088%3C%2Ftrace%3E%0D%0A++++++++++++%3CtrackDuration%3E286000%3C%2FtrackDuration%3E%0D%0A++++++++++++%3Cbitrate%3E807728%3C%2Fbitrate%3E%0D%0A++++++++++++%3Calbum%3E%0D%0A++++++++++++++++%3Ctitle%3E%0D%0A++++++++++++++++++++%3Ctext%3EForever+Young%3C%2Ftext%3E%0D%0A++++++++++++++++++++%3Cword%3EForever%3C%2Fword%3E%0D%0A++++++++++++++++++++%3Cword%3EYoung%3C%2Fword%3E%0D%0A++++++++++++++++%3C%2Ftitle%3E%0D%0A++++++++++++++++%3Cartist%3E%0D%0A++++++++++++++++++++%3Ctext%3EAlphaville%3C%2Ftext%3E%0D%0A++++++++++++++++++++%3Cword%3EAlphaville%3C%2Fword%3E%0D%0A++++++++++++++++%3C%2Fartist%3E%0D%0A++++++++++++%3C%2Falbum%3E%0D%0A++++++++++++%3CtrackRequestID%3E0%3C%2FtrackRequestID%3E%0D%0A++++++++%3C%2Ftrack%3E%0D%0A++++%3C%2FMDQ-CD%3E%0D%0A%3C%2FMETADATA%3E%0D%0A",
+      "text_encoding": "utf-8",
+      "form": [
+        [
+          "mdq",
+          "<METADATA>\r\n    <MDQ-CD>\r\n        <mdqRequestID>00000000-0000-0000-0000-000000000001</mdqRequestID>\r\n        <track>\r\n            <title>\r\n                <text>Big in Japan</text>\r\n                <word>Big</word>\r\n                <word>in</word>\r\n                <word>Japan</word>\r\n            </title>\r\n            <artist>\r\n                <text>Alphaville</text>\r\n                <word>Alphaville</word>\r\n            </artist>\r\n            <trackNumber>3</trackNumber>\r\n            <filename>03. Alphaville - Big in Japan.flac</filename>\r\n            <trace>2533 2122 1934 2631 2011 1769 1842 2463 1871 2191 2572 2455 2411 1994 1962 3500 5853 2040 2574 1700 2521 1480 2074 880 2332 2226 1554 1635 1305 1088</trace>\r\n            <trackDuration>286000</trackDuration>\r\n            <bitrate>807728</bitrate>\r\n            <album>\r\n                <title>\r\n                    <text>Forever Young</text>\r\n                    <word>Forever</word>\r\n                    <word>Young</word>\r\n                </title>\r\n                <artist>\r\n                    <text>Alphaville</text>\r\n                    <word>Alphaville</word>\r\n                </artist>\r\n            </album>\r\n            <trackRequestID>0</trackRequestID>\r\n        </track>\r\n    </MDQ-CD>\r\n</METADATA>\r\n"
+        ]
+      ]
+    }
+  },
+  "forwarded": true,
+  "upstream": {
+    "addresses": [
+      "184.25.52.9",
+      "2a02:26f0:8d00:594::57",
+      "2a02:26f0:8d00:584::57"
+    ],
+    "status": 410,
+    "reason": "Gone",
+    "headers": [
+      [
+        "Content-Length",
+        "0"
+      ],
+      [
+        "Cache-Control",
+        "no-cache, no-store"
+      ],
+      [
+        "MS-CV",
+        "v6TPZyiIXkiL4V+Stg+OYA.0"
+      ],
+      [
+        "X-Content-Type-Options",
+        "nosniff"
+      ],
+      [
+        "x-azure-ref",
+        "20261106T141944Z-186458d88c99ssjzhC1FRAyvyn0000001nyg000000004r1b"
+      ],
+      [
+        "Date",
+        "Fri, 06 Nov 2026 14:19:44 GMT"
+      ],
+      [
+        "Connection",
+        "close"
+      ]
+    ],
+    "body": {
+      "length": 0,
+      "omitted": "omesso: contenuto del server Microsoft, non ridistribuito nel repository"
+    }
+  },
+  "response": {
+    "status": 410
+  }
+}
