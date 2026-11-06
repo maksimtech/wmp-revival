@@ -102,17 +102,43 @@ _FILENAME_NUMBER = re.compile(r"^\s*(?:\d+\s*-\s*)?(\d{1,3})\s*[.\-_)]?\s+")
 _EXTENSION = re.compile(r"\.[A-Za-z0-9]{2,5}$")
 
 
-def filename_title(track: MdqTrack) -> str:
-    """Titolo ricavato dal nome del file: '01. Stupid Girls.flac' -> 'Stupid Girls'.
+def filename_guess(track: MdqTrack) -> tuple[str, str]:
+    """(artista, titolo) ricavati dal nome del file.
 
-    Toglie estensione, numero iniziale (anche '1-01 ') e un eventuale prefisso 'Artista - '.
+    '01. Stupid Girls.flac' -> ('', 'Stupid Girls'); 'P!nk - Who Knew.wma' con artista P!nk
+    -> ('', 'Who Knew'); '10. ABBA, Abba - Arrival.flac' con il tag rovinato "Giovanni Allevi"
+    -> ('ABBA, Abba', 'Arrival'). L'artista è vuoto se il nome non ne indica uno diverso.
     """
     name = _EXTENSION.sub("", track.filename.strip())
     name = _FILENAME_NUMBER.sub("", name, count=1)
     for artist in (track.artist, track.album_artist):
         if artist and norm(name).startswith(norm(artist) + " - "):
-            name = name[len(artist) + 3 :]
-    return name.strip(" -_.")
+            return "", name[len(artist) + 3 :].strip(" -_.")
+    if " - " in name:
+        left, right = name.split(" - ", 1)
+        return left.strip(), right.strip(" -_.")
+    return "", name.strip(" -_.")
+
+
+def filename_title(track: MdqTrack) -> str:
+    return filename_guess(track)[1]
+
+
+def filename_number(track: MdqTrack) -> int | None:
+    match = _FILENAME_NUMBER.match(_EXTENSION.sub("", track.filename.strip()))
+    return int(match.group(1)) if match else None
+
+
+def tag_is_suspect(track: MdqTrack) -> bool:
+    """Il nome del file indica un altro artista e un altro titolo: il tag non è affidabile.
+
+    Succede quando WMP ha già scritto nella libreria i dati di un altro album (il FLAC di
+    "Arrival" degli ABBA diventato "Panic" di Giovanni Allevi).
+    """
+    artist, title = filename_guess(track)
+    if not artist or norm_title(title) == norm_title(track.title):
+        return False
+    return norm(collapse_artist(artist)) not in {norm(collapse_artist(a)) for a in artist_candidates(track)}
 
 
 def title_candidates(track: MdqTrack) -> list[str]:
@@ -272,6 +298,13 @@ class MetadataService:
         """
         attempts: list[tuple[MdqTrack, bool]] = []
         for track in mdq.tracks[:MAX_ANCHORS]:
+            if tag_is_suspect(track):
+                # Prima il nome del file, senza l'album del tag (anch'esso sospetto).
+                guess_artist, guess_title = filename_guess(track)
+                number = filename_number(track)
+                for artist in dict.fromkeys((guess_artist, collapse_artist(guess_artist))):
+                    variant = replace(track, title=guess_title, artist=artist, album="", number=number)
+                    attempts.append((variant, False))
             for artist in artist_candidates(track):
                 for title in title_candidates(track):
                     attempts.append((replace(track, title=title, artist=artist), True))
@@ -295,7 +328,13 @@ class MetadataService:
         return [], mdq.tracks[0]
 
     async def file_automatic(self, mdq: Mdq) -> str | None:
-        """Ricerca automatica dei file (POST a GetMDRCD): solo se anche l'album corrisponde."""
+        """Ricerca automatica dei file (POST a GetMDRCD): solo se anche l'album corrisponde.
+
+        Mai quando il tag è sospetto (il nome del file indica un altro artista): lì decide
+        l'utente dalla pagina "Trova informazioni album", non WMP in background.
+        """
+        if any(tag_is_suspect(t) for t in mdq.tracks):
+            return None
         ranked, anchor = await self._ranked_for(mdq)
         if anchor.album:
             ranked = [r for r in ranked if not r[0][0]]  # chiave[0]: album diverso

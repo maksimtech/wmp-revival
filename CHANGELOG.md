@@ -42,6 +42,11 @@ Versioni: [CalVer](https://calver.org/) `YYYY.MM.PATCH`.
   `WriteNamesEx(2, "", …)` come quella Microsoft e WMP applicava i dati alla richiesta precedente
   (il FLAC di *Arrival* è diventato *Panic* di *Joy*). Ora indica il CD per TOC
   (`CD_BY_TOC`).
+- Un file con i dati di un altro album nella libreria di WMP (tag "sospetto": il nome del file
+  `NN. Artista - Titolo` dice altro) si ritrova dal nome del file; la ricerca automatica in quel
+  caso non scrive niente.
+- Pagine e script si caricano all'avvio: un server lasciato acceso durante un aggiornamento non
+  serve più pagine incompatibili con il suo codice.
 - **WMP non rinomina né sposta più i file**: `fRenameRegroupFiles` è falso; `serve --rename-files`
   lo riattiva per chi vuole il riordino in `Artista\Album`.
 - **File diversi dello stesso album non ricevono più i dati di un'altra traccia.** WMP conserva

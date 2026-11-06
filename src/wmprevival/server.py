@@ -20,7 +20,7 @@ from importlib import resources
 from typing import Any
 
 from aiohttp import web
-from jinja2 import Environment, PackageLoader, select_autoescape
+from jinja2 import Environment, PackageLoader, StrictUndefined, select_autoescape
 
 from wmprevival import mdq as mdq_mod
 from wmprevival import mdr
@@ -37,7 +37,16 @@ _env = Environment(
     autoescape=select_autoescape(["html"]),
     trim_blocks=True,
     lstrip_blocks=True,
+    auto_reload=False,
+    undefined=StrictUndefined,
 )
+# Pagine e script caricati una volta, all'avvio, insieme al codice: un server in esecuzione
+# non deve mai servire una pagina nuova con il codice vecchio (visto il 2026-11-06: la pagina
+# aggiornata cercava writeType, il processo avviato prima non lo passava).
+_TEMPLATES = {name: _env.get_template(name) for name in ("results.html", "bridge.html")}
+_STATIC_TEXT = {
+    name: resources.files("wmprevival").joinpath("web", name).read_text(encoding="utf-8") for name in STATIC
+}
 
 
 def raw_query(raw_path: str) -> dict[str, str]:
@@ -58,7 +67,7 @@ def _duration(ms: int | None) -> str:
 
 
 def render(template: str, **context: Any) -> str:
-    return _env.get_template(template).render(**context)
+    return _TEMPLATES[template].render(**context)
 
 
 WRITE_CD_BY_TOC = 0  # WMP_WRITENAMES_TYPE_CD_BY_TOC: il destinatario è il CD con quel TOC
@@ -118,9 +127,8 @@ class MetadataResponder:
                 return self.bridge(params["requestid"])
         if path.startswith("/fai/") and path[5:] in STATIC and request.method == "GET":
             name = path[5:]
-            text = resources.files("wmprevival").joinpath("web", name).read_text(encoding="utf-8")
             content_type, _, charset = STATIC[name].partition("; charset=")
-            return web.Response(text=text, content_type=content_type, charset=charset)
+            return web.Response(text=_STATIC_TEXT[name], content_type=content_type, charset=charset)
         if path == "/fai/log":
             return web.Response(status=204)
         return web.Response(status=404)

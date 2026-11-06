@@ -52,8 +52,15 @@ class FixtureMB:
         self.calls.append(("release", mbid))
         return self.releases.get(mbid)
 
+    EXACT_QUERIES = {
+        'recording:"Arrival" AND artist:"ABBA"': "search_arrival_abba_senza_album.json",
+    }
+
     async def search_recordings(self, query: str, limit: int = 10) -> list[dict[str, Any]]:
         self.calls.append(("search", query))
+        if query in self.EXACT_QUERIES:
+            exact: list[dict[str, Any]] = body(self.EXACT_QUERIES[query])["recordings"]
+            return exact
         for needle, name in (
             ("Big in Japan", "search_big_in_japan.json"),
             ("Mine All Day", "search_mine_all_day.json"),

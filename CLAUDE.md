@@ -682,6 +682,19 @@ sono diventate tutte "Long Way to Happy" (traccia 3).
   `fRenameRegroupFiles` è **false** salvo `serve --rename-files`.
 - Da verificare: che `CD_BY_TOC` con il TOC nel formato di WMP sia accettato
   (la pagina riporta l'eventuale errore su `/FAI/log`).
+- Ripristino fatto con l'utente: FLAC spostato in
+  `Music\ABBA\Arrival\10. ABBA, Abba - Arrival.flac` (SHA-256 verificato),
+  tolte le immagini generate da WMP e le cartelle vuote; il resto della
+  riorganizzazione lasciato com'è per scelta dell'utente.
+- **WMP non rilegge i tag di un file spostato**: la libreria tiene "Panic" /
+  Giovanni Allevi / Joy, con il nome file nuovo. Il server ora riconosce il
+  **tag sospetto** (`service.tag_is_suspect`: il nome del file `NN. Artista -
+  Titolo` indica un altro artista e un altro titolo) e cerca prima dal nome del
+  file, senza l'album del tag; la ricerca automatica in quel caso **non scrive
+  niente** (decide l'utente dalla pagina). Fixture `fai_file_abba_come_panic.json`.
+- Pagine e script si caricano una volta all'avvio (`StrictUndefined`, niente
+  ricarica): un server avviato prima di un aggiornamento serviva la pagina nuova
+  con il codice vecchio (`Object of type Undefined is not JSON serializable`).
 
 - Lookup `/ws/2/discid/<id>?inc=recordings+artist-credits+labels+release-groups+work-rels+artist-rels`
   sull'**API pubblica** con cache (mirror rimandato, indirizzo configurabile).

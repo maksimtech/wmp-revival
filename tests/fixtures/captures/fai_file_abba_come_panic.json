@@ -1,0 +1,95 @@
+{
+  "schema": 1,
+  "recorder": "wmprevival/2026.11.0",
+  "received_at": "2026-11-06T16:38:00.267543+01:00",
+  "client": "127.0.0.1",
+  "tls": {
+    "version": "TLSv1.3",
+    "cipher": "TLS_AES_256_GCM_SHA384",
+    "sni": "musicmatch-ssl.xboxlive.com"
+  },
+  "request": {
+    "method": "POST",
+    "http_version": "1.1",
+    "raw_path": "/FAI/default.aspx?locale=410&geoid=76&version=12.0.26100.9549&userlocale=410&requestid=00000000-0000-0000-0000-000000000001",
+    "path": "/FAI/default.aspx",
+    "query_string": "locale=410&geoid=76&version=12.0.26100.9549&userlocale=410&requestid=00000000-0000-0000-0000-000000000001",
+    "headers": [
+      [
+        "Accept",
+        "image/gif, image/jpeg, image/pjpeg, application/x-ms-application, application/xaml+xml, application/x-ms-xbap, */*"
+      ],
+      [
+        "Referer",
+        "https://musicmatch-ssl.xboxlive.com/FAI/default.aspx?locale=410&geoid=76&version=12.0.26100.9549&userlocale=410&requestid=00000000-0000-0000-0000-000000000001"
+      ],
+      [
+        "Accept-Language",
+        "it-IT"
+      ],
+      [
+        "Content-Type",
+        "application/x-www-form-urlencoded"
+      ],
+      [
+        "Accept-Encoding",
+        "gzip, deflate"
+      ],
+      [
+        "User-Agent",
+        "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 10.0; WOW64; Trident/7.0; .NET4.0C; .NET4.0E)"
+      ],
+      [
+        "Host",
+        "musicmatch-ssl.xboxlive.com"
+      ],
+      [
+        "Content-Length",
+        "1700"
+      ],
+      [
+        "Connection",
+        "Keep-Alive"
+      ],
+      [
+        "Cache-Control",
+        "no-cache"
+      ]
+    ],
+    "body": {
+      "length": 1700,
+      "base64": "bWRxPSUzQ01FVEFEQVRBJTNFJTBEJTBBKysrKyUzQ01EUS1DRCUzRSUwRCUwQSsrKysrKysrJTNDbWRxUmVxdWVzdElEJTNFMDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAxJTNDJTJGbWRxUmVxdWVzdElEJTNFJTBEJTBBKysrKysrKyslM0N0cmFjayUzRSUwRCUwQSsrKysrKysrKysrKyUzQ3RpdGxlJTNFJTBEJTBBKysrKysrKysrKysrKysrKyUzQ3RleHQlM0VQYW5pYyUzQyUyRnRleHQlM0UlMEQlMEErKysrKysrKysrKysrKysrJTNDd29yZCUzRVBhbmljJTNDJTJGd29yZCUzRSUwRCUwQSsrKysrKysrKysrKyUzQyUyRnRpdGxlJTNFJTBEJTBBKysrKysrKysrKysrJTNDYXJ0aXN0JTNFJTBEJTBBKysrKysrKysrKysrKysrKyUzQ3RleHQlM0VHaW92YW5uaStBbGxldmklM0MlMkZ0ZXh0JTNFJTBEJTBBKysrKysrKysrKysrKysrKyUzQ3dvcmQlM0VHaW92YW5uaSUzQyUyRndvcmQlM0UlMEQlMEErKysrKysrKysrKysrKysrJTNDd29yZCUzRUFsbGV2aSUzQyUyRndvcmQlM0UlMEQlMEErKysrKysrKysrKyslM0MlMkZhcnRpc3QlM0UlMEQlMEErKysrKysrKysrKyslM0N0cmFja051bWJlciUzRTElM0MlMkZ0cmFja051bWJlciUzRSUwRCUwQSsrKysrKysrKysrKyUzQ2ZpbGVuYW1lJTNFMTAuK0FCQkElMkMrQWJiYSstK0Fycml2YWwuZmxhYyUzQyUyRmZpbGVuYW1lJTNFJTBEJTBBKysrKysrKysrKysrJTNDdHJhY2UlM0U0MDIrNDMxKzQxNjkrODUzKzMwMzUrMzEzNSsyNDQzKzI1NjgrNTc4KzI0NjIrMTczMiszMjYxKzE3ODErMzY4MSsyMjI4KzE4OSsxMzkrNjg5MSsxNTcyKzI5NjIrMTcxMSs3MzAyKzM0NTArMjc1KzE2NDcrNjI1KzI4ODYrMTIzMys5NTMrOTI2JTNDJTJGdHJhY2UlM0UlMEQlMEErKysrKysrKysrKyslM0N0cmFja0R1cmF0aW9uJTNFMTgwMDAwJTNDJTJGdHJhY2tEdXJhdGlvbiUzRSUwRCUwQSsrKysrKysrKysrKyUzQ2JpdHJhdGUlM0U5NzAyMzIlM0MlMkZiaXRyYXRlJTNFJTBEJTBBKysrKysrKysrKysrJTNDV01Db250ZW50SUQlM0UlN0IwMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDIlN0QlM0MlMkZXTUNvbnRlbnRJRCUzRSUwRCUwQSsrKysrKysrKysrKyUzQ2FsYnVtJTNFJTBEJTBBKysrKysrKysrKysrKysrKyUzQ3RpdGxlJTNFJTBEJTBBKysrKysrKysrKysrKysrKysrKyslM0N0ZXh0JTNFSm95JTNDJTJGdGV4dCUzRSUwRCUwQSsrKysrKysrKysrKysrKysrKysrJTNDd29yZCUzRUpveSUzQyUyRndvcmQlM0UlMEQlMEErKysrKysrKysrKysrKysrJTNDJTJGdGl0bGUlM0UlMEQlMEErKysrKysrKysrKysrKysrJTNDYXJ0aXN0JTNFJTBEJTBBKysrKysrKysrKysrKysrKysrKyslM0N0ZXh0JTNFR2lvdmFubmkrQWxsZXZpJTNDJTJGdGV4dCUzRSUwRCUwQSsrKysrKysrKysrKysrKysrKysrJTNDd29yZCUzRUdpb3Zhbm5pJTNDJTJGd29yZCUzRSUwRCUwQSsrKysrKysrKysrKysrKysrKysrJTNDd29yZCUzRUFsbGV2aSUzQyUyRndvcmQlM0UlMEQlMEErKysrKysrKysrKysrKysrJTNDJTJGYXJ0aXN0JTNFJTBEJTBBKysrKysrKysrKysrJTNDJTJGYWxidW0lM0UlMEQlMEErKysrKysrKysrKyslM0N0cmFja1JlcXVlc3RJRCUzRTAlM0MlMkZ0cmFja1JlcXVlc3RJRCUzRSUwRCUwQSsrKysrKysrJTNDJTJGdHJhY2slM0UlMEQlMEErKysrJTNDJTJGTURRLUNEJTNFJTBEJTBBJTNDJTJGTUVUQURBVEElM0UlMEQlMEE=",
+      "text": "mdq=%3CMETADATA%3E%0D%0A++++%3CMDQ-CD%3E%0D%0A++++++++%3CmdqRequestID%3E00000000-0000-0000-0000-000000000001%3C%2FmdqRequestID%3E%0D%0A++++++++%3Ctrack%3E%0D%0A++++++++++++%3Ctitle%3E%0D%0A++++++++++++++++%3Ctext%3EPanic%3C%2Ftext%3E%0D%0A++++++++++++++++%3Cword%3EPanic%3C%2Fword%3E%0D%0A++++++++++++%3C%2Ftitle%3E%0D%0A++++++++++++%3Cartist%3E%0D%0A++++++++++++++++%3Ctext%3EGiovanni+Allevi%3C%2Ftext%3E%0D%0A++++++++++++++++%3Cword%3EGiovanni%3C%2Fword%3E%0D%0A++++++++++++++++%3Cword%3EAllevi%3C%2Fword%3E%0D%0A++++++++++++%3C%2Fartist%3E%0D%0A++++++++++++%3CtrackNumber%3E1%3C%2FtrackNumber%3E%0D%0A++++++++++++%3Cfilename%3E10.+ABBA%2C+Abba+-+Arrival.flac%3C%2Ffilename%3E%0D%0A++++++++++++%3Ctrace%3E402+431+4169+853+3035+3135+2443+2568+578+2462+1732+3261+1781+3681+2228+189+139+6891+1572+2962+1711+7302+3450+275+1647+625+2886+1233+953+926%3C%2Ftrace%3E%0D%0A++++++++++++%3CtrackDuration%3E180000%3C%2FtrackDuration%3E%0D%0A++++++++++++%3Cbitrate%3E970232%3C%2Fbitrate%3E%0D%0A++++++++++++%3CWMContentID%3E%7B00000000-0000-0000-0000-000000000002%7D%3C%2FWMContentID%3E%0D%0A++++++++++++%3Calbum%3E%0D%0A++++++++++++++++%3Ctitle%3E%0D%0A++++++++++++++++++++%3Ctext%3EJoy%3C%2Ftext%3E%0D%0A++++++++++++++++++++%3Cword%3EJoy%3C%2Fword%3E%0D%0A++++++++++++++++%3C%2Ftitle%3E%0D%0A++++++++++++++++%3Cartist%3E%0D%0A++++++++++++++++++++%3Ctext%3EGiovanni+Allevi%3C%2Ftext%3E%0D%0A++++++++++++++++++++%3Cword%3EGiovanni%3C%2Fword%3E%0D%0A++++++++++++++++++++%3Cword%3EAllevi%3C%2Fword%3E%0D%0A++++++++++++++++%3C%2Fartist%3E%0D%0A++++++++++++%3C%2Falbum%3E%0D%0A++++++++++++%3CtrackRequestID%3E0%3C%2FtrackRequestID%3E%0D%0A++++++++%3C%2Ftrack%3E%0D%0A++++%3C%2FMDQ-CD%3E%0D%0A%3C%2FMETADATA%3E%0D%0A",
+      "text_encoding": "utf-8",
+      "form": [
+        [
+          "mdq",
+          "<METADATA>\r\n    <MDQ-CD>\r\n        <mdqRequestID>00000000-0000-0000-0000-000000000001</mdqRequestID>\r\n        <track>\r\n            <title>\r\n                <text>Panic</text>\r\n                <word>Panic</word>\r\n            </title>\r\n            <artist>\r\n                <text>Giovanni Allevi</text>\r\n                <word>Giovanni</word>\r\n                <word>Allevi</word>\r\n            </artist>\r\n            <trackNumber>1</trackNumber>\r\n            <filename>10. ABBA, Abba - Arrival.flac</filename>\r\n            <trace>402 431 4169 853 3035 3135 2443 2568 578 2462 1732 3261 1781 3681 2228 189 139 6891 1572 2962 1711 7302 3450 275 1647 625 2886 1233 953 926</trace>\r\n            <trackDuration>180000</trackDuration>\r\n            <bitrate>970232</bitrate>\r\n            <WMContentID>{00000000-0000-0000-0000-000000000002}</WMContentID>\r\n            <album>\r\n                <title>\r\n                    <text>Joy</text>\r\n                    <word>Joy</word>\r\n                </title>\r\n                <artist>\r\n                    <text>Giovanni Allevi</text>\r\n                    <word>Giovanni</word>\r\n                    <word>Allevi</word>\r\n                </artist>\r\n            </album>\r\n            <trackRequestID>0</trackRequestID>\r\n        </track>\r\n    </MDQ-CD>\r\n</METADATA>\r\n"
+        ]
+      ]
+    }
+  },
+  "forwarded": false,
+  "served_locally": true,
+  "served": {
+    "headers": [
+      [
+        "Cache-Control",
+        "no-cache, no-store"
+      ],
+      [
+        "Content-Type",
+        "text/html; charset=utf-8"
+      ]
+    ],
+    "body": {
+      "length": 1274,
+      "base64": "PCFET0NUWVBFIGh0bWw+CjxodG1sPgo8aGVhZD4KPG1ldGEgaHR0cC1lcXVpdj0iQ29udGVudC1UeXBlIiBjb250ZW50PSJ0ZXh0L2h0bWw7IGNoYXJzZXQ9dXRmLTgiPgo8dGl0bGU+VHJvdmEgaW5mb3JtYXppb25pIHN1bGwnYWxidW08L3RpdGxlPgo8bGluayByZWw9InN0eWxlc2hlZXQiIHR5cGU9InRleHQvY3NzIiBocmVmPSJzdHlsZS5jc3MiPgo8L2hlYWQ+Cjxib2R5Pgo8c2NyaXB0IHR5cGU9InRleHQvamF2YXNjcmlwdCI+CnZhciBtZHJjZHMgPSBbXTsKdmFyIG1hdGNoZXMgPSBbXTsKdmFyIHdyaXRlVHlwZSA9IDI7CnZhciB3cml0ZUlkID0gIiI7CnZhciByZW5hbWVGaWxlcyA9IGZhbHNlOwo8L3NjcmlwdD4KPHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiIHNyYz0ic3VnZ2VzdGlvbnMuanMiPjwvc2NyaXB0Pgo8ZGl2IGNsYXNzPSJoZWFkZXIiPlRyb3ZhIGluZm9ybWF6aW9uaSBzdWxsJ2FsYnVtIDxzcGFuIGNsYXNzPSJzb3VyY2UiPmRhdGkgZGEgTXVzaWNCcmFpbno8L3NwYW4+PC9kaXY+CjxkaXYgY2xhc3M9ImNvbHVtbiBsZWZ0Ij4KICA8ZGl2IGNsYXNzPSJ0aXRsZSI+RWxlbmNvIGRpIHRyYWNjZTwvZGl2PgogIDxkaXYgY2xhc3M9Imxpc3QiPgogICAgPHRhYmxlIGNlbGxwYWRkaW5nPSIwIiBjZWxsc3BhY2luZz0iMCI+CiAgICAgIDx0ciBpZD0idHJhY2stMCIgY2xhc3M9InRyYWNrIj4KICAgICAgICA8dGQgY2xhc3M9Im51bWJlciI+MTwvdGQ+CiAgICAgICAgPHRkPlBhbmljPC90ZD4KICAgICAgICA8dGQgY2xhc3M9ImR1cmF0aW9uIj4zOjAwPC90ZD4KICAgICAgPC90cj4KICAgIDwvdGFibGU+CiAgPC9kaXY+CjwvZGl2Pgo8ZGl2IGNsYXNzPSJjb2x1bW4gcmlnaHQiPgogIDxkaXYgY2xhc3M9InRpdGxlIj5BbGJ1bTwvZGl2PgogIDxkaXYgY2xhc3M9Imxpc3QiPgogICAgPGRpdiBjbGFzcz0ibWVzc2FnZSI+TmVzc3VuYSBjb3JyaXNwb25kZW56YSB0cm92YXRhIHN1IE11c2ljQnJhaW56LjwvZGl2PgogIDwvZGl2Pgo8L2Rpdj4KPGRpdiBpZD0iZXJyb3IiIGNsYXNzPSJlcnJvciI+PC9kaXY+CjxkaXYgY2xhc3M9ImZvb3RlciI+CiAgPGlucHV0IGlkPSJmaW5pc2giIGNsYXNzPSJidXR0b24iIHR5cGU9ImJ1dHRvbiIgdmFsdWU9IkZpbmUiIGRpc2FibGVkPSJkaXNhYmxlZCIgb25jbGljaz0iZmluaXNoKCkiPgogIDxpbnB1dCBpZD0iY2FuY2VsIiBjbGFzcz0iYnV0dG9uIiB0eXBlPSJidXR0b24iIHZhbHVlPSJBbm51bGxhIiBvbmNsaWNrPSJjYW5jZWwoKSI+CjwvZGl2Pgo8L2JvZHk+CjwvaHRtbD4=",
+      "text": "<!DOCTYPE html>\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n<title>Trova informazioni sull'album</title>\n<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">\n</head>\n<body>\n<script type=\"text/javascript\">\nvar mdrcds = [];\nvar matches = [];\nvar writeType = 2;\nvar writeId = \"\";\nvar renameFiles = false;\n</script>\n<script type=\"text/javascript\" src=\"suggestions.js\"></script>\n<div class=\"header\">Trova informazioni sull'album <span class=\"source\">dati da MusicBrainz</span></div>\n<div class=\"column left\">\n  <div class=\"title\">Elenco di tracce</div>\n  <div class=\"list\">\n    <table cellpadding=\"0\" cellspacing=\"0\">\n      <tr id=\"track-0\" class=\"track\">\n        <td class=\"number\">1</td>\n        <td>Panic</td>\n        <td class=\"duration\">3:00</td>\n      </tr>\n    </table>\n  </div>\n</div>\n<div class=\"column right\">\n  <div class=\"title\">Album</div>\n  <div class=\"list\">\n    <div class=\"message\">Nessuna corrispondenza trovata su MusicBrainz.</div>\n  </div>\n</div>\n<div id=\"error\" class=\"error\"></div>\n<div class=\"footer\">\n  <input id=\"finish\" class=\"button\" type=\"button\" value=\"Fine\" disabled=\"disabled\" onclick=\"finish()\">\n  <input id=\"cancel\" class=\"button\" type=\"button\" value=\"Annulla\" onclick=\"cancel()\">\n</div>\n</body>\n</html>",
+      "text_encoding": "utf-8"
+    }
+  },
+  "response": {
+    "status": 200
+  }
+}
