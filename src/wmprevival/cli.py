@@ -311,6 +311,11 @@ def serve(
     no_auto: bool = typer.Option(
         False, "--no-auto", help="Niente ricerca automatica dei CD: solo 'Trova informazioni album'."
     ),
+    rename_files: bool = typer.Option(
+        False,
+        "--rename-files",
+        help="Lascia che WMP rinomini e sposti i file in Artista\\Album dopo 'Trova informazioni album'.",
+    ),
 ) -> None:
     """Risponde a WMP con i dati di MusicBrainz, registrando ogni richiesta e risposta."""
     paths = Paths.from_env()
@@ -342,7 +347,9 @@ def serve(
         cache = ResponseCache(paths.mb_cache)
         try:
             async with MusicBrainzClient(mb_config, cache) as client:
-                responder = MetadataResponder(MetadataService(client), auto=not no_auto)
+                responder = MetadataResponder(MetadataService(client), auto=not no_auto, rename_files=rename_files)
+                if rename_files:
+                    console.print("[yellow]--rename-files:[/yellow] WMP rinominerà e sposterà i file.")
                 if no_auto:
                     console.print("[yellow]--no-auto:[/yellow] ricerca automatica dei CD disattivata.")
                 rec = recorder.Recorder(paths.captures, on_record=show, responder=responder)

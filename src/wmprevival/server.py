@@ -61,7 +61,19 @@ def render(template: str, **context: Any) -> str:
     return _env.get_template(template).render(**context)
 
 
-def results_page(tracks: list[dict[str, Any]], choices: list[Choice], message: str = "") -> web.Response:
+WRITE_CD_BY_TOC = 0  # WMP_WRITENAMES_TYPE_CD_BY_TOC: il destinatario è il CD con quel TOC
+WRITE_BY_MDQ = 2  # WMP_WRITENAMES_TYPE_CD_BY_MDQCD: il destinatario è la richiesta MDQ corrente
+
+
+def results_page(
+    tracks: list[dict[str, Any]],
+    choices: list[Choice],
+    message: str = "",
+    *,
+    write_type: int = WRITE_BY_MDQ,
+    write_id: str = "",
+    rename_files: bool = False,
+) -> web.Response:
     html = render(
         "results.html",
         tracks=tracks,
@@ -69,6 +81,9 @@ def results_page(tracks: list[dict[str, Any]], choices: list[Choice], message: s
         mdrcds=[c.mdr for c in choices],
         matches=[list(c.matches) for c in choices],
         message=message or "Nessuna corrispondenza trovata su MusicBrainz.",
+        write_type=write_type,
+        write_id=write_id,
+        rename_files=rename_files,
     )
     return web.Response(text=html, content_type="text/html", charset="utf-8", headers=NO_CACHE)
 
@@ -78,11 +93,14 @@ def xml_response(xml: str) -> web.Response:
 
 
 class MetadataResponder:
-    def __init__(self, service: MetadataService, auto: bool = True) -> None:
+    def __init__(self, service: MetadataService, auto: bool = True, rename_files: bool = False) -> None:
         self.service = service
         # auto=False: la ricerca automatica dei CD risponde sempre "nessun dato" e restano
         # solo le scelte manuali ("Trova informazioni album"): nessuna scrittura senza conferma.
         self.auto = auto
+        # fRenameRegroupFiles di WriteNamesEx: con True WMP rinomina e sposta i file in
+        # Artista\Album\NN Titolo (visto il 2026-11-06 su tutta la cartella Musica). Spento.
+        self.rename_files = rename_files
 
     async def __call__(self, request: web.Request, body: bytes) -> web.Response:
         path = request.path.lower()
@@ -149,7 +167,9 @@ class MetadataResponder:
         except Exception:  # noqa: BLE001
             log.exception("ricerca del CD fallita")
             return results_page(tracks, [], "MusicBrainz non risponde: riprovare più tardi.")
-        return results_page(tracks, choices)
+        return results_page(
+            tracks, choices, write_type=WRITE_CD_BY_TOC, write_id=toc.to_wmp(), rename_files=self.rename_files
+        )
 
     def bridge(self, request_id: str) -> web.Response:
         if not mdq_mod.GUID_RE.match(request_id):
@@ -172,4 +192,4 @@ class MetadataResponder:
         except Exception:  # noqa: BLE001
             log.exception("ricerca dei file fallita")
             return results_page(tracks, [], "MusicBrainz non risponde: riprovare più tardi.")
-        return results_page(tracks, choices)
+        return results_page(tracks, choices, write_type=WRITE_BY_MDQ, write_id="", rename_files=self.rename_files)

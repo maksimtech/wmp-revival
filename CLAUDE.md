@@ -665,6 +665,24 @@ sono diventate tutte "Long Way to Happy" (traccia 3).
 - **Verificato su WMP dall'utente (2026-11-06)**: dopo il riavvio di `serve`,
   *Arrival* viene trovato e applicato correttamente.
 
+### `WriteNamesEx(2, "")` dalla pagina del CD colpisce l'ultima richiesta MDQ (2026-11-06)
+
+- Sequenza: FAI sul file di *Arrival* (scelta applicata), poi FAI sul CD *Joy*
+  nel lettore (`cd=<toc>&wmid=12C5606B…`) con la pagina che chiamava, come
+  quella Microsoft, `WriteNamesEx(2, "", mdr, true)`. WMP ha applicato l'MDR di
+  *Joy* alla **richiesta MDQ precedente**: il file di *Arrival* è diventato
+  *Panic* e, per `fRenameRegroupFiles = true`, è stato **rinominato e spostato**
+  in `Music\Giovanni Allevi\Joy\01 Panic.flac` (tag del FLAC intatti: WMP non
+  scrive i tag dei FLAC). Nella stessa cartella WMP ha creato `Folder.jpg`,
+  `AlbumArtSmall.jpg` e `AlbumArt_{WMCollectionID}_Large/Small.jpg`.
+- Con `true` WMP ha anche **riorganizzato tutta la cartella Musica** in
+  `Artista\Album\NN Titolo.flac` per gli album toccati (16:26-16:28).
+- **Regole**: la pagina del CD usa `WriteNamesEx(0 = CD_BY_TOC, "<TOC WMP>", …)`;
+  quella dei file `(2, "", …)` (la richiesta corrente è quella della pagina);
+  `fRenameRegroupFiles` è **false** salvo `serve --rename-files`.
+- Da verificare: che `CD_BY_TOC` con il TOC nel formato di WMP sia accettato
+  (la pagina riporta l'eventuale errore su `/FAI/log`).
+
 - Lookup `/ws/2/discid/<id>?inc=recordings+artist-credits+labels+release-groups+work-rels+artist-rels`
   sull'**API pubblica** con cache (mirror rimandato, indirizzo configurabile).
 - Se più release corrispondono: scelta deterministica e documentata (paese,

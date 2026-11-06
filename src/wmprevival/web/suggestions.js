@@ -1,6 +1,7 @@
 // WMP Revival: logica della pagina dei risultati. ES3 (MSHTML in modalità IE7).
-// Usa le variabili globali `mdrcds` (un MDR-CD per album) e `matches` (indici delle
-// tracce richieste coperte da ciascun album), definite dalla pagina.
+// Usa le variabili globali `mdrcds` (un MDR-CD per album), `matches` (indici delle
+// tracce richieste coperte da ciascun album), `writeType`, `writeId` e `renameFiles`
+// (argomenti di WriteNamesEx), definite dalla pagina.
 // L'MDR arriva già in ASCII con riferimenti &#N;, quindi va passato a WMP così com'è.
 
 var chosen = -1;
@@ -61,7 +62,10 @@ function finish() {
         return;
     }
     try {
-        window.external.WriteNamesEx(2, "", mdrcds[chosen], true);
+        // Destinatario esplicito: per un CD il suo TOC (tipo 0, CD_BY_TOC); per i file la
+        // richiesta MDQ che ha generato la pagina (tipo 2, CD_BY_MDQCD, id vuoto). Con tipo 2
+        // anche per il CD, WMP ha applicato l'MDR di un CD a un file di una FAI precedente.
+        window.external.WriteNamesEx(writeType, writeId, mdrcds[chosen], renameFiles);
     } catch (e) {
         var detail = (e.number !== undefined ? "0x" + (e.number >>> 0).toString(16) + " " : "") + (e.message || "");
         report("WriteNamesEx-error", detail);

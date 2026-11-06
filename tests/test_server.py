@@ -81,6 +81,11 @@ async def test_fai_on_a_cd_lists_the_editions(server) -> None:
     assert len(mdrcds) == 2 and all(ET.fromstring(x).findtext("MDR-CD/albumTitle") == "Joy" for x in mdrcds)
     assert _js_array(html, "matches") == [list(range(12))] * 2
     assert '<script type="text/javascript" src="suggestions.js">' in html
+    # Regressione 2026-11-06: con (2, "") WMP ha applicato l'MDR di Joy al file di una FAI
+    # precedente (Arrival degli ABBA, rinominato "01 Panic.flac"). Il CD si indica per TOC.
+    assert "var writeType = 0;" in html
+    assert f'var writeId = "{JOY.to_wmp()}";' in html
+    assert "var renameFiles = false;" in html  # niente file rinominati o spostati
 
 
 async def test_file_flow_bridge_then_results(server) -> None:
@@ -108,6 +113,8 @@ async def test_file_flow_bridge_then_results(server) -> None:
     assert root.findtext("MDR-CD/mdqRequestID") == "00000000-0000-0000-0000-000000000001"
     assert root.findtext("MDR-CD/track/trackRequestID") == "0"
     assert _js_array(html, "matches") == [[0]] * 5
+    assert "var writeType = 2;" in html and 'var writeId = "";' in html  # la richiesta MDQ corrente
+    assert "var renameFiles = false;" in html
 
 
 async def test_bridge_refuses_anything_but_a_guid(server) -> None:
@@ -121,7 +128,7 @@ async def test_static_files_and_log(server) -> None:
     base, _ = server
     status, ctype, js = await _get(f"{base}/FAI/suggestions.js")
     assert status == 200 and "javascript" in ctype
-    assert 'window.external.WriteNamesEx(2, "", mdrcds[chosen], true)' in js
+    assert "window.external.WriteNamesEx(writeType, writeId, mdrcds[chosen], renameFiles)" in js
     assert "window.external.ReturnToMainTask()" in js
     status, ctype, css = await _get(f"{base}/FAI/style.css")
     assert status == 200 and ctype.startswith("text/css") and ".album" in css
@@ -178,6 +185,21 @@ async def test_no_auto_answers_no_data_to_the_automatic_lookup(tmp_path) -> None
         assert mb.calls == []  # nessuna richiesta a MusicBrainz
         _status, _ctype, html = await _get(f"{base}/FAI/default.aspx?{QUERY}&cd={JOY.to_wmp()}")
         assert 'id="album-0"' in html  # la scelta manuale funziona
+    finally:
+        await runner.cleanup()
+
+
+async def test_rename_files_only_on_request(tmp_path) -> None:
+    rec = recorder.Recorder(
+        tmp_path / "cap", responder=MetadataResponder(MetadataService(FixtureMB()), rename_files=True)
+    )
+    runner = web.AppRunner(recorder.build_app(rec))
+    await runner.setup()
+    await web.TCPSite(runner, "127.0.0.1", 0).start()
+    try:
+        base = f"http://127.0.0.1:{runner.addresses[0][1]}"
+        _status, _ctype, html = await _get(f"{base}/FAI/default.aspx?{QUERY}&cd={JOY.to_wmp()}")
+        assert "var renameFiles = true;" in html
     finally:
         await runner.cleanup()
 
