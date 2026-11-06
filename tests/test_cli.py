@@ -48,6 +48,7 @@ def system(monkeypatch: pytest.MonkeyPatch, home) -> FakeStore:
     monkeypatch.setattr(winsys, "restrict_to_current_user", lambda _p: None)
     monkeypatch.setattr(winsys, "is_admin", lambda: True)
     monkeypatch.setattr(winsys, "wmp_policies", lambda: {})
+    monkeypatch.setattr(winsys, "wmp_file_organizing", lambda: {})
     return fake
 
 
@@ -150,3 +151,10 @@ def test_fixture_command(tmp_path) -> None:
     data = json.loads(dest.read_text(encoding="utf-8"))
     assert data["request"]["raw_path"] == "/x?g=00000000-0000-0000-0000-000000000001"
     assert "1 GUID" in result.output
+
+
+def test_status_warns_when_wmp_moves_files(system, monkeypatch) -> None:
+    monkeypatch.setattr(winsys, "wmp_file_organizing", lambda: dict(winsys.WMP_FILE_ORGANIZING))
+    result = runner.invoke(cli.app, ["status", "--port", "1"])
+    assert result.exit_code == 0
+    assert "AutoRename" in result.output and "AutoOrganize" in result.output

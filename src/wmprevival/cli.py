@@ -226,6 +226,9 @@ def status(port: int = typer.Option(443, help="Porta del registratore/server."))
         ", ".join(f"{k}={v}" for k, v in policies.items()) if policies else "nessun blocco impostato",
     )
 
+    for name, label in winsys.wmp_file_organizing().items():
+        table.add_row("[yellow]WMP sposta i file[/yellow]", f"{name}: «{label}» è attiva (Opzioni > Catalogo)")
+
     captures = sorted(paths.captures.glob("*.json")) if paths.captures.exists() else []
     table.add_row("catture", f"{len(captures)}, ultima: {captures[-1].name}" if captures else "nessuna")
     console.print(table)

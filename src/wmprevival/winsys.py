@@ -90,6 +90,34 @@ def wmp_policies() -> dict[str, object]:
     return found
 
 
+WMP_PREFERENCES_KEY = r"Software\Microsoft\MediaPlayer\Preferences"
+# Opzioni del catalogo di WMP che rinominano e spostano i file secondo i dati della libreria
+# (visto il 2026-11-06: un file spostato a mano è stato rimesso dove diceva la libreria).
+WMP_FILE_ORGANIZING = {
+    "AutoRename": "Rinomina i file musicali in base alle impostazioni di copia",
+    "AutoOrganize": "Ridisponi la musica nella cartella della musica copiata",
+}
+
+
+def wmp_file_organizing() -> dict[str, str]:
+    """Opzioni attive che fanno rinominare o spostare i file a WMP (HKCU)."""
+    if sys.platform != "win32":
+        return {}
+    import winreg
+
+    active: dict[str, str] = {}
+    try:
+        key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, WMP_PREFERENCES_KEY)
+    except OSError:
+        return active
+    with key:
+        for name, label in WMP_FILE_ORGANIZING.items():
+            with contextlib.suppress(OSError):
+                if winreg.QueryValueEx(key, name)[0]:
+                    active[name] = label
+    return active
+
+
 def is_admin() -> bool:
     if sys.platform != "win32":
         return os.geteuid() == 0 if hasattr(os, "geteuid") else False

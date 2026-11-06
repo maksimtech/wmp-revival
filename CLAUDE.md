@@ -692,6 +692,16 @@ sono diventate tutte "Long Way to Happy" (traccia 3).
   Titolo` indica un altro artista e un altro titolo) e cerca prima dal nome del
   file, senza l'album del tag; la ricerca automatica in quel caso **non scrive
   niente** (decide l'utente dalla pagina). Fixture `fai_file_abba_come_panic.json`.
+- **Il file è tornato in `Giovanni Allevi\Joy\01 Panic.flac` da solo** (16:38,
+  con le immagini ricreate): in `HKCU\…\MediaPlayer\Preferences` risultano
+  `AutoRename = 1` e `AutoOrganize = 1` (Opzioni > Catalogo multimediale:
+  "Rinomina i file musicali…" e "Ridisponi la musica…"), assenti all'inizio della
+  sessione insieme a `FlushMetadataToFiles = 1` e `AutoMetadataUpdate = 0`. Con
+  queste opzioni WMP rinomina e sposta i file secondo la **sua libreria**,
+  indipendentemente da `fRenameRegroupFiles`. `wmprevival status` ora le segnala.
+  Per rimediare a un dato sbagliato in libreria: togliere le due opzioni,
+  eliminare la voce **solo dalla raccolta**, rimettere il file al suo posto con
+  WMP chiuso, riaprire WMP (rilegge i tag del file).
 - Pagine e script si caricano una volta all'avvio (`StrictUndefined`, niente
   ricarica): un server avviato prima di un aggiornamento serviva la pagina nuova
   con il codice vecchio (`Object of type Undefined is not JSON serializable`).
