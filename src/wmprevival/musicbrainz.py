@@ -31,6 +31,9 @@ FOUND_TTL = 30 * 86400.0
 NOT_FOUND_TTL = 86400.0
 RETRY_STATUSES = (429, 503)
 DISCID_INC = "artist-credits+labels+recordings+release-groups"
+RELEASE_INC = (
+    "artist-credits+labels+recordings+release-groups+genres+recording-level-rels+work-rels+work-level-rels+artist-rels"
+)
 
 
 class MusicBrainzError(RuntimeError):
@@ -145,6 +148,16 @@ class MusicBrainzClient:
     async def lookup_discid(self, disc_id: str) -> Any | None:
         """Release con questo Disc ID (o un CD stub); ``None`` se il Disc ID non è collegato."""
         return await self.get(f"discid/{disc_id}", {"inc": DISCID_INC})
+
+    async def release(self, mbid: str) -> Any | None:
+        """Release completa: tracce, crediti, etichette, generi, compositori (via opere) e direttori."""
+        return await self.get(f"release/{mbid}", {"inc": RELEASE_INC})
+
+    async def search_recordings(self, query: str, limit: int = 10) -> list[dict[str, Any]]:
+        """Ricerca di registrazioni (sintassi Lucene); ogni risultato elenca le sue release."""
+        body = await self.get("recording", {"query": query, "limit": str(limit)})
+        recordings: list[dict[str, Any]] = (body or {}).get("recordings", [])
+        return recordings
 
     async def search_toc(self, toc: Toc) -> list[dict[str, Any]]:
         """Ricerca per somiglianza sul TOC (stesso numero di tracce, durate vicine). Niente CD stub."""

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Trova informazioni sull'album</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<form id="bridge" method="post"><input id="mdq" type="hidden" name="mdq"></form>
+<div class="message">Ricerca su MusicBrainz in corso...</div>
+<script type="text/javascript">
+var requestId = {{ request_id|tojson }};
+document.getElementById("mdq").value = window.external.GetMDQByRequestID(requestId);
+document.getElementById("bridge").submit();
+</script>
+</body>
+</html>

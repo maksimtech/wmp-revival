@@ -18,7 +18,7 @@ import sys
 from pathlib import Path
 
 from wmprevival.config import Config
-from wmprevival.musicbrainz import DISCID_INC, MusicBrainzClient
+from wmprevival.musicbrainz import DISCID_INC, RELEASE_INC, MusicBrainzClient
 from wmprevival.paths import Paths
 from wmprevival.toc import Toc
 
@@ -30,6 +30,10 @@ async def record(kind: str, value: str) -> dict[str, object]:
             path, params = f"discid/{value}", {"inc": DISCID_INC}
         elif kind == "toc":
             path, params = "discid/-", {"toc": Toc.from_wmp(value).mb_toc, "cdstubs": "no", "inc": DISCID_INC}
+        elif kind == "release":
+            path, params = f"release/{value}", {"inc": RELEASE_INC}
+        elif kind == "recording-search":
+            path, params = "recording", {"query": value, "limit": "10"}
         else:
             raise SystemExit(f"tipo sconosciuto: {kind}")
         body = await client.get(path, params)

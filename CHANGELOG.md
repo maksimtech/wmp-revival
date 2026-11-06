@@ -14,6 +14,13 @@ Versioni: [CalVer](https://calver.org/) `YYYY.MM.PATCH`.
   base è configurabile per passare a un mirror locale senza cambiare codice.
 - **Scelta del disco** (`matching.py`): Disc ID esatto, poi ricerca per TOC con scarto massimo
   di 3 s traccia per traccia; scarta i dischi estranei proposti da MusicBrainz.
+- **`wmprevival serve`: il server risponde a WMP con i dati di MusicBrainz.** MDR-CD 4.0 per
+  la ricerca automatica dei CD (`GetMDRCD`), pagina dei risultati per "Trova informazioni
+  album" su CD e su file (pagina ponte, MDQ letto con defusedxml), pagine Jinja2 con escaping
+  automatico e JavaScript ES3 scritti da zero, test anti-XSS, mai un 5xx. Le edizioni digitali
+  vengono proposte per prime per i file. `--no-auto` lascia solo le scelte manuali. Se WMP
+  rifiuta i dati, la pagina mostra l'errore e lo segnala a `/FAI/log`.
+- `scripts/servi.cmd` per una sessione di prova con il server (setup, serve, teardown).
 - `wmprevival mb-lookup <TOC>` mostra candidati e scelta; `tools/record_mb_fixture.py` registra
   risposte di MusicBrainz come fixture.
 

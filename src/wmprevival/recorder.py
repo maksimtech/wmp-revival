@@ -19,7 +19,7 @@ import ssl
 import urllib.parse
 import weakref
 import zlib
-from collections.abc import Callable, Sequence
+from collections.abc import Awaitable, Callable, Sequence
 from pathlib import Path
 from typing import Any
 
@@ -29,6 +29,9 @@ from wmprevival import __version__
 from wmprevival.forward import Forwarder, UpstreamResponse, response_headers_for_client
 
 SCHEMA_VERSION = 1
+
+Responder = Callable[[web.Request, bytes], Awaitable[web.Response]]
+"""Produce la risposta a WMP al posto del server vero (``wmprevival serve``)."""
 MAX_BODY = 4 * 1024 * 1024
 
 _sni: weakref.WeakKeyDictionary[ssl.SSLObject, str] = weakref.WeakKeyDictionary()
@@ -161,9 +164,13 @@ class Recorder:
         captures_dir: Path,
         forwarder: Forwarder | None = None,
         on_record: Callable[[dict[str, Any], Path], None] | None = None,
+        responder: Responder | None = None,
     ) -> None:
+        if forwarder is not None and responder is not None:
+            raise ValueError("inoltro e risposte proprie si escludono")
         self.captures_dir = captures_dir
         self.forwarder = forwarder
+        self.responder = responder
         self.on_record = on_record
         self._seq = itertools.count(1)
 
@@ -202,9 +209,21 @@ class Recorder:
                 "body": encode_body(body, request.headers.get("Content-Encoding"), request.headers.get("Content-Type")),
             },
             "forwarded": self.forwarder is not None,
+            "served_locally": self.responder is not None,
         }
         response: web.Response
-        if self.forwarder is None:
+        if self.responder is not None:
+            try:
+                response = await self.responder(request, body)
+            except Exception as exc:  # noqa: BLE001 - mai un 5xx verso WMP
+                record["responder_error"] = f"{type(exc).__name__}: {exc}"
+                response = web.Response(status=404)
+            served = response.body if isinstance(response.body, bytes) else b""
+            record["served"] = {
+                "headers": [[k, v] for k, v in response.headers.items()],
+                "body": encode_body(served, None, response.headers.get("Content-Type")),
+            }
+        elif self.forwarder is None:
             response = web.Response(status=404)
         else:
             try:

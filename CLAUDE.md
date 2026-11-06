@@ -566,9 +566,33 @@ parametro `toc` di MusicBrainz, durate delle tracce), verificata sui tre CD real
   Gute Nacht* (DE, scarto medio 0,3 s), **da confermare con l'utente**.
 - Fixture delle risposte di MusicBrainz (CC0) in `tests/fixtures/musicbrainz/`,
   registrate con `tools/record_mb_fixture.py`.
-- Da fare: scelta tra edizioni equivalenti (paese, data, formato), lookup della
-  release scelta con le relazioni (compositore, direttore), costruzione
-  dell'MDR-CD, risposta a `GetMDRCD` e pagina FAI per il CD.
+- **Risposte a WMP implementate (2026-11-06), da provare su WMP vero** con
+  `scripts\servi.cmd` (`wmprevival serve`, opzione `--no-auto`):
+  - `mdr.py`: MDR-CD 4.0 con tutti gli elementi del modello di `wmp.dll`;
+    `WMCollectionID` = `{MBID release}`, `WMCollectionGroupID` = `{MBID release group}`,
+    `WMContentID` = `{MBID recording}` (GUID maiuscoli tra graffe), `trackRequestID`
+    ultimo figlio di `<track>`, `releaseDate` come in MusicBrainz, genere più votato
+    del release group, etichetta, compositori dalle opere (`performance` → work →
+    `composer`, in mancanza `writer`), direttori (`conductor`). XML in ASCII con
+    `&#N;` (equivalente di `EncodeOMI`).
+  - `GetMDRCD`: MDR della prima scelta, altrimenti la risposta "nessun dato" con la
+    forma di quella Microsoft (`Backoff`, `mdqRequestID`, `ResponseCode`).
+  - FAI su CD: fino a 3 edizioni accettate dalla scelta per durate, tutte le tracce.
+  - FAI su file: nostra pagina ponte (`requestid` validato come GUID), poi ricerca
+    `recording:"…" AND artist:"…" AND release:"…"` (senza album se non trova
+    niente), ordinamento: titolo uguale e durata entro 5 s obbligatori, poi album
+    uguale, numero di traccia, ufficiale, tipo Album, **Digital Media prima**
+    (l'utente ha l'edizione digitale `10f85058` di *Forever Young*), data, MBID;
+    fino a 5 edizioni; l'MDR contiene solo le tracce richieste con il loro
+    `trackRequestID`.
+  - Pagine e JS nostri (`src/wmprevival/web/`), ES3; se `WriteNamesEx` solleva
+    un errore la pagina lo mostra e lo manda a `/FAI/log` (finisce nelle catture
+    e nella console di `serve`).
+  - Prova locale con MusicBrainz vero (curl sulla porta 8443): `GetMDRCD` di *Joy*
+    1,3 s, FAI del file 8,3 s la prima volta (1 ricerca + 5 release), poi cache.
+- Ipotesi da verificare su WMP: formato dei GUID, posizione di `trackRequestID`,
+  `releaseDate` solo anno, `mdqRequestID` a zero per i CD, `WriteNamesEx(2, "", …)`
+  anche per il CD, tempi di attesa accettati da WMP.
 
 - Lookup `/ws/2/discid/<id>?inc=recordings+artist-credits+labels+release-groups+work-rels+artist-rels`
   sull'**API pubblica** con cache (mirror rimandato, indirizzo configurabile).

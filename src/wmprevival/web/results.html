@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Trova informazioni sull'album</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<script type="text/javascript">
+var mdrcds = {{ mdrcds|tojson }};
+var matches = {{ matches|tojson }};
+</script>
+<script type="text/javascript" src="suggestions.js"></script>
+<div class="header">Trova informazioni sull'album <span class="source">dati da MusicBrainz</span></div>
+<div class="column left">
+  <div class="title">Elenco di tracce</div>
+  <div class="list">
+    <table cellpadding="0" cellspacing="0">
+      {% for track in tracks %}
+      <tr id="track-{{ loop.index0 }}" class="track">
+        <td class="number">{{ track.number }}</td>
+        <td>{{ track.title }}</td>
+        <td class="duration">{{ track.duration }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+<div class="column right">
+  <div class="title">Album</div>
+  <div class="list">
+    {% for choice in choices %}
+    <div id="album-{{ loop.index0 }}" class="album" onclick="select({{ loop.index0 }})">
+      <div class="album-title">{{ choice.title }}</div>
+      <div>{{ choice.artist }}</div>
+      <div class="details">{{ choice.details }}</div>
+    </div>
+    {% else %}
+    <div class="message">{{ message }}</div>
+    {% endfor %}
+  </div>
+</div>
+<div id="error" class="error"></div>
+<div class="footer">
+  <input id="finish" class="button" type="button" value="Fine" disabled="disabled" onclick="finish()">
+  <input id="cancel" class="button" type="button" value="Annulla" onclick="cancel()">
+</div>
+</body>
+</html>

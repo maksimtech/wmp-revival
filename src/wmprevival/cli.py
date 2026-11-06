@@ -10,6 +10,7 @@ import json
 import shutil
 import socket
 import sys
+import urllib.parse
 from enum import StrEnum
 from pathlib import Path
 from typing import Any
@@ -22,6 +23,8 @@ from wmprevival import __version__, capture, forward, hosts, matching, recorder,
 from wmprevival.config import Config, ConfigError
 from wmprevival.musicbrainz import MusicBrainzClient, MusicBrainzError, ResponseCache
 from wmprevival.paths import SERVICE_HOST, Paths
+from wmprevival.server import MetadataResponder
+from wmprevival.service import MetadataService
 from wmprevival.state import STORES, InstallState
 from wmprevival.toc import Toc, TocError
 
@@ -297,6 +300,66 @@ def record(
     except KeyboardInterrupt:
         console.print("Fermato.")
     except (OSError, forward.UnsafeUpstreamError) as exc:
+        raise _fail(str(exc)) from exc
+
+
+@app.command()
+def serve(
+    port: int = typer.Option(443, help="Porta HTTPS."),
+    listen: list[str] = typer.Option(["127.0.0.1", "::1"], help="Indirizzi su cui ascoltare (ripetibile)."),
+    allow_lan: bool = typer.Option(False, "--allow-lan", help="Permette indirizzi diversi dal loopback."),
+    no_auto: bool = typer.Option(
+        False, "--no-auto", help="Niente ricerca automatica dei CD: solo 'Trova informazioni album'."
+    ),
+) -> None:
+    """Risponde a WMP con i dati di MusicBrainz, registrando ogni richiesta e risposta."""
+    paths = Paths.from_env()
+    files = tls.PkiFiles.in_dir(paths.pki)
+    if not files.all_exist():
+        raise _fail("PKI assente: esegui prima 'wmprevival setup'.")
+    try:
+        addresses = recorder.check_listen(listen, allow_lan)
+        mb_config = Config.load(paths.config_file).musicbrainz.validate()
+    except (ValueError, ConfigError) as exc:
+        raise _fail(f"{exc}\n  (configurazione: {paths.config_file})") from exc
+    if not hosts.marked_entries(hosts.read(paths.hosts_file)):
+        console.print("[yellow]Attenzione:[/yellow] hosts non reindirizza il servizio: WMP non arriverà qui.")
+    ctx = recorder.server_context(files.server_cert, files.server_key)
+
+    def show(record_: dict[str, Any], dest: Path) -> None:
+        req = record_["request"]
+        stamp = dt.datetime.now().strftime("%H:%M:%S")
+        extra = ""
+        if req["path"].lower() == "/fai/log":
+            extra = f"  [bold]{urllib.parse.unquote(req['query_string'])}[/bold]"
+        console.print(
+            f"[dim]{stamp}[/dim] {req['method']} {req['path']} → {record_['response']['status']}{extra}"
+            f"  [dim]{dest.name}[/dim]",
+            highlight=False,
+        )
+
+    async def run() -> None:
+        cache = ResponseCache(paths.mb_cache)
+        try:
+            async with MusicBrainzClient(mb_config, cache) as client:
+                responder = MetadataResponder(MetadataService(client), auto=not no_auto)
+                if no_auto:
+                    console.print("[yellow]--no-auto:[/yellow] ricerca automatica dei CD disattivata.")
+                rec = recorder.Recorder(paths.captures, on_record=show, responder=responder)
+                runner, started, errors = await recorder.start(rec, addresses, port, ctx)
+                for err in errors:
+                    console.print(f"[yellow]Non in ascolto su {err}[/yellow]")
+                console.print(f"Rispondo a WMP su {', '.join(f'{h}:{port}' for h in started)} con MusicBrainz")
+                console.print(f"({mb_config.base_url}). Ctrl+C per fermare. Catture in {paths.captures}")
+                await recorder.serve_forever(runner)
+        finally:
+            cache.close()
+
+    try:
+        asyncio.run(run())
+    except KeyboardInterrupt:
+        console.print("Fermato.")
+    except OSError as exc:
         raise _fail(str(exc)) from exc
 
 

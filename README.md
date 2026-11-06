@@ -5,8 +5,8 @@ WMP chiede ancora le informazioni sugli album a `musicmatch-ssl.xboxlive.com`, c
 risponde senza dati. WMP Revival si presenta al suo posto, solo su questo PC, e risponderà
 con dati di MusicBrainz (e Discogs come ripiego). Nessun file di Windows viene modificato.
 
-Stato: **fasi 0, 1 e 2** e ricerca su MusicBrainz (fase 3 in corso). Il server non dà
-ancora risposte con metadati. Dettagli e piano completo in [CLAUDE.md](CLAUDE.md).
+Stato: **fasi 0-2**; fasi 3-4 implementate (`wmprevival serve`), da collaudare su WMP. Copertine e
+Discogs non ancora. Dettagli e piano completo in [CLAUDE.md](CLAUDE.md).
 
 ## Requisiti
 
@@ -84,6 +84,15 @@ Prova senza WMP, con il TOC come lo scrive WMP:
 ```powershell
 uv run wmprevival mb-lookup "C+96+5370+9D42+EDBD+137FC+16546+1C6D5+2273F+29927+2EB78+32D76+36C84+3AC1A"
 ```
+
+## Server con i dati di MusicBrainz
+
+```powershell
+uv run wmprevival serve            # risponde a WMP (dopo setup), registra tutto in captures
+uv run wmprevival serve --no-auto  # niente ricerca automatica dei CD: solo "Trova informazioni album"
+```
+
+Sessione completa da un prompt amministratore: `scripts\servi.cmd` (setup, serve, teardown).
 
 ## Strumenti
 

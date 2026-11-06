@@ -1,0 +1,722 @@
+{
+  "recorded_at": "2026-11-06T14:41:54+00:00",
+  "url": "https://musicbrainz.org/ws/2/release/12c5606b-1b33-4ab3-bec1-f556972b5f89?inc=artist-credits+labels+recordings+release-groups+genres+recording-level-rels+work-rels+work-level-rels+artist-rels&fmt=json",
+  "status": 200,
+  "body": {
+    "release-events": [
+      {
+        "date": "2006",
+        "area": {
+          "disambiguation": "",
+          "name": "Italy",
+          "sort-name": "Italy",
+          "type": null,
+          "id": "c6500277-9a3d-349b-bf30-41afdbf42add",
+          "type-id": null,
+          "iso-3166-1-codes": [
+            "IT"
+          ]
+        }
+      }
+    ],
+    "packaging": "Jewel Case",
+    "packaging-id": "ec27701a-4a22-37f4-bfac-6616e0f9750a",
+    "artist-credit": [
+      {
+        "artist": {
+          "country": "IT",
+          "disambiguation": "",
+          "name": "Giovanni Allevi",
+          "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+          "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+          "type": "Person",
+          "sort-name": "Allevi, Giovanni",
+          "genres": []
+        },
+        "joinphrase": "",
+        "name": "Giovanni Allevi"
+      }
+    ],
+    "label-info": [
+      {
+        "label": {
+          "id": "b23143cd-dbcb-4ce5-b937-d1f6843f5f64",
+          "type-id": "b6285b2a-3514-3d43-80df-fcf528824ded",
+          "genres": [],
+          "type": "Imprint",
+          "sort-name": "Ricordi",
+          "name": "Ricordi",
+          "disambiguation": "Italian imprint launched by Dischi Ricordi S.p.A. in 1958",
+          "label-code": 989
+        },
+        "catalog-number": "88697000632"
+      }
+    ],
+    "media": [
+      {
+        "format": "CD",
+        "tracks": [
+          {
+            "id": "699397a9-c569-36ee-886c-997f2d28a51d",
+            "position": 1,
+            "title": "Panic",
+            "length": 280773,
+            "artist-credit": [
+              {
+                "artist": {
+                  "country": "IT",
+                  "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                  "sort-name": "Allevi, Giovanni",
+                  "type": "Person",
+                  "disambiguation": "",
+                  "name": "Giovanni Allevi"
+                },
+                "name": "Giovanni Allevi",
+                "joinphrase": ""
+              }
+            ],
+            "recording": {
+              "artist-credit": [
+                {
+                  "artist": {
+                    "name": "Giovanni Allevi",
+                    "disambiguation": "",
+                    "type": "Person",
+                    "sort-name": "Allevi, Giovanni",
+                    "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                    "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                    "country": "IT"
+                  },
+                  "joinphrase": "",
+                  "name": "Giovanni Allevi"
+                }
+              ],
+              "id": "2b4f86fb-c49a-44bb-8f63-9437b9c2e089",
+              "genres": [],
+              "first-release-date": "2006",
+              "relations": [],
+              "title": "Panic",
+              "disambiguation": "",
+              "length": 280773,
+              "video": false
+            },
+            "number": "1"
+          },
+          {
+            "id": "f18d6df0-54dc-3cf5-9df6-59ee7387416e",
+            "position": 2,
+            "title": "Portami via",
+            "length": 249946,
+            "artist-credit": [
+              {
+                "joinphrase": "",
+                "name": "Giovanni Allevi",
+                "artist": {
+                  "sort-name": "Allevi, Giovanni",
+                  "type": "Person",
+                  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                  "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                  "disambiguation": "",
+                  "name": "Giovanni Allevi",
+                  "country": "IT"
+                }
+              }
+            ],
+            "recording": {
+              "length": 249946,
+              "video": false,
+              "disambiguation": "",
+              "title": "Portami via",
+              "relations": [],
+              "first-release-date": "2006",
+              "genres": [],
+              "id": "1d8dfea3-d3c4-4c09-b11e-5c1ee6650716",
+              "artist-credit": [
+                {
+                  "joinphrase": "",
+                  "name": "Giovanni Allevi",
+                  "artist": {
+                    "country": "IT",
+                    "disambiguation": "",
+                    "name": "Giovanni Allevi",
+                    "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                    "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                    "sort-name": "Allevi, Giovanni",
+                    "type": "Person"
+                  }
+                }
+              ]
+            },
+            "number": "2"
+          },
+          {
+            "length": 272680,
+            "title": "Downtown",
+            "position": 3,
+            "id": "9ba0dc37-f415-3d38-9281-6d9a4e8abac7",
+            "recording": {
+              "first-release-date": "2006",
+              "genres": [
+                {
+                  "name": "jazz",
+                  "disambiguation": "",
+                  "id": "a715278f-1580-409f-8078-4ffbc800e08b",
+                  "count": 1
+                }
+              ],
+              "id": "967ca065-60b8-408d-b705-48d6b46dff76",
+              "artist-credit": [
+                {
+                  "joinphrase": "",
+                  "name": "Giovanni Allevi",
+                  "artist": {
+                    "name": "Giovanni Allevi",
+                    "disambiguation": "",
+                    "type": "Person",
+                    "sort-name": "Allevi, Giovanni",
+                    "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                    "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                    "country": "IT"
+                  }
+                }
+              ],
+              "length": 272680,
+              "video": false,
+              "disambiguation": "",
+              "title": "Downtown",
+              "relations": []
+            },
+            "number": "3",
+            "artist-credit": [
+              {
+                "name": "Giovanni Allevi",
+                "joinphrase": "",
+                "artist": {
+                  "country": "IT",
+                  "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                  "type": "Person",
+                  "sort-name": "Allevi, Giovanni",
+                  "disambiguation": "",
+                  "name": "Giovanni Allevi"
+                }
+              }
+            ]
+          },
+          {
+            "recording": {
+              "video": false,
+              "length": 251400,
+              "disambiguation": "",
+              "title": "Water Dance",
+              "relations": [],
+              "first-release-date": "2006",
+              "genres": [],
+              "id": "7e6569ce-08be-4b51-8012-e1b96b289fca",
+              "artist-credit": [
+                {
+                  "name": "Giovanni Allevi",
+                  "joinphrase": "",
+                  "artist": {
+                    "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                    "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                    "type": "Person",
+                    "sort-name": "Allevi, Giovanni",
+                    "disambiguation": "",
+                    "name": "Giovanni Allevi",
+                    "country": "IT"
+                  }
+                }
+              ]
+            },
+            "number": "4",
+            "artist-credit": [
+              {
+                "artist": {
+                  "name": "Giovanni Allevi",
+                  "disambiguation": "",
+                  "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                  "sort-name": "Allevi, Giovanni",
+                  "type": "Person",
+                  "country": "IT"
+                },
+                "name": "Giovanni Allevi",
+                "joinphrase": ""
+              }
+            ],
+            "length": 251400,
+            "title": "Water Dance",
+            "position": 4,
+            "id": "e67e7d93-4586-31d5-8161-c382b6e162d0"
+          },
+          {
+            "artist-credit": [
+              {
+                "artist": {
+                  "country": "IT",
+                  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                  "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                  "type": "Person",
+                  "sort-name": "Allevi, Giovanni",
+                  "disambiguation": "",
+                  "name": "Giovanni Allevi"
+                },
+                "joinphrase": "",
+                "name": "Giovanni Allevi"
+              }
+            ],
+            "number": "5",
+            "recording": {
+              "title": "Viaggio in aereo",
+              "relations": [],
+              "length": 152560,
+              "video": false,
+              "disambiguation": "",
+              "id": "d3b25d66-c742-4a76-b157-6b6abb0ff0ff",
+              "artist-credit": [
+                {
+                  "joinphrase": "",
+                  "name": "Giovanni Allevi",
+                  "artist": {
+                    "name": "Giovanni Allevi",
+                    "disambiguation": "",
+                    "sort-name": "Allevi, Giovanni",
+                    "type": "Person",
+                    "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                    "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                    "country": "IT"
+                  }
+                }
+              ],
+              "first-release-date": "2006",
+              "genres": []
+            },
+            "id": "4965e4b6-e755-3460-964c-3f87269e99de",
+            "position": 5,
+            "title": "Viaggio in aereo",
+            "length": 152560
+          },
+          {
+            "recording": {
+              "video": false,
+              "length": 330973,
+              "disambiguation": "",
+              "title": "Follow You",
+              "relations": [],
+              "first-release-date": "2006",
+              "genres": [],
+              "id": "4197f49d-c7a6-46a2-b00e-765314ac49a2",
+              "artist-credit": [
+                {
+                  "artist": {
+                    "name": "Giovanni Allevi",
+                    "disambiguation": "",
+                    "type": "Person",
+                    "sort-name": "Allevi, Giovanni",
+                    "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                    "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                    "country": "IT"
+                  },
+                  "joinphrase": "",
+                  "name": "Giovanni Allevi"
+                }
+              ]
+            },
+            "number": "6",
+            "artist-credit": [
+              {
+                "joinphrase": "",
+                "name": "Giovanni Allevi",
+                "artist": {
+                  "name": "Giovanni Allevi",
+                  "disambiguation": "",
+                  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                  "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                  "sort-name": "Allevi, Giovanni",
+                  "type": "Person",
+                  "country": "IT"
+                }
+              }
+            ],
+            "position": 6,
+            "id": "5baba499-77be-3ebc-a14f-8aee57485d10",
+            "length": 330973,
+            "title": "Follow You"
+          },
+          {
+            "recording": {
+              "relations": [],
+              "title": "Vento d'Europa",
+              "disambiguation": "",
+              "video": false,
+              "length": 327066,
+              "artist-credit": [
+                {
+                  "artist": {
+                    "name": "Giovanni Allevi",
+                    "disambiguation": "",
+                    "sort-name": "Allevi, Giovanni",
+                    "type": "Person",
+                    "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                    "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                    "country": "IT"
+                  },
+                  "name": "Giovanni Allevi",
+                  "joinphrase": ""
+                }
+              ],
+              "id": "32a40304-5e4b-44f4-a46e-0b9752f11293",
+              "genres": [],
+              "first-release-date": "2006"
+            },
+            "number": "7",
+            "artist-credit": [
+              {
+                "joinphrase": "",
+                "name": "Giovanni Allevi",
+                "artist": {
+                  "type": "Person",
+                  "sort-name": "Allevi, Giovanni",
+                  "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                  "name": "Giovanni Allevi",
+                  "disambiguation": "",
+                  "country": "IT"
+                }
+              }
+            ],
+            "length": 327066,
+            "title": "Vento d'Europa",
+            "position": 7,
+            "id": "4fff8e06-4287-3e3d-989c-b4caabe2e551"
+          },
+          {
+            "recording": {
+              "disambiguation": "",
+              "length": 386773,
+              "video": false,
+              "relations": [],
+              "title": "L'orologio degli dei",
+              "genres": [
+                {
+                  "count": 1,
+                  "id": "a715278f-1580-409f-8078-4ffbc800e08b",
+                  "name": "jazz",
+                  "disambiguation": ""
+                }
+              ],
+              "first-release-date": "2006",
+              "artist-credit": [
+                {
+                  "artist": {
+                    "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                    "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                    "type": "Person",
+                    "sort-name": "Allevi, Giovanni",
+                    "name": "Giovanni Allevi",
+                    "disambiguation": "",
+                    "country": "IT"
+                  },
+                  "name": "Giovanni Allevi",
+                  "joinphrase": ""
+                }
+              ],
+              "id": "564c839f-bd31-466f-80da-b21e6d606a3e"
+            },
+            "number": "8",
+            "artist-credit": [
+              {
+                "artist": {
+                  "country": "IT",
+                  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                  "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                  "type": "Person",
+                  "sort-name": "Allevi, Giovanni",
+                  "disambiguation": "",
+                  "name": "Giovanni Allevi"
+                },
+                "name": "Giovanni Allevi",
+                "joinphrase": ""
+              }
+            ],
+            "position": 8,
+            "id": "1cb6b8f5-80b7-306b-911d-69e20c19f64f",
+            "length": 386773,
+            "title": "L'orologio degli dei"
+          },
+          {
+            "number": "9",
+            "recording": {
+              "relations": [],
+              "title": "Back to Life",
+              "disambiguation": "",
+              "video": false,
+              "length": 278946,
+              "artist-credit": [
+                {
+                  "joinphrase": "",
+                  "name": "Giovanni Allevi",
+                  "artist": {
+                    "disambiguation": "",
+                    "name": "Giovanni Allevi",
+                    "sort-name": "Allevi, Giovanni",
+                    "type": "Person",
+                    "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                    "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                    "country": "IT"
+                  }
+                }
+              ],
+              "id": "ccd73b04-f62e-4753-9ee3-b2d8f41ae049",
+              "genres": [],
+              "first-release-date": "2006"
+            },
+            "artist-credit": [
+              {
+                "artist": {
+                  "country": "IT",
+                  "type": "Person",
+                  "sort-name": "Allevi, Giovanni",
+                  "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                  "name": "Giovanni Allevi",
+                  "disambiguation": ""
+                },
+                "joinphrase": "",
+                "name": "Giovanni Allevi"
+              }
+            ],
+            "length": 278946,
+            "title": "Back to Life",
+            "position": 9,
+            "id": "2d9c7b8b-0e99-3733-b1fe-051dcf9fc099"
+          },
+          {
+            "id": "f72109d5-fd83-3af7-899a-0842c93b698b",
+            "position": 10,
+            "title": "Jazzmatic",
+            "length": 223226,
+            "artist-credit": [
+              {
+                "name": "Giovanni Allevi",
+                "joinphrase": "",
+                "artist": {
+                  "country": "IT",
+                  "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                  "type": "Person",
+                  "sort-name": "Allevi, Giovanni",
+                  "disambiguation": "",
+                  "name": "Giovanni Allevi"
+                }
+              }
+            ],
+            "recording": {
+              "disambiguation": "",
+              "video": false,
+              "length": 223226,
+              "relations": [],
+              "title": "Jazzmatic",
+              "genres": [],
+              "first-release-date": "2006",
+              "artist-credit": [
+                {
+                  "artist": {
+                    "country": "IT",
+                    "type": "Person",
+                    "sort-name": "Allevi, Giovanni",
+                    "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                    "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                    "name": "Giovanni Allevi",
+                    "disambiguation": ""
+                  },
+                  "name": "Giovanni Allevi",
+                  "joinphrase": ""
+                }
+              ],
+              "id": "fb7ef1ec-2a86-4ef7-8ccc-69039a49e95c"
+            },
+            "number": "10"
+          },
+          {
+            "number": "11",
+            "recording": {
+              "disambiguation": "",
+              "length": 213200,
+              "video": false,
+              "relations": [],
+              "title": "Il bacio",
+              "genres": [
+                {
+                  "count": 1,
+                  "id": "a715278f-1580-409f-8078-4ffbc800e08b",
+                  "disambiguation": "",
+                  "name": "jazz"
+                }
+              ],
+              "first-release-date": "2006",
+              "artist-credit": [
+                {
+                  "artist": {
+                    "country": "IT",
+                    "sort-name": "Allevi, Giovanni",
+                    "type": "Person",
+                    "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                    "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                    "name": "Giovanni Allevi",
+                    "disambiguation": ""
+                  },
+                  "joinphrase": "",
+                  "name": "Giovanni Allevi"
+                }
+              ],
+              "id": "c36c809b-fa71-494b-83c2-75536813b838"
+            },
+            "artist-credit": [
+              {
+                "joinphrase": "",
+                "name": "Giovanni Allevi",
+                "artist": {
+                  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                  "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                  "sort-name": "Allevi, Giovanni",
+                  "type": "Person",
+                  "disambiguation": "",
+                  "name": "Giovanni Allevi",
+                  "country": "IT"
+                }
+              }
+            ],
+            "position": 11,
+            "id": "664e5f4b-369a-342b-b90d-44c485731f11",
+            "length": 213200,
+            "title": "Il bacio"
+          },
+          {
+            "id": "c42d349e-4051-3c62-b174-ca6ec46c50ce",
+            "position": 12,
+            "title": "New Renaissance",
+            "length": 217013,
+            "artist-credit": [
+              {
+                "artist": {
+                  "sort-name": "Allevi, Giovanni",
+                  "type": "Person",
+                  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                  "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                  "disambiguation": "",
+                  "name": "Giovanni Allevi",
+                  "country": "IT"
+                },
+                "joinphrase": "",
+                "name": "Giovanni Allevi"
+              }
+            ],
+            "recording": {
+              "disambiguation": "",
+              "video": false,
+              "length": 217013,
+              "relations": [],
+              "title": "New Renaissance",
+              "genres": [],
+              "first-release-date": "2006",
+              "artist-credit": [
+                {
+                  "name": "Giovanni Allevi",
+                  "joinphrase": "",
+                  "artist": {
+                    "name": "Giovanni Allevi",
+                    "disambiguation": "",
+                    "sort-name": "Allevi, Giovanni",
+                    "type": "Person",
+                    "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                    "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+                    "country": "IT"
+                  }
+                }
+              ],
+              "id": "3e95f745-f425-4516-805c-363ba85684f8"
+            },
+            "number": "12"
+          }
+        ],
+        "format-id": "9712d52a-4509-3d4b-a1a2-67c88c643e31",
+        "track-count": 12,
+        "id": "692d58c0-c73c-3044-96af-44350e9c817b",
+        "position": 1,
+        "title": "",
+        "track-offset": 0
+      }
+    ],
+    "disambiguation": "black CD",
+    "release-group": {
+      "primary-type-id": "f529b476-6e62-324f-b0aa-1f3e33d313fc",
+      "secondary-type-ids": [],
+      "first-release-date": "2006",
+      "primary-type": "Album",
+      "artist-credit": [
+        {
+          "artist": {
+            "country": "IT",
+            "sort-name": "Allevi, Giovanni",
+            "type": "Person",
+            "id": "dbaf944e-756c-448a-b8fa-da284c585413",
+            "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+            "disambiguation": "",
+            "name": "Giovanni Allevi"
+          },
+          "name": "Giovanni Allevi",
+          "joinphrase": ""
+        }
+      ],
+      "disambiguation": "",
+      "title": "Joy",
+      "genres": [
+        {
+          "disambiguation": "",
+          "name": "classical",
+          "id": "6ed4e4d1-9a97-4e2c-b8df-083754f154f4",
+          "count": 1
+        },
+        {
+          "id": "e2b06d21-13df-4a48-aa81-6ddd99344dc7",
+          "count": 1,
+          "disambiguation": "",
+          "name": "contemporary jazz"
+        },
+        {
+          "name": "jazz",
+          "disambiguation": "",
+          "count": 1,
+          "id": "a715278f-1580-409f-8078-4ffbc800e08b"
+        }
+      ],
+      "secondary-types": [],
+      "id": "8964cb98-ba6e-321e-89d5-0fac4613350d"
+    },
+    "relations": [],
+    "title": "Joy",
+    "barcode": "0886970006323",
+    "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+    "text-representation": {
+      "script": "Latn",
+      "language": "mul"
+    },
+    "asin": "B000PKG4S2",
+    "status": "Official",
+    "country": "IT",
+    "date": "2006",
+    "cover-art-archive": {
+      "artwork": true,
+      "count": 1,
+      "darkened": false,
+      "front": true,
+      "back": false
+    },
+    "genres": [],
+    "quality": "normal",
+    "id": "12c5606b-1b33-4ab3-bec1-f556972b5f89"
+  }
+}

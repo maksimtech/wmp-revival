@@ -1,0 +1,22 @@
+/* WMP Revival: stile delle pagine FAI (MSHTML in modalità IE7). */
+html { overflow: hidden; }
+body { margin: 0; font-family: "Segoe UI", Tahoma, Arial, sans-serif; font-size: 9pt; color: #1e1e1e; background: #fff; }
+.header { padding: 12px 19px 8px; font-size: 12pt; border-bottom: 1px solid #ddd; }
+.source { font-size: 8pt; color: #777; margin-left: 8px; }
+.column { position: absolute; top: 46px; bottom: 56px; overflow: auto; }
+.left { left: 19px; right: 50%; padding-right: 8px; }
+.right { left: 50%; right: 19px; padding-left: 8px; }
+.title { font-weight: bold; margin-bottom: 6px; }
+.list table { width: 100%; }
+.track td { padding: 2px 4px; color: #777; }
+.track.matched td, .matched td { color: #1e1e1e; background: #eef5fc; }
+.number, .duration { width: 40px; text-align: right; white-space: nowrap; }
+.album { padding: 6px 8px; margin-bottom: 4px; border: 1px solid #ddd; cursor: pointer; }
+.album:hover { background: #f4f4f4; }
+.album.selected, .selected { background: #cce4f7; border-color: #7eb4ea; }
+.album-title { font-weight: bold; }
+.details { color: #777; font-size: 8pt; }
+.message { padding: 12px 0; color: #555; }
+.error { display: none; position: absolute; left: 19px; right: 19px; bottom: 56px; padding: 6px; background: #fde7e9; color: #a4262c; }
+.footer { position: absolute; left: 0; right: 0; bottom: 0; padding: 11px 19px; background: #f4f4f4; text-align: right; }
+.button { min-width: 75px; margin-left: 6px; }
