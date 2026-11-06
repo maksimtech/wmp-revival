@@ -13,8 +13,7 @@ Versioni: [CalVer](https://calver.org/) `YYYY.MM.PATCH`.
 - `scripts/cattura.cmd` per una sessione di cattura completa da un prompt amministratore.
 - `fixture --drop-upstream-body` toglie le pagine e gli script del server Microsoft dalle
   fixture. Prime fixture reali in `tests/fixtures/captures/` (tre `GetMDRCD`, FAI su CD e FAI su
-  file: GET con `requestid` e POST con l'MDQ-CD")
-  con i test del formato osservato.
+  file: GET con `requestid` e POST con l'MDQ-CD), con i test del formato osservato.
 - `CLAUDE.md`: risultati della prima cattura (query del CD, risposta "Gracenote provider has
   been removed", pagina FAI in modalità IE7, `WriteNamesEx(2, "", mdr, true)`).
 
