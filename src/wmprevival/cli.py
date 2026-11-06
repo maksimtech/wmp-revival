@@ -255,7 +255,16 @@ def record(
         raise _fail(str(exc)) from exc
     if not hosts.marked_entries(hosts.read(paths.hosts_file)):
         console.print("[yellow]Attenzione:[/yellow] hosts non reindirizza il servizio: WMP non arriverà qui.")
-    ctx = recorder.server_context(files.server_cert, files.server_key)
+
+    def hello(sni: str | None) -> None:
+        stamp = dt.datetime.now().strftime("%H:%M:%S")
+        console.print(
+            f"[dim]{stamp} TLS ClientHello (SNI {sni or '-'}). Se non segue una richiesta, il client "
+            "ha rifiutato il certificato.[/dim]",
+            highlight=False,
+        )
+
+    ctx = recorder.server_context(files.server_cert, files.server_key, on_hello=hello)
 
     async def run() -> None:
         fwd: forward.Forwarder | None = None

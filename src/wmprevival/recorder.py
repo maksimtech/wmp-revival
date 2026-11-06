@@ -34,7 +34,13 @@ MAX_BODY = 4 * 1024 * 1024
 _sni: weakref.WeakKeyDictionary[ssl.SSLObject, str] = weakref.WeakKeyDictionary()
 
 
-def server_context(cert: Path, key: Path) -> ssl.SSLContext:
+def server_context(cert: Path, key: Path, on_hello: Callable[[str | None], None] | None = None) -> ssl.SSLContext:
+    """Contesto TLS del server. ``on_hello`` viene chiamato a ogni ClientHello.
+
+    Serve a diagnosticare un certificato rifiutato (CA non accettata, pinning): in quel
+    caso il client chiude durante l'handshake e nessuna richiesta HTTP arriva mai, quindi
+    senza questo avviso il registratore resterebbe muto.
+    """
     ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     ctx.minimum_version = ssl.TLSVersion.TLSv1_2
     ctx.load_cert_chain(cert, key)
@@ -42,6 +48,8 @@ def server_context(cert: Path, key: Path) -> ssl.SSLContext:
     def remember_sni(obj: ssl.SSLObject, name: str | None, _ctx: ssl.SSLContext) -> None:
         if name:
             _sni[obj] = name
+        if on_hello:
+            on_hello(name)
 
     ctx.sni_callback = remember_sni
     return ctx
