@@ -317,6 +317,26 @@ modifica al sistema.
   (da confermare con Picard).
 - Attenzione ai CD Enhanced: la traccia dati non compare tra i `.cda` e sposta
   il lead-out del Disc ID; da verificare cosa mette WMP nel TOC in quel caso.
+- **Altri due CD** (stesso giorno, WMP riaperto): uno da 12 tracce, molto noto, e
+  uno da 21. Per entrambi **"Album sconosciuto"**, ma
+  `AutoMetadataCurrentDownloadCount` è passato **da 0 a 6** senza errori: il
+  server vero risponde "con successo" ma senza dati, anche per album famosi.
+  Il formato del TOC è confermato (`C+96+5370+...+3AC1A` identico al calcolo dai
+  `.cda`). Per ogni disco una nuova riga in `MetadataRequest` con id
+  `{GUID}0001`.
+- **Verifica su MusicBrainz** (API pubblica, Disc ID calcolati dal TOC di WMP):
+
+  | CD | Disc ID esatto | Ricerca per TOC (`/ws/2/discid/-?toc=`) |
+  | --- | --- | --- |
+  | 14 tracce | 404, non collegato | 12 release diverse: rumore |
+  | 12 tracce | 404, non collegato | 1 candidata (2 edizioni): Giovanni Allevi, *Joy* (2006, IT) |
+  | 21 tracce | solo **CD stub** "Miniclub Compilation" (Various) | - |
+
+  Conseguenze per le fasi 2-3: il Disc ID esatto da solo non basta; la ricerca
+  per TOC serve ma va filtrata con un punteggio sulla distanza delle durate e
+  una soglia (sotto: "non trovato" o pagina di scelta); i CD stub sono dati
+  anonimi di bassa qualità, da decidere se e come usarli. Collegare i Disc ID
+  con Picard ("Aggiungi ID disco") migliora il lookup esatto per tutti.
 - Colonne viste nel database (oltre a quelle già elencate):
   `MetadataRequest.RequestID`, `.Locale`, `.Key`, `.TOCorDVDIDExBit`,
   `.TOCorDVDIDExText`; `Album.TOCExBit`, `Album.TOCExText`;
