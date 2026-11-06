@@ -5,7 +5,7 @@ import base64
 from wmprevival import capture, recorder
 
 GUID = "{DEADBEEF-1234-4ABC-8DEF-0123456789AB}"
-OTHER = "a7557~1-not-a-guid"
+OTHER = "Windows-Media-Player/12.0.26100.9549"
 
 
 def _record() -> dict:

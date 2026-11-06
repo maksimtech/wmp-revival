@@ -317,6 +317,14 @@ modifica al sistema.
   (da confermare con Picard).
 - Attenzione ai CD Enhanced: la traccia dati non compare tra i `.cda` e sposta
   il lead-out del Disc ID; da verificare cosa mette WMP nel TOC in quel caso.
+- Colonne viste nel database (oltre a quelle già elencate):
+  `MetadataRequest.RequestID`, `.Locale`, `.Key`, `.TOCorDVDIDExBit`,
+  `.TOCorDVDIDExText`; `Album.TOCExBit`, `Album.TOCExText`;
+  `Track.MetadataState`, `.MetadataNeedsWork`, `.MetadataProviderRequestState`,
+  `.MetadataProviderRequestTime`. Compare anche una stringa nella forma
+  `{GUID}0001`, forse un `RequestID` (GUID + contatore): da confrontare con la
+  cattura. È un identificativo della libreria dell'utente, quindi va trattato
+  come i GUID nelle fixture.
 
 ### Altri file analizzati (nessuna logica di metadati)
 
