@@ -1,0 +1,99 @@
+"""Operazioni di sistema su Windows: archivio certificati, permessi, DNS, privilegi.
+
+Tutte passano da un ``Runner`` iniettabile, così i test verificano i comandi senza
+eseguirli. I messaggi di certutil sono localizzati: si guarda solo il codice di uscita.
+"""
+
+from __future__ import annotations
+
+import contextlib
+import ctypes
+import os
+import subprocess
+import sys
+from collections.abc import Callable, Sequence
+from pathlib import Path
+
+from wmprevival.state import Store
+
+Runner = Callable[[Sequence[str]], "subprocess.CompletedProcess[str]"]
+
+
+def run(cmd: Sequence[str]) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(list(cmd), capture_output=True, text=True, check=False)
+
+
+class SystemCommandError(RuntimeError):
+    def __init__(self, cmd: Sequence[str], result: subprocess.CompletedProcess[str]) -> None:
+        detail = (result.stderr or result.stdout or "").strip()
+        super().__init__(f"{' '.join(cmd)} -> codice {result.returncode}: {detail}")
+
+
+def _checked(runner: Runner, cmd: Sequence[str]) -> None:
+    result = runner(cmd)
+    if result.returncode != 0:
+        raise SystemCommandError(cmd, result)
+
+
+def _store_args(store: Store) -> list[str]:
+    return ["-user"] if store == "user" else []
+
+
+def add_root(cert: Path, store: Store, runner: Runner = run) -> None:
+    """Installa la CA tra le radici attendibili. Con ``user`` Windows chiede conferma a video."""
+    _checked(runner, ["certutil", *_store_args(store), "-addstore", "-f", "Root", str(cert)])
+
+
+def remove_root(thumbprint: str, store: Store, runner: Runner = run) -> None:
+    _checked(runner, ["certutil", *_store_args(store), "-delstore", "Root", thumbprint])
+
+
+def has_root(thumbprint: str, store: Store, runner: Runner = run) -> bool:
+    return runner(["certutil", *_store_args(store), "-store", "Root", thumbprint]).returncode == 0
+
+
+def restrict_to_current_user(path: Path, runner: Runner = run) -> None:
+    """Toglie i permessi ereditati e lascia il controllo completo solo all'utente corrente."""
+    if sys.platform != "win32":
+        path.chmod(0o600)
+        return
+    user = os.environ.get("USERNAME", "")
+    domain = os.environ.get("USERDOMAIN", "")
+    who = f"{domain}\\{user}" if domain else user
+    _checked(runner, ["icacls", str(path), "/inheritance:r", "/grant:r", f"{who}:F"])
+
+
+def flush_dns(runner: Runner = run) -> None:
+    runner(["ipconfig", "/flushdns"])
+
+
+WMP_POLICY_KEY = r"Software\Policies\Microsoft\WindowsMediaPlayer"
+WMP_POLICY_VALUES = ("PreventCDDVDMetadataRetrieval", "PreventMusicFileMetadataRetrieval")
+
+
+def wmp_policies() -> dict[str, object]:
+    """Criteri di gruppo che bloccano il recupero dei metadati, se impostati (HKLM e HKCU)."""
+    if sys.platform != "win32":
+        return {}
+    import winreg
+
+    found: dict[str, object] = {}
+    for hive_name, hive in (("HKLM", winreg.HKEY_LOCAL_MACHINE), ("HKCU", winreg.HKEY_CURRENT_USER)):
+        try:
+            key = winreg.OpenKey(hive, WMP_POLICY_KEY)
+        except OSError:
+            continue
+        with key:
+            for name in WMP_POLICY_VALUES:
+                with contextlib.suppress(OSError):
+                    found[f"{hive_name}\\{name}"] = winreg.QueryValueEx(key, name)[0]
+    return found
+
+
+def is_admin() -> bool:
+    if sys.platform != "win32":
+        return os.geteuid() == 0 if hasattr(os, "geteuid") else False
+    try:
+        return bool(ctypes.windll.shell32.IsUserAnAdmin())
+    except OSError:
+        return False

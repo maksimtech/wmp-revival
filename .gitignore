@@ -1,0 +1,19 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+/dist/
+/build/
+*.egg-info/
+
+# Dati locali: PKI, catture, stato e backup stanno in %LOCALAPPDATA%\WMPRevival.
+# Queste righe sono una rete di sicurezza se qualcuno li copia qui per errore.
+*.key
+*.pem
+*.pfx
+*.wmdb
+captures/
+config.toml
+.env

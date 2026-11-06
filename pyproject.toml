@@ -1,0 +1,79 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "wmprevival"
+dynamic = ["version"]
+description = "Server locale di metadati per Windows Media Player Legacy (MusicBrainz, Discogs)"
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.13"
+authors = [
+    {name = "Massimo Moretti"},
+]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Environment :: Console",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = [
+    "typer>=0.12",
+    "rich>=13.0",
+    # Server HTTPS del registratore e client della modalità --forward: il client
+    # accetta un resolver su misura, così si collega all'IP vero del servizio
+    # mantenendo SNI e verifica del certificato sul nome originale.
+    "aiohttp>=3.10",
+    "cryptography>=43",
+    # Risoluzione DNS diretta per --forward: il file hosts punta il nome su 127.0.0.1.
+    "dnspython>=2.6",
+]
+
+[project.scripts]
+wmprevival = "wmprevival.cli:app"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.8",
+    "mypy>=1.13",
+]
+
+[tool.hatch.version]
+path = "src/wmprevival/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/wmprevival"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.ruff]
+line-length = 120
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "UP", "B", "C4", "SIM"]
+
+[tool.ruff.lint.flake8-bugbear]
+# Typer dichiara le opzioni come chiamate nei valori predefiniti.
+extend-immutable-calls = ["typer.Option", "typer.Argument"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+# Test: annotazioni facoltative su fixture e helper.
+module = "tests.*"
+disallow_untyped_defs = false
+disallow_untyped_calls = false
+disallow_incomplete_defs = false
+disable_error_code = ["type-arg", "var-annotated"]
