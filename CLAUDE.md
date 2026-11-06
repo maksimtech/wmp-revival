@@ -182,7 +182,7 @@ Interfaccia dispatch `IWMPCDDVDWizardExternal`
 Windows Media Player":
 
 | DISPID | Metodo | Ritorno |
-|---|---|---|
+| --- | --- | --- |
 | 0x2711 | `WriteNames(BSTR bstrTOC, BSTR bstrMetadata)` | void |
 | 0x2712 | `ReturnToMainTask()` | void |
 | 0x2717 | `WriteNamesEx(WMP_WRITENAMESEX_TYPE type, BSTR bstrTypeId, BSTR bstrMetadata, VARIANT_BOOL fRenameRegroupFiles)` | void |
