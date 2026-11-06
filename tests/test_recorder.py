@@ -109,6 +109,29 @@ def test_encode_body_gzip_and_utf16_and_binary() -> None:
     assert recorder.encode_body(b"") == {"length": 0, "base64": ""}
 
 
+def test_connection_resets_are_silenced_but_other_errors_are_not() -> None:
+    import asyncio
+    from unittest import mock
+
+    loop = asyncio.new_event_loop()
+    try:
+        with mock.patch.object(loop, "default_exception_handler") as default:
+            recorder.quiet_connection_resets(loop)
+            handler = loop.get_exception_handler()
+            assert handler is not None
+            # Come lo solleva Windows: OSError con winerror 10054 (o 10053, 10057).
+            reset = OSError(None, "connessione chiusa dall'host remoto", None, 10054)
+            assert reset.winerror == 10054 if hasattr(reset, "winerror") else True
+            for exc in (ConnectionResetError(), ConnectionAbortedError(), reset):
+                handler(loop, {"message": "Exception in callback _call_connection_lost", "exception": exc})
+            default.assert_not_called()
+            other = {"message": "altro", "exception": ValueError("vero errore")}
+            handler(loop, other)
+            default.assert_called_once_with(other)
+    finally:
+        loop.close()
+
+
 def test_check_listen() -> None:
     assert recorder.check_listen(["127.0.0.1", "::1"], allow_lan=False) == ["127.0.0.1", "::1"]
     with pytest.raises(ValueError, match="--allow-lan"):

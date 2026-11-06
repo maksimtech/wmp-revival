@@ -1,6 +1,8 @@
 """Risposte al posto del servizio Microsoft (``wmprevival serve``).
 
 - ``GET /cdinfo/GetMDRCD.aspx?...&CD=<toc>``: ricerca automatica del CD → MDR-CD o "nessun dato";
+- ``POST /cdinfo/GetMDRCD.aspx?...&requestID=<GUID>`` (MDQ-CD nel corpo): ricerca automatica dei
+  file della libreria → MDR-CD con le tracce abbinate o "nessun dato";
 - ``GET /FAI/default.aspx?...&cd=<toc>``: pagina dei risultati per un CD;
 - ``GET /FAI/default.aspx?...&requestid=<GUID>``: pagina ponte per i file;
 - ``POST /FAI/default.aspx`` (campo ``mdq``): pagina dei risultati per i file;
@@ -87,6 +89,8 @@ class MetadataResponder:
         params = raw_query(request.raw_path)
         if path == "/cdinfo/getmdrcd.aspx" and request.method == "GET":
             return await self.cd_lookup(params.get("cd", ""))
+        if path == "/cdinfo/getmdrcd.aspx" and request.method == "POST":
+            return await self.file_lookup(body, params.get("requestid", ""))
         if path == "/fai/default.aspx":
             if request.method == "POST":
                 return await self.file_results(body)
@@ -114,6 +118,22 @@ class MetadataResponder:
             log.exception("ricerca automatica del CD fallita")
             return xml_response(mdr.build_not_found(code="Lookup failed"))
         return xml_response(xml if xml is not None else mdr.build_not_found())
+
+    async def file_lookup(self, body: bytes, request_id: str) -> web.Response:
+        """Ricerca automatica dei file della libreria: MDQ-CD in XML nel corpo della POST."""
+        reply_id = request_id if mdq_mod.GUID_RE.match(request_id) else mdr.ZERO_GUID
+        if not self.auto:
+            return xml_response(mdr.build_not_found(reply_id, code="Automatic lookup disabled"))
+        try:
+            query = mdq_mod.parse(body.decode("utf-8", errors="replace"))
+        except mdq_mod.MdqError:
+            return xml_response(mdr.build_not_found(reply_id, code="Invalid MDQ"))
+        try:
+            xml = await self.service.file_automatic(query)
+        except Exception:  # noqa: BLE001 - niente 5xx
+            log.exception("ricerca automatica dei file fallita")
+            return xml_response(mdr.build_not_found(query.request_id, code="Lookup failed"))
+        return xml_response(xml if xml is not None else mdr.build_not_found(query.request_id))
 
     async def cd_results(self, toc_value: str) -> web.Response:
         try:

@@ -1,0 +1,348 @@
+{
+  "recorded_at": "2026-11-06T14:58:10+00:00",
+  "url": "https://musicbrainz.org/ws/2/recording?query=recording%3A%22Mine%20All%20Day%22%20AND%20artist%3A%22PewDiePie%20%26%20Party%20in%20Backyard%22%20AND%20release%3A%22Mine%20All%20Day%22&limit=10&fmt=json",
+  "status": 200,
+  "body": {
+    "created": "2026-11-06T14:57:53.587Z",
+    "count": 3,
+    "offset": 0,
+    "recordings": [
+      {
+        "id": "8c4b1103-a59c-4013-9fda-919da3197407",
+        "score": 100,
+        "artist-credit-id": "82e7b4cc-25a7-45f4-a55b-ac946de07721",
+        "title": "Mine All Day",
+        "length": 250000,
+        "video": null,
+        "artist-credit": [
+          {
+            "joinphrase": " & ",
+            "name": "PewDiePie",
+            "artist": {
+              "id": "659e888d-5386-4cdc-a076-65d0906bef8c",
+              "name": "PewDiePie",
+              "sort-name": "PewDiePie",
+              "aliases": [
+                {
+                  "sort-name": "Kjellberg, Felix Arvid Ulf",
+                  "type-id": "d4dcd0c0-b341-3612-a332-c0ce797b25cf",
+                  "name": "Felix Arvid Ulf Kjellberg",
+                  "locale": "sv",
+                  "type": "Legal name",
+                  "primary": null,
+                  "begin-date": null,
+                  "end-date": null
+                }
+              ]
+            }
+          },
+          {
+            "name": "Party in Backyard",
+            "artist": {
+              "id": "d4e4b375-6af5-463c-bd81-48570610b324",
+              "name": "Party in Backyard",
+              "sort-name": "Party in Backyard"
+            }
+          }
+        ],
+        "first-release-date": "2019-10-23",
+        "releases": [
+          {
+            "id": "f5729885-957d-49b5-b5fc-22ec5c7f3875",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "82e7b4cc-25a7-45f4-a55b-ac946de07721",
+            "count": 1,
+            "title": "Mine All Day",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "joinphrase": " & ",
+                "name": "PewDiePie",
+                "artist": {
+                  "id": "659e888d-5386-4cdc-a076-65d0906bef8c",
+                  "name": "PewDiePie",
+                  "sort-name": "PewDiePie"
+                }
+              },
+              {
+                "name": "Party in Backyard",
+                "artist": {
+                  "id": "d4e4b375-6af5-463c-bd81-48570610b324",
+                  "name": "Party in Backyard",
+                  "sort-name": "Party in Backyard"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "d8c5b178-46e5-427b-b25e-86eab4b872dd",
+              "type-id": "d6038452-8ee0-3f68-affc-2de9a1ede0b9",
+              "primary-type-id": "d6038452-8ee0-3f68-affc-2de9a1ede0b9",
+              "title": "Mine All Day",
+              "primary-type": "Single"
+            },
+            "date": "2019-10-23",
+            "country": "XW",
+            "release-events": [
+              {
+                "date": "2019-10-23",
+                "area": {
+                  "id": "525d4e18-3d00-31b9-a58b-a146a916de8f",
+                  "name": "[Worldwide]",
+                  "sort-name": "[Worldwide]",
+                  "iso-3166-1-codes": [
+                    "XW"
+                  ]
+                }
+              }
+            ],
+            "track-count": 3,
+            "media": [
+              {
+                "id": "6f0a6f73-5bf8-3cbc-9325-2108e45b93ba",
+                "position": 1,
+                "format": "Digital Media",
+                "track": [
+                  {
+                    "id": "2c63c79c-02f4-484a-b061-53607606de0d",
+                    "number": "1",
+                    "title": "Mine All Day",
+                    "length": 250000
+                  }
+                ],
+                "track-count": 3,
+                "track-offset": 0
+              }
+            ]
+          }
+        ],
+        "isrcs": [
+          "QZHN81957282"
+        ]
+      },
+      {
+        "id": "a67090d2-088c-435d-916f-fa02bd3c5743",
+        "score": 97,
+        "artist-credit-id": "82e7b4cc-25a7-45f4-a55b-ac946de07721",
+        "title": "Mine All Day (Acapella)",
+        "length": 250000,
+        "video": null,
+        "artist-credit": [
+          {
+            "joinphrase": " & ",
+            "name": "PewDiePie",
+            "artist": {
+              "id": "659e888d-5386-4cdc-a076-65d0906bef8c",
+              "name": "PewDiePie",
+              "sort-name": "PewDiePie",
+              "aliases": [
+                {
+                  "sort-name": "Kjellberg, Felix Arvid Ulf",
+                  "type-id": "d4dcd0c0-b341-3612-a332-c0ce797b25cf",
+                  "name": "Felix Arvid Ulf Kjellberg",
+                  "locale": "sv",
+                  "type": "Legal name",
+                  "primary": null,
+                  "begin-date": null,
+                  "end-date": null
+                }
+              ]
+            }
+          },
+          {
+            "name": "Party in Backyard",
+            "artist": {
+              "id": "d4e4b375-6af5-463c-bd81-48570610b324",
+              "name": "Party in Backyard",
+              "sort-name": "Party in Backyard"
+            }
+          }
+        ],
+        "first-release-date": "2019-10-23",
+        "releases": [
+          {
+            "id": "f5729885-957d-49b5-b5fc-22ec5c7f3875",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "82e7b4cc-25a7-45f4-a55b-ac946de07721",
+            "count": 1,
+            "title": "Mine All Day",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "joinphrase": " & ",
+                "name": "PewDiePie",
+                "artist": {
+                  "id": "659e888d-5386-4cdc-a076-65d0906bef8c",
+                  "name": "PewDiePie",
+                  "sort-name": "PewDiePie"
+                }
+              },
+              {
+                "name": "Party in Backyard",
+                "artist": {
+                  "id": "d4e4b375-6af5-463c-bd81-48570610b324",
+                  "name": "Party in Backyard",
+                  "sort-name": "Party in Backyard"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "d8c5b178-46e5-427b-b25e-86eab4b872dd",
+              "type-id": "d6038452-8ee0-3f68-affc-2de9a1ede0b9",
+              "primary-type-id": "d6038452-8ee0-3f68-affc-2de9a1ede0b9",
+              "title": "Mine All Day",
+              "primary-type": "Single"
+            },
+            "date": "2019-10-23",
+            "country": "XW",
+            "release-events": [
+              {
+                "date": "2019-10-23",
+                "area": {
+                  "id": "525d4e18-3d00-31b9-a58b-a146a916de8f",
+                  "name": "[Worldwide]",
+                  "sort-name": "[Worldwide]",
+                  "iso-3166-1-codes": [
+                    "XW"
+                  ]
+                }
+              }
+            ],
+            "track-count": 3,
+            "media": [
+              {
+                "id": "6f0a6f73-5bf8-3cbc-9325-2108e45b93ba",
+                "position": 1,
+                "format": "Digital Media",
+                "track": [
+                  {
+                    "id": "a8ff3943-c942-4ea2-be5e-853aaaf95ea5",
+                    "number": "3",
+                    "title": "Mine All Day (Acapella)",
+                    "length": 250000
+                  }
+                ],
+                "track-count": 3,
+                "track-offset": 2
+              }
+            ]
+          }
+        ],
+        "isrcs": [
+          "QZHN81957284"
+        ]
+      },
+      {
+        "id": "bf4afb94-3d43-4c73-866e-28061474a854",
+        "score": 97,
+        "artist-credit-id": "82e7b4cc-25a7-45f4-a55b-ac946de07721",
+        "title": "Mine All Day (Instrumental)",
+        "length": 250000,
+        "video": null,
+        "artist-credit": [
+          {
+            "joinphrase": " & ",
+            "name": "PewDiePie",
+            "artist": {
+              "id": "659e888d-5386-4cdc-a076-65d0906bef8c",
+              "name": "PewDiePie",
+              "sort-name": "PewDiePie",
+              "aliases": [
+                {
+                  "sort-name": "Kjellberg, Felix Arvid Ulf",
+                  "type-id": "d4dcd0c0-b341-3612-a332-c0ce797b25cf",
+                  "name": "Felix Arvid Ulf Kjellberg",
+                  "locale": "sv",
+                  "type": "Legal name",
+                  "primary": null,
+                  "begin-date": null,
+                  "end-date": null
+                }
+              ]
+            }
+          },
+          {
+            "name": "Party in Backyard",
+            "artist": {
+              "id": "d4e4b375-6af5-463c-bd81-48570610b324",
+              "name": "Party in Backyard",
+              "sort-name": "Party in Backyard"
+            }
+          }
+        ],
+        "first-release-date": "2019-10-23",
+        "releases": [
+          {
+            "id": "f5729885-957d-49b5-b5fc-22ec5c7f3875",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "artist-credit-id": "82e7b4cc-25a7-45f4-a55b-ac946de07721",
+            "count": 1,
+            "title": "Mine All Day",
+            "status": "Official",
+            "artist-credit": [
+              {
+                "joinphrase": " & ",
+                "name": "PewDiePie",
+                "artist": {
+                  "id": "659e888d-5386-4cdc-a076-65d0906bef8c",
+                  "name": "PewDiePie",
+                  "sort-name": "PewDiePie"
+                }
+              },
+              {
+                "name": "Party in Backyard",
+                "artist": {
+                  "id": "d4e4b375-6af5-463c-bd81-48570610b324",
+                  "name": "Party in Backyard",
+                  "sort-name": "Party in Backyard"
+                }
+              }
+            ],
+            "release-group": {
+              "id": "d8c5b178-46e5-427b-b25e-86eab4b872dd",
+              "type-id": "d6038452-8ee0-3f68-affc-2de9a1ede0b9",
+              "primary-type-id": "d6038452-8ee0-3f68-affc-2de9a1ede0b9",
+              "title": "Mine All Day",
+              "primary-type": "Single"
+            },
+            "date": "2019-10-23",
+            "country": "XW",
+            "release-events": [
+              {
+                "date": "2019-10-23",
+                "area": {
+                  "id": "525d4e18-3d00-31b9-a58b-a146a916de8f",
+                  "name": "[Worldwide]",
+                  "sort-name": "[Worldwide]",
+                  "iso-3166-1-codes": [
+                    "XW"
+                  ]
+                }
+              }
+            ],
+            "track-count": 3,
+            "media": [
+              {
+                "id": "6f0a6f73-5bf8-3cbc-9325-2108e45b93ba",
+                "position": 1,
+                "format": "Digital Media",
+                "track": [
+                  {
+                    "id": "78c5df79-eb5c-42aa-98f2-87e76f5ca865",
+                    "number": "2",
+                    "title": "Mine All Day (Instrumental)",
+                    "length": 250000
+                  }
+                ],
+                "track-count": 3,
+                "track-offset": 1
+              }
+            ]
+          }
+        ],
+        "isrcs": [
+          "QZHN81957283"
+        ]
+      }
+    ]
+  }
+}

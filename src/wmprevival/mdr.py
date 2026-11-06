@@ -93,10 +93,13 @@ def genre(release: dict[str, Any]) -> str:
     return ""
 
 
+SPECIAL_LABELS = {"[no label]"}  # etichetta speciale di MusicBrainz per le autoproduzioni
+
+
 def label(release: dict[str, Any]) -> str:
     for info in release.get("label-info", []):
         name = (info.get("label") or {}).get("name")
-        if name:
+        if name and name not in SPECIAL_LABELS:
             return str(name)
     return ""
 

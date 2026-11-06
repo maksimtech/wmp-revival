@@ -54,9 +54,13 @@ class FixtureMB:
 
     async def search_recordings(self, query: str, limit: int = 10) -> list[dict[str, Any]]:
         self.calls.append(("search", query))
-        if "Big in Japan" in query:
-            recordings: list[dict[str, Any]] = body("search_big_in_japan.json")["recordings"]
-            return recordings
+        for needle, name in (
+            ("Big in Japan", "search_big_in_japan.json"),
+            ("Mine All Day", "search_mine_all_day.json"),
+        ):
+            if needle in query:
+                recordings: list[dict[str, Any]] = body(name)["recordings"]
+                return recordings
         return []
 
 

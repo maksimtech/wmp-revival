@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "recorder": "wmprevival/2026.11.0",
+  "received_at": "2026-11-06T15:54:07.719020+01:00",
+  "client": "127.0.0.1",
+  "tls": {
+    "version": "TLSv1.3",
+    "cipher": "TLS_AES_256_GCM_SHA384",
+    "sni": "musicmatch-ssl.xboxlive.com"
+  },
+  "request": {
+    "method": "POST",
+    "http_version": "1.1",
+    "raw_path": "/cdinfo/GetMDRCD.aspx?locale=410&geoid=76&version=12.0.26100.9549&userlocale=410&requestID=00000000-0000-0000-0000-000000000001",
+    "path": "/cdinfo/GetMDRCD.aspx",
+    "query_string": "locale=410&geoid=76&version=12.0.26100.9549&userlocale=410&requestID=00000000-0000-0000-0000-000000000001",
+    "headers": [
+      [
+        "Accept",
+        "*/*"
+      ],
+      [
+        "User-Agent",
+        "Windows-Media-Player/12.0.26100.9711"
+      ],
+      [
+        "Content-Type",
+        "text/xml"
+      ],
+      [
+        "Accept-Encoding",
+        "gzip, deflate"
+      ],
+      [
+        "Host",
+        "musicmatch-ssl.xboxlive.com"
+      ],
+      [
+        "Content-Length",
+        "4703"
+      ],
+      [
+        "Connection",
+        "Keep-Alive"
+      ]
+    ],
+    "body": {
+      "length": 4703,
+      "base64": "PE1FVEFEQVRBPg0KICAgIDxNRFEtQ0Q+DQogICAgICAgIDxtZHFSZXF1ZXN0SUQ+MDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAxPC9tZHFSZXF1ZXN0SUQ+DQogICAgICAgIDxhbGJ1bT4NCiAgICAgICAgICAgIDx0aXRsZT4NCiAgICAgICAgICAgICAgICA8dGV4dD5NaW5lIEFsbCBEYXkgW0V4cGxpY2l0XTwvdGV4dD4NCiAgICAgICAgICAgICAgICA8d29yZD5NaW5lPC93b3JkPg0KICAgICAgICAgICAgICAgIDx3b3JkPkFsbDwvd29yZD4NCiAgICAgICAgICAgICAgICA8d29yZD5EYXk8L3dvcmQ+DQogICAgICAgICAgICAgICAgPHdvcmQ+RXhwbGljaXQ8L3dvcmQ+DQogICAgICAgICAgICA8L3RpdGxlPg0KICAgICAgICAgICAgPGFydGlzdD4NCiAgICAgICAgICAgICAgICA8dGV4dD5QZXdEaWVQaWUgJmFtcDsgUGFydHkgaW4gQmFja3lhcmQ8L3RleHQ+DQogICAgICAgICAgICAgICAgPHdvcmQ+UGV3RGllUGllPC93b3JkPg0KICAgICAgICAgICAgICAgIDx3b3JkLz4NCiAgICAgICAgICAgICAgICA8d29yZD5QYXJ0eTwvd29yZD4NCiAgICAgICAgICAgICAgICA8d29yZD5pbjwvd29yZD4NCiAgICAgICAgICAgICAgICA8d29yZD5CYWNreWFyZDwvd29yZD4NCiAgICAgICAgICAgIDwvYXJ0aXN0Pg0KICAgICAgICA8L2FsYnVtPg0KICAgICAgICA8dHJhY2s+DQogICAgICAgICAgICA8dGl0bGU+DQogICAgICAgICAgICAgICAgPHRleHQ+TWluZSBBbGwgRGF5IFtFeHBsaWNpdF08L3RleHQ+DQogICAgICAgICAgICAgICAgPHdvcmQ+TWluZTwvd29yZD4NCiAgICAgICAgICAgICAgICA8d29yZD5BbGw8L3dvcmQ+DQogICAgICAgICAgICAgICAgPHdvcmQ+RGF5PC93b3JkPg0KICAgICAgICAgICAgICAgIDx3b3JkPkV4cGxpY2l0PC93b3JkPg0KICAgICAgICAgICAgPC90aXRsZT4NCiAgICAgICAgICAgIDxhcnRpc3Q+DQogICAgICAgICAgICAgICAgPHRleHQ+UGV3RGllUGllICZhbXA7IFBhcnR5IGluIEJhY2t5YXJkPC90ZXh0Pg0KICAgICAgICAgICAgICAgIDx3b3JkPlBld0RpZVBpZTwvd29yZD4NCiAgICAgICAgICAgICAgICA8d29yZC8+DQogICAgICAgICAgICAgICAgPHdvcmQ+UGFydHk8L3dvcmQ+DQogICAgICAgICAgICAgICAgPHdvcmQ+aW48L3dvcmQ+DQogICAgICAgICAgICAgICAgPHdvcmQ+QmFja3lhcmQ8L3dvcmQ+DQogICAgICAgICAgICA8L2FydGlzdD4NCiAgICAgICAgICAgIDx0cmFja051bWJlcj4xPC90cmFja051bWJlcj4NCiAgICAgICAgICAgIDxmaWxlbmFtZT4wMSBNaW5lIEFsbCBEYXkgW0V4cGxpY2l0XS5mbGFjPC9maWxlbmFtZT4NCiAgICAgICAgICAgIDx0cmFjZT4xNjM1IDEwNzEgMzAzMiA1MzU3IDI3MzkgMjQyMyAyMjE4IDM4MzIgMjk3MCAyMTQ2IDE0OTAgOTUzIDEwMDMgODk5IDk5MyA2NDYwIDIzNjUgMjQ1NyA1MTg3IDE4OTYgMTI2OCAxMjUwIDM5MjQgMjY4MiAyMTQ5IDE0MzEgNTcwIDQwMSA0NzIgMjQ4PC90cmFjZT4NCiAgICAgICAgICAgIDx0cmFja0R1cmF0aW9uPjI1MDAwMDwvdHJhY2tEdXJhdGlvbj4NCiAgICAgICAgICAgIDxiaXRyYXRlPjkwMTMyODwvYml0cmF0ZT4NCiAgICAgICAgICAgIDx0cmFja1JlcXVlc3RJRD4wPC90cmFja1JlcXVlc3RJRD4NCiAgICAgICAgPC90cmFjaz4NCiAgICAgICAgPHRyYWNrPg0KICAgICAgICAgICAgPHRpdGxlPg0KICAgICAgICAgICAgICAgIDx0ZXh0Pk1pbmUgQWxsIERheSBbRXhwbGljaXRdPC90ZXh0Pg0KICAgICAgICAgICAgICAgIDx3b3JkPk1pbmU8L3dvcmQ+DQogICAgICAgICAgICAgICAgPHdvcmQ+QWxsPC93b3JkPg0KICAgICAgICAgICAgICAgIDx3b3JkPkRheTwvd29yZD4NCiAgICAgICAgICAgICAgICA8d29yZD5FeHBsaWNpdDwvd29yZD4NCiAgICAgICAgICAgIDwvdGl0bGU+DQogICAgICAgICAgICA8YXJ0aXN0Pg0KICAgICAgICAgICAgICAgIDx0ZXh0PlBld0RpZVBpZSAmYW1wOyBQYXJ0eSBpbiBCYWNreWFyZDwvdGV4dD4NCiAgICAgICAgICAgICAgICA8d29yZD5QZXdEaWVQaWU8L3dvcmQ+DQogICAgICAgICAgICAgICAgPHdvcmQvPg0KICAgICAgICAgICAgICAgIDx3b3JkPlBhcnR5PC93b3JkPg0KICAgICAgICAgICAgICAgIDx3b3JkPmluPC93b3JkPg0KICAgICAgICAgICAgICAgIDx3b3JkPkJhY2t5YXJkPC93b3JkPg0KICAgICAgICAgICAgPC9hcnRpc3Q+DQogICAgICAgICAgICA8dHJhY2tOdW1iZXI+MTwvdHJhY2tOdW1iZXI+DQogICAgICAgICAgICA8ZmlsZW5hbWU+TWluZSBBbGwgRGF5IFtFZGl0XS5mbGFjPC9maWxlbmFtZT4NCiAgICAgICAgICAgIDx0cmFjZT4xNjM1IDEwNzEgMzAzMiA1MzU3IDI3MzkgMjQyMyAyMjE4IDM4MzIgMjk3MCAyMTQ2IDE0OTAgOTUzIDEwMDMgODk5IDk5MyA2NDYwIDIzNjUgMjQ1NyA1MTg3IDE4OTYgMTI2OCAxMjUwIDM5MjQgMjY4MiAyMTQ5IDE0MzEgNTcwIDQwMSA0NzIgMjQ4PC90cmFjZT4NCiAgICAgICAgICAgIDx0cmFja0R1cmF0aW9uPjExOTAwMDwvdHJhY2tEdXJhdGlvbj4NCiAgICAgICAgICAgIDxiaXRyYXRlPjg4MTEwNDwvYml0cmF0ZT4NCiAgICAgICAgICAgIDx0cmFja1JlcXVlc3RJRD4zPC90cmFja1JlcXVlc3RJRD4NCiAgICAgICAgPC90cmFjaz4NCiAgICAgICAgPHRyYWNrPg0KICAgICAgICAgICAgPHRpdGxlPg0KICAgICAgICAgICAgICAgIDx0ZXh0Pk1pbmUgQWxsIERheSAoSW5zdHJ1bWVudGFsKSBbRXhwbGljaXRdPC90ZXh0Pg0KICAgICAgICAgICAgICAgIDx3b3JkPk1pbmU8L3dvcmQ+DQogICAgICAgICAgICAgICAgPHdvcmQ+QWxsPC93b3JkPg0KICAgICAgICAgICAgICAgIDx3b3JkPkRheTwvd29yZD4NCiAgICAgICAgICAgICAgICA8d29yZD5JbnN0cnVtZW50YWw8L3dvcmQ+DQogICAgICAgICAgICAgICAgPHdvcmQ+RXhwbGljaXQ8L3dvcmQ+DQogICAgICAgICAgICA8L3RpdGxlPg0KICAgICAgICAgICAgPGFydGlzdD4NCiAgICAgICAgICAgICAgICA8dGV4dD5QZXdEaWVQaWUgJmFtcDsgUGFydHkgaW4gQmFja3lhcmQ8L3RleHQ+DQogICAgICAgICAgICAgICAgPHdvcmQ+UGV3RGllUGllPC93b3JkPg0KICAgICAgICAgICAgICAgIDx3b3JkLz4NCiAgICAgICAgICAgICAgICA8d29yZD5QYXJ0eTwvd29yZD4NCiAgICAgICAgICAgICAgICA8d29yZD5pbjwvd29yZD4NCiAgICAgICAgICAgICAgICA8d29yZD5CYWNreWFyZDwvd29yZD4NCiAgICAgICAgICAgIDwvYXJ0aXN0Pg0KICAgICAgICAgICAgPHRyYWNrTnVtYmVyPjI8L3RyYWNrTnVtYmVyPg0KICAgICAgICAgICAgPGZpbGVuYW1lPjAyIE1pbmUgQWxsIERheSAoSW5zdHJ1bWVudGFsKSBbRXhwbGljaXRdLmZsYWM8L2ZpbGVuYW1lPg0KICAgICAgICAgICAgPHRyYWNlPjIwMDAgODYxIDI4MTUgNzA4MSAyMjMzIDEwNzYgMTUyNiA0Nzg5IDM1NDMgMjYzNiAxNTUwIDU5OSA2NTQgNTczIDgyNSA2MzM0IDE0OTggMzAxOCA1NjExIDExNzYgNjA5IDIyMDMgMzMzNiAzMjA3IDI3MzIgMTc5MiAzMzcgMjQ4IDIzMyA0Mjg8L3RyYWNlPg0KICAgICAgICAgICAgPHRyYWNrRHVyYXRpb24+MjUwMDAwPC90cmFja0R1cmF0aW9uPg0KICAgICAgICAgICAgPGJpdHJhdGU+ODUyNjAwPC9iaXRyYXRlPg0KICAgICAgICAgICAgPHRyYWNrUmVxdWVzdElEPjE8L3RyYWNrUmVxdWVzdElEPg0KICAgICAgICA8L3RyYWNrPg0KICAgICAgICA8dHJhY2s+DQogICAgICAgICAgICA8dGl0bGU+DQogICAgICAgICAgICAgICAgPHRleHQ+TWluZSBBbGwgRGF5IChBY2FwZWxsYSkgW0V4cGxpY2l0XTwvdGV4dD4NCiAgICAgICAgICAgICAgICA8d29yZD5NaW5lPC93b3JkPg0KICAgICAgICAgICAgICAgIDx3b3JkPkFsbDwvd29yZD4NCiAgICAgICAgICAgICAgICA8d29yZD5EYXk8L3dvcmQ+DQogICAgICAgICAgICAgICAgPHdvcmQ+QWNhcGVsbGE8L3dvcmQ+DQogICAgICAgICAgICAgICAgPHdvcmQ+RXhwbGljaXQ8L3dvcmQ+DQogICAgICAgICAgICA8L3RpdGxlPg0KICAgICAgICAgICAgPGFydGlzdD4NCiAgICAgICAgICAgICAgICA8dGV4dD5QZXdEaWVQaWUgJmFtcDsgUGFydHkgaW4gQmFja3lhcmQ8L3RleHQ+DQogICAgICAgICAgICAgICAgPHdvcmQ+UGV3RGllUGllPC93b3JkPg0KICAgICAgICAgICAgICAgIDx3b3JkLz4NCiAgICAgICAgICAgICAgICA8d29yZD5QYXJ0eTwvd29yZD4NCiAgICAgICAgICAgICAgICA8d29yZD5pbjwvd29yZD4NCiAgICAgICAgICAgICAgICA8d29yZD5CYWNreWFyZDwvd29yZD4NCiAgICAgICAgICAgIDwvYXJ0aXN0Pg0KICAgICAgICAgICAgPHRyYWNrTnVtYmVyPjM8L3RyYWNrTnVtYmVyPg0KICAgICAgICAgICAgPGZpbGVuYW1lPjAzIE1pbmUgQWxsIERheSAoQWNhcGVsbGEpIFtFeHBsaWNpdF0uZmxhYzwvZmlsZW5hbWU+DQogICAgICAgICAgICA8dHJhY2U+MTU0NyAyMTYwIDM5OTEgMjY1NyAzNTkwIDM1OTEgMjc1NSAxNjc3IDE3MzQgMTQ2MyAxNDcxIDE2MTIgMTUyMiAxNDY0IDE1MjcgNDExMyA1MzQ3IDI4NjkgMzAwMiAzOTIwIDI1NzYgMzU1NCAxNDcyIDE4MDAgMTI2NyA4NjkgOTE4IDQ3NCA0MTYgMTYzPC90cmFjZT4NCiAgICAgICAgICAgIDx0cmFja0R1cmF0aW9uPjI1MDAwMDwvdHJhY2tEdXJhdGlvbj4NCiAgICAgICAgICAgIDxiaXRyYXRlPjc2MDYzMjwvYml0cmF0ZT4NCiAgICAgICAgICAgIDx0cmFja1JlcXVlc3RJRD4yPC90cmFja1JlcXVlc3RJRD4NCiAgICAgICAgPC90cmFjaz4NCiAgICA8L01EUS1DRD4NCjwvTUVUQURBVEE+DQo=",
+      "text": "<METADATA>\r\n    <MDQ-CD>\r\n        <mdqRequestID>00000000-0000-0000-0000-000000000001</mdqRequestID>\r\n        <album>\r\n            <title>\r\n                <text>Mine All Day [Explicit]</text>\r\n                <word>Mine</word>\r\n                <word>All</word>\r\n                <word>Day</word>\r\n                <word>Explicit</word>\r\n            </title>\r\n            <artist>\r\n                <text>PewDiePie &amp; Party in Backyard</text>\r\n                <word>PewDiePie</word>\r\n                <word/>\r\n                <word>Party</word>\r\n                <word>in</word>\r\n                <word>Backyard</word>\r\n            </artist>\r\n        </album>\r\n        <track>\r\n            <title>\r\n                <text>Mine All Day [Explicit]</text>\r\n                <word>Mine</word>\r\n                <word>All</word>\r\n                <word>Day</word>\r\n                <word>Explicit</word>\r\n            </title>\r\n            <artist>\r\n                <text>PewDiePie &amp; Party in Backyard</text>\r\n                <word>PewDiePie</word>\r\n                <word/>\r\n                <word>Party</word>\r\n                <word>in</word>\r\n                <word>Backyard</word>\r\n            </artist>\r\n            <trackNumber>1</trackNumber>\r\n            <filename>01 Mine All Day [Explicit].flac</filename>\r\n            <trace>1635 1071 3032 5357 2739 2423 2218 3832 2970 2146 1490 953 1003 899 993 6460 2365 2457 5187 1896 1268 1250 3924 2682 2149 1431 570 401 472 248</trace>\r\n            <trackDuration>250000</trackDuration>\r\n            <bitrate>901328</bitrate>\r\n            <trackRequestID>0</trackRequestID>\r\n        </track>\r\n        <track>\r\n            <title>\r\n                <text>Mine All Day [Explicit]</text>\r\n                <word>Mine</word>\r\n                <word>All</word>\r\n                <word>Day</word>\r\n                <word>Explicit</word>\r\n            </title>\r\n            <artist>\r\n                <text>PewDiePie &amp; Party in Backyard</text>\r\n                <word>PewDiePie</word>\r\n                <word/>\r\n                <word>Party</word>\r\n                <word>in</word>\r\n                <word>Backyard</word>\r\n            </artist>\r\n            <trackNumber>1</trackNumber>\r\n            <filename>Mine All Day [Edit].flac</filename>\r\n            <trace>1635 1071 3032 5357 2739 2423 2218 3832 2970 2146 1490 953 1003 899 993 6460 2365 2457 5187 1896 1268 1250 3924 2682 2149 1431 570 401 472 248</trace>\r\n            <trackDuration>119000</trackDuration>\r\n            <bitrate>881104</bitrate>\r\n            <trackRequestID>3</trackRequestID>\r\n        </track>\r\n        <track>\r\n            <title>\r\n                <text>Mine All Day (Instrumental) [Explicit]</text>\r\n                <word>Mine</word>\r\n                <word>All</word>\r\n                <word>Day</word>\r\n                <word>Instrumental</word>\r\n                <word>Explicit</word>\r\n            </title>\r\n            <artist>\r\n                <text>PewDiePie &amp; Party in Backyard</text>\r\n                <word>PewDiePie</word>\r\n                <word/>\r\n                <word>Party</word>\r\n                <word>in</word>\r\n                <word>Backyard</word>\r\n            </artist>\r\n            <trackNumber>2</trackNumber>\r\n            <filename>02 Mine All Day (Instrumental) [Explicit].flac</filename>\r\n            <trace>2000 861 2815 7081 2233 1076 1526 4789 3543 2636 1550 599 654 573 825 6334 1498 3018 5611 1176 609 2203 3336 3207 2732 1792 337 248 233 428</trace>\r\n            <trackDuration>250000</trackDuration>\r\n            <bitrate>852600</bitrate>\r\n            <trackRequestID>1</trackRequestID>\r\n        </track>\r\n        <track>\r\n            <title>\r\n                <text>Mine All Day (Acapella) [Explicit]</text>\r\n                <word>Mine</word>\r\n                <word>All</word>\r\n                <word>Day</word>\r\n                <word>Acapella</word>\r\n                <word>Explicit</word>\r\n            </title>\r\n            <artist>\r\n                <text>PewDiePie &amp; Party in Backyard</text>\r\n                <word>PewDiePie</word>\r\n                <word/>\r\n                <word>Party</word>\r\n                <word>in</word>\r\n                <word>Backyard</word>\r\n            </artist>\r\n            <trackNumber>3</trackNumber>\r\n            <filename>03 Mine All Day (Acapella) [Explicit].flac</filename>\r\n            <trace>1547 2160 3991 2657 3590 3591 2755 1677 1734 1463 1471 1612 1522 1464 1527 4113 5347 2869 3002 3920 2576 3554 1472 1800 1267 869 918 474 416 163</trace>\r\n            <trackDuration>250000</trackDuration>\r\n            <bitrate>760632</bitrate>\r\n            <trackRequestID>2</trackRequestID>\r\n        </track>\r\n    </MDQ-CD>\r\n</METADATA>\r\n",
+      "text_encoding": "utf-8"
+    }
+  },
+  "forwarded": false,
+  "served_locally": true,
+  "served": {
+    "headers": [],
+    "body": {
+      "length": 0,
+      "base64": ""
+    }
+  },
+  "response": {
+    "status": 404
+  }
+}

@@ -594,6 +594,33 @@ parametro `toc` di MusicBrainz, durate delle tracce), verificata sui tre CD real
   `releaseDate` solo anno, `mdqRequestID` a zero per i CD, `WriteNamesEx(2, "", …)`
   anche per il CD, tempi di attesa accettati da WMP.
 
+### Prima prova con il nostro server (2026-11-06, `serve` senza `--no-auto`)
+
+- `GetMDRCD` automatico per *Joy* → nostro MDR. Poi "Trova informazioni album"
+  sul CD: la pagina ha ricevuto **`wmid=12C5606B-1B33-4AB3-BEC1-F556972B5F89`**,
+  cioè il nostro `WMCollectionID` senza graffe: **WMP ha accettato e salvato
+  l'MDR automatico**. Scelta l'edizione 1 → `WriteNamesEx` **senza errori**
+  (`/FAI/log?kind=WriteNamesEx-ok`). Formato dei GUID tra graffe e
+  `mdqRequestID` a zero per i CD: accettati.
+- Il CD da 14 tracce ha ricevuto in automatico *Gute Nacht* (Das
+  Spieluhren-Orchester): **da confermare con l'utente**.
+- Scoperta: **ricerca automatica dei file della libreria** =
+  `POST /cdinfo/GetMDRCD.aspx?locale=…&userlocale=410&requestID=<GUID>` (qui
+  `requestID` con le maiuscole), `Content-Type: text/xml`, corpo MDQ-CD con
+  **`<album>` a livello di `MDQ-CD`** (non dentro le tracce) e più `<track>`
+  dello stesso album con `trackRequestID` non in ordine (0, 3, 1, 2). Fixture
+  `tests/fixtures/captures/auto_file_post_mdq.json`. Ora gestita: MDR con le sole
+  tracce abbinate e i loro `trackRequestID`, solo se anche l'album corrisponde.
+- I titoli dei negozi portano marcatori (`[Explicit]`, `(Clean)`) assenti in
+  MusicBrainz: tolti per ricerca e confronti (`[Edit]` no: è un'altra versione).
+  L'etichetta speciale `[no label]` di MusicBrainz non si scrive.
+- Su Windows il ProactorEventLoop stampava un traceback innocuo quando WMP
+  chiude la connessione per primo (`_call_connection_lost` → `shutdown`):
+  zittito per i soli reset di connessione (`recorder.quiet_connection_resets`).
+- Da guardare in WMP: cosa mostra dopo `WriteNamesEx` (titoli, anno, genere,
+  rinomina dei file con `fRenameRegroupFiles = true`), e se i file di
+  *Mine All Day* vengono aggiornati dalla ricerca automatica.
+
 - Lookup `/ws/2/discid/<id>?inc=recordings+artist-credits+labels+release-groups+work-rels+artist-rels`
   sull'**API pubblica** con cache (mirror rimandato, indirizzo configurabile).
 - Se più release corrispondono: scelta deterministica e documentata (paese,

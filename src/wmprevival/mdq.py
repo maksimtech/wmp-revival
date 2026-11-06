@@ -62,6 +62,10 @@ def parse(xml: str) -> Mdq:
     request_id = _text(query, "mdqRequestID")
     if not GUID_RE.match(request_id):
         raise MdqError("mdqRequestID non è un GUID")
+    # Nella ricerca automatica (POST a GetMDRCD) l'album sta a livello di MDQ-CD, una volta
+    # sola per tutte le tracce; in FAI sta dentro ogni <track>.
+    shared_album = _text(query, "album/title/text")
+    shared_album_artist = _text(query, "album/artist/text")
     tracks = []
     for i, track in enumerate(query.findall("track")):
         rid = _int(track.findtext("trackRequestID"))
@@ -70,8 +74,8 @@ def parse(xml: str) -> Mdq:
                 request_id=rid if rid is not None else i,
                 title=_text(track, "title/text"),
                 artist=_text(track, "artist/text"),
-                album=_text(track, "album/title/text"),
-                album_artist=_text(track, "album/artist/text"),
+                album=_text(track, "album/title/text") or shared_album,
+                album_artist=_text(track, "album/artist/text") or shared_album_artist,
                 number=_int(track.findtext("trackNumber")),
                 duration_ms=_int(track.findtext("trackDuration")),
                 filename=_text(track, "filename"),

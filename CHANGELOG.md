@@ -21,6 +21,9 @@ Versioni: [CalVer](https://calver.org/) `YYYY.MM.PATCH`.
   vengono proposte per prime per i file. `--no-auto` lascia solo le scelte manuali. Se WMP
   rifiuta i dati, la pagina mostra l'errore e lo segnala a `/FAI/log`.
 - `scripts/servi.cmd` per una sessione di prova con il server (setup, serve, teardown).
+- **Ricerca automatica dei file della libreria**: `POST /cdinfo/GetMDRCD.aspx` con l'MDQ in XML
+  (album a livello di query, più tracce) riceve un MDR con le tracce abbinate e i loro
+  `trackRequestID`; i marcatori dei negozi come `[Explicit]` non impediscono più il confronto.
 - `wmprevival mb-lookup <TOC>` mostra candidati e scelta; `tools/record_mb_fixture.py` registra
   risposte di MusicBrainz come fixture.
 
@@ -35,6 +38,9 @@ Versioni: [CalVer](https://calver.org/) `YYYY.MM.PATCH`.
 
 ### Corretto
 
+- `serve` e `record` non stampano più un traceback di asyncio quando WMP chiude la connessione
+  per primo (ProactorEventLoop su Windows); gli altri errori restano visibili.
+- L'etichetta speciale `[no label]` di MusicBrainz non finisce più nei dati per WMP.
 - La CLI non si interrompe più con `UnicodeEncodeError` quando l'output va su una console
   cp1252: i simboli non rappresentabili diventano `?`.
 

@@ -268,6 +268,7 @@ async def start(
     recorder: Recorder, listen: Sequence[str], port: int, ssl_ctx: ssl.SSLContext
 ) -> tuple[web.AppRunner, list[str], list[str]]:
     """Avvia il server; restituisce runner, indirizzi attivi ed errori sugli altri."""
+    quiet_connection_resets(asyncio.get_running_loop())
     runner = web.AppRunner(build_app(recorder), access_log=None)
     await runner.setup()
     started, errors = [], []
@@ -282,6 +283,31 @@ async def start(
         await runner.cleanup()
         raise OSError("impossibile ascoltare: " + "; ".join(errors))
     return runner, started, errors
+
+
+_RESET_WINERRORS = {10053, 10054, 10057}  # connessione interrotta, resettata, socket non connesso
+
+
+def is_connection_reset(exc: BaseException | None) -> bool:
+    return isinstance(exc, ConnectionError) or (
+        isinstance(exc, OSError) and getattr(exc, "winerror", None) in _RESET_WINERRORS
+    )
+
+
+def quiet_connection_resets(loop: asyncio.AbstractEventLoop) -> None:
+    """Zittisce il traceback del ProactorEventLoop quando il client chiude per primo.
+
+    Su Windows, se WMP (o la sua pagina) chiude la connessione per primo,
+    ``_call_connection_lost`` prova ``shutdown()`` su un socket già resettato e asyncio
+    stampa un traceback innocuo. Gli altri errori restano visibili.
+    """
+
+    def handler(loop: asyncio.AbstractEventLoop, context: dict[str, Any]) -> None:
+        if is_connection_reset(context.get("exception")):
+            return
+        loop.default_exception_handler(context)
+
+    loop.set_exception_handler(handler)
 
 
 async def serve_forever(runner: web.AppRunner) -> None:
