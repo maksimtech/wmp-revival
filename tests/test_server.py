@@ -103,7 +103,7 @@ async def test_file_flow_bridge_then_results(server) -> None:
     assert "Forever Young" in html and "Big in Japan" in html
     mdrcds = _js_array(html, "mdrcds")
     assert len(mdrcds) == 5
-    users = next(x for x in mdrcds if USER_EDITION.upper() in x)
+    users = next(x for x in mdrcds if f"musicbrainz-release={USER_EDITION}" in x)
     root = ET.fromstring(users)
     assert root.findtext("MDR-CD/mdqRequestID") == "00000000-0000-0000-0000-000000000001"
     assert root.findtext("MDR-CD/track/trackRequestID") == "0"

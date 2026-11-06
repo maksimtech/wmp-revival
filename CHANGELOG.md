@@ -38,6 +38,13 @@ Versioni: [CalVer](https://calver.org/) `YYYY.MM.PATCH`.
 
 ### Corretto
 
+- **File diversi dello stesso album non ricevono più i dati di un'altra traccia.** WMP conserva
+  un solo documento MDR per `WMCollectionID` e, nella ricerca automatica, riusava le tracce di
+  un documento precedente con i `trackRequestID` della richiesta nuova (tre file di P!nk diventati
+  tutti "Long Way to Happy"). Ora ogni risposta sui file ha un `WMCollectionID` proprio; la
+  release resta in `dataProviderParams`.
+- I tag già rovinati si riparano: se il titolo del tag non è compatibile con la durata, la
+  ricerca e l'abbinamento usano il titolo ricavato dal nome del file, provando fino a tre file.
 - `serve` e `record` non stampano più un traceback di asyncio quando WMP chiude la connessione
   per primo (ProactorEventLoop su Windows); gli altri errori restano visibili.
 - L'etichetta speciale `[no label]` di MusicBrainz non finisce più nei dati per WMP.

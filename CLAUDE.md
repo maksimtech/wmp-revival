@@ -621,6 +621,37 @@ parametro `toc` di MusicBrainz, durate delle tracce), verificata sui tre CD real
   rinomina dei file con `fRenameRegroupFiles = true`), e se i file di
   *Mine All Day* vengono aggiornati dalla ricerca automatica.
 
+### WMP conserva un solo MDR per `WMCollectionID` (bug del 2026-11-06)
+
+Segnalazione dell'utente: nell'album *I'm Not Dead* di P!nk le tracce 1, 2 e 3
+sono diventate tutte "Long Way to Happy" (traccia 3).
+
+- Sequenza dalle catture: FAI su 12 file → MDR della release `2EBD0F3C` con
+  `trackRequestID 0` = "Long Way to Happy"; poi due ricerche automatiche (*Who
+  Knew*, *Stupid Girls*), ognuna con il suo file a `trackRequestID 0`: **risposte
+  corrette ma con lo stesso `WMCollectionID`**.
+- Nel database della libreria (copia) c'è **un solo** documento MDR per
+  `2EBD0F3C`: intestazione con l'`mdqRequestID` dell'ultima ricerca automatica,
+  ma **tracce del documento della FAI**. WMP aggiorna l'intestazione, tiene le
+  tracce vecchie e applica i `trackRequestID` nuovi, che però contano da 0 in
+  ogni richiesta. I documenti stanno in UTF-16, riformattati, nella
+  `CurrentDatabase_*.wmdb` (anche spezzati tra pagine).
+- La pagina FAI invece **sostituisce** il documento (i *Pink Floyd* rifatti più
+  volte sono rimasti giusti): il riuso riguarda la ricerca automatica.
+- **Regola**: per le risposte sui file `WMCollectionID` è un UUID v5 di
+  (release, `mdqRequestID`), diverso per ogni richiesta
+  (`service.file_collection_id`); la release resta in `dataProviderParams`
+  (`musicbrainz-release=<MBID>`). Per i CD resta l'MBID della release, perché lì
+  `trackRequestID` è sempre l'indice nel TOC e quindi stabile.
+- Effetti da verificare: raggruppamento degli album in libreria (WMP sembra
+  raggruppare per titolo e artista dell'album) e copertine (`AlbumArt_{ID}_*.jpg`
+  sono per `WMCollectionID`: fase 6).
+- Riparazione dei tag già rovinati: la ricerca prova fino a 3 file e, per
+  ciascuno, il titolo del tag e quello ricavato dal **nome del file**
+  (`01. Stupid Girls.flac`), sempre con lo scarto di durata ≤ 5 s; lo stesso
+  vale per l'abbinamento, che non dà mai la stessa traccia a due file. Al
+  massimo 4 ricerche per richiesta. Fixture `fai_file_pink_rovinati.json`.
+
 - Lookup `/ws/2/discid/<id>?inc=recordings+artist-credits+labels+release-groups+work-rels+artist-rels`
   sull'**API pubblica** con cache (mirror rimandato, indirizzo configurabile).
 - Se più release corrispondono: scelta deterministica e documentata (paese,

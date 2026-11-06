@@ -56,6 +56,8 @@ class MdrAlbum:
     label: str = ""
     genre: str = ""
     tracks: tuple[MdrTrack, ...] = field(default_factory=tuple)
+    # WMCollectionID se diverso dalla release (risposte sui file: vedi service.file_collection_id).
+    collection_id: str = ""
 
 
 def _names(relations: Iterable[dict[str, Any]], types: tuple[str, ...]) -> list[str]:
@@ -125,9 +127,15 @@ def track_from_mb(track: dict[str, Any], request_id: int) -> MdrTrack:
     )
 
 
-def album_from_release(release: dict[str, Any], tracks: Iterable[MdrTrack], request_id: str = ZERO_GUID) -> MdrAlbum:
+def album_from_release(
+    release: dict[str, Any],
+    tracks: Iterable[MdrTrack],
+    request_id: str = ZERO_GUID,
+    collection_id: str = "",
+) -> MdrAlbum:
     return MdrAlbum(
         release_id=release["id"],
+        collection_id=collection_id,
         release_group_id=(release.get("release-group") or {}).get("id", ""),
         request_id=request_id,
         title=release.get("title", ""),
@@ -165,7 +173,7 @@ def build(album: MdrAlbum) -> str:
     root = ET.Element("METADATA", {"xmlns:sql": SQL_NS})
     mdr = ET.SubElement(root, "MDR-CD")
     _el(mdr, "version", "4.0")
-    _el(mdr, "WMCollectionID", guid(album.release_id))
+    _el(mdr, "WMCollectionID", guid(album.collection_id or album.release_id))
     _el(mdr, "WMCollectionGroupID", guid(album.release_group_id))
     _el(mdr, "mdqRequestID", album.request_id)
     _el(mdr, "uniqueFileID")
@@ -179,7 +187,9 @@ def build(album: MdrAlbum) -> str:
         _el(mdr, tag)
     _el(mdr, "moreInfoParams")
     _el(mdr, "dataProvider", DATA_PROVIDER)
-    for tag in ("dataProviderParams", "dataProviderLogo", "validated"):
+    # La release resta rintracciabile anche quando WMCollectionID è uno per richiesta.
+    _el(mdr, "dataProviderParams", f"musicbrainz-release={album.release_id}" if album.release_id else "")
+    for tag in ("dataProviderLogo", "validated"):
         _el(mdr, tag)
     for track in album.tracks:
         t = ET.SubElement(mdr, "track")

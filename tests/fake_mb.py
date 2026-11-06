@@ -57,6 +57,8 @@ class FixtureMB:
         for needle, name in (
             ("Big in Japan", "search_big_in_japan.json"),
             ("Mine All Day", "search_mine_all_day.json"),
+            ('recording:"Long Way to Happy"', "search_long_way_to_happy.json"),
+            ('recording:"Stupid Girls"', "search_stupid_girls.json"),
         ):
             if needle in query:
                 recordings: list[dict[str, Any]] = body(name)["recordings"]

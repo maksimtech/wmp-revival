@@ -9,7 +9,8 @@ from __future__ import annotations
 
 import re
 import unicodedata
-from dataclasses import dataclass
+import uuid
+from dataclasses import dataclass, replace
 from typing import Any, Protocol
 
 from wmprevival import matching, mdr
@@ -67,6 +68,50 @@ def _details(release: dict[str, Any], med: dict[str, Any] | None = None) -> str:
 
 def lucene_phrase(text: str) -> str:
     return '"' + text.replace("\\", "\\\\").replace('"', '\\"') + '"'
+
+
+MAX_ANCHORS = 3  # file da cui partire con la ricerca, se il primo non trova niente
+MAX_SEARCHES = 4  # ricerche al massimo per una richiesta (1 al secondo sull'API pubblica)
+
+_FILENAME_NUMBER = re.compile(r"^\s*(?:\d+\s*-\s*)?(\d{1,3})\s*[.\-_)]?\s+")
+_EXTENSION = re.compile(r"\.[A-Za-z0-9]{2,5}$")
+
+
+def filename_title(track: MdqTrack) -> str:
+    """Titolo ricavato dal nome del file: '01. Stupid Girls.flac' -> 'Stupid Girls'.
+
+    Toglie estensione, numero iniziale (anche '1-01 ') e un eventuale prefisso 'Artista - '.
+    """
+    name = _EXTENSION.sub("", track.filename.strip())
+    name = _FILENAME_NUMBER.sub("", name, count=1)
+    for artist in (track.artist, track.album_artist):
+        if artist and norm(name).startswith(norm(artist) + " - "):
+            name = name[len(artist) + 3 :]
+    return name.strip(" -_.")
+
+
+def title_candidates(track: MdqTrack) -> list[str]:
+    """Titolo del tag e, se diverso, quello del nome del file."""
+    found: list[str] = []
+    for title in (track.title, filename_title(track) if track.filename else ""):
+        if title and norm_title(title) not in {norm_title(t) for t in found}:
+            found.append(title)
+    return found
+
+
+_COLLECTION_NS = uuid.UUID("6f1d0b1e-3c55-5a8e-9d2b-7d3b6a9c4e10")
+
+
+def file_collection_id(release_id: str, request_id: str) -> str:
+    """``WMCollectionID`` per una risposta sui file: uno nuovo per ogni richiesta.
+
+    WMP conserva **un solo documento MDR per WMCollectionID** e, se ne riceve un altro con lo
+    stesso ID, tiene le tracce di quello vecchio applicando i ``trackRequestID`` nuovi, che però
+    contano da 0 in ogni richiesta. Risultato visto il 2026-11-06: tre file di P!nk diventati
+    tutti "Long Way to Happy". Un ID per richiesta evita il riuso; per i CD resta l'MBID della
+    release, perché lì ``trackRequestID`` è sempre l'indice nel TOC.
+    """
+    return str(uuid.uuid5(_COLLECTION_NS, f"{release_id.lower()}:{request_id.upper()}"))
 
 
 class MetadataService:
@@ -151,24 +196,36 @@ class MetadataService:
         return ranked
 
     @staticmethod
-    def _match_tracks(release: dict[str, Any], mdq: Mdq, recording_id: str) -> list[tuple[MdqTrack, dict[str, Any]]]:
+    def _match_tracks(
+        release: dict[str, Any], mdq: Mdq, anchor: MdqTrack, recording_id: str
+    ) -> list[tuple[MdqTrack, dict[str, Any]]]:
         """Abbina ogni file a una traccia diversa della release.
 
-        Il primo file usa la registrazione trovata dalla ricerca; gli altri il titolo (senza
-        marcatori dei negozi) e, se le durate sono note, uno scarto di al massimo 5 s; a parità,
-        la durata più vicina. Due file non prendono mai la stessa traccia.
+        Il file usato per la ricerca prende la registrazione trovata; gli altri il titolo del
+        tag o, in alternativa, quello ricavato dal nome del file (senza marcatori dei negozi),
+        sempre con uno scarto di durata di al massimo 5 s; a parità, la durata più vicina.
+        Due file non prendono mai la stessa traccia. Il nome del file salva i tag già rovinati
+        (es. tre file diversi tutti intitolati "Long Way to Happy").
         """
         all_tracks = [t for med in release.get("media", []) for t in med.get("tracks", [])]
         used: set[str] = set()
         pairs = []
         for wanted in mdq.tracks:
             hit = None
-            if wanted is mdq.tracks[0]:
-                hit = next((t for t in all_tracks if (t.get("recording") or {}).get("id") == recording_id), None)
+            if wanted is anchor:
+                hit = next(
+                    (
+                        t
+                        for t in all_tracks
+                        if (t.get("recording") or {}).get("id") == recording_id and t.get("id") not in used
+                    ),
+                    None,
+                )
             if hit is None:
+                titles = {norm_title(t) for t in title_candidates(wanted) if t}
                 options = []
                 for t in all_tracks:
-                    if t.get("id") in used or norm_title(t.get("title", "")) != norm_title(wanted.title):
+                    if t.get("id") in used or norm_title(t.get("title", "")) not in titles:
                         continue
                     length, duration = t.get("length"), wanted.duration_ms
                     diff = abs(length - duration) if length is not None and duration else None
@@ -177,33 +234,51 @@ class MetadataService:
                     options.append((diff if diff is not None else MAX_FILE_LENGTH_DIFF_MS, t.get("position", 0), t))
                 options.sort(key=lambda o: (o[0], o[1]))
                 hit = options[0][2] if options else None
-            if hit is not None and hit.get("id") not in used:
+            if hit is not None:
                 used.add(hit.get("id", ""))
                 pairs.append((wanted, hit))
         return pairs
 
-    async def _ranked_for(self, mdq: Mdq) -> list[tuple[Any, ...]]:
-        first = mdq.tracks[0]
-        if not first.title:
-            return []
-        recordings = await self.mb.search_recordings(self._query(first, with_album=True))
-        ranked = self._rank_file_releases(first, recordings)
-        if not ranked and first.album:
-            ranked = self._rank_file_releases(first, await self.mb.search_recordings(self._query(first, False)))
-        return ranked
+    async def _ranked_for(self, mdq: Mdq) -> tuple[list[tuple[Any, ...]], MdqTrack]:
+        """Cerca partendo dai primi file, con il titolo del tag e poi quello del nome del file.
+
+        Un tag rovinato (titolo giusto per un'altra traccia, durata diversa) non blocca più
+        tutta la ricerca: si passa all'alternativa successiva. Al massimo ``MAX_SEARCHES``.
+        """
+        attempts: list[tuple[MdqTrack, bool]] = []
+        for track in mdq.tracks[:MAX_ANCHORS]:
+            for title in title_candidates(track):
+                attempts.append((replace(track, title=title), True))
+        for track in mdq.tracks[:1]:
+            if track.album:
+                attempts += [(replace(track, title=title), False) for title in title_candidates(track)]
+        tried: set[str] = set()
+        for variant, with_album in attempts:
+            query = self._query(variant, with_album)
+            if not variant.title or query in tried or len(tried) >= MAX_SEARCHES:
+                continue
+            tried.add(query)
+            ranked = self._rank_file_releases(variant, await self.mb.search_recordings(query))
+            if ranked:
+                anchor = next(t for t in mdq.tracks if t.request_id == variant.request_id)
+                return ranked, anchor
+        return [], mdq.tracks[0]
 
     async def file_automatic(self, mdq: Mdq) -> str | None:
         """Ricerca automatica dei file (POST a GetMDRCD): solo se anche l'album corrisponde."""
-        ranked = await self._ranked_for(mdq)
-        if mdq.tracks[0].album:
+        ranked, anchor = await self._ranked_for(mdq)
+        if anchor.album:
             ranked = [r for r in ranked if not r[0][0]]  # chiave[0]: album diverso
-        choices = await self._file_choices_from(mdq, ranked, limit=1)
+        choices = await self._file_choices_from(mdq, ranked, anchor, limit=1)
         return choices[0].mdr if choices else None
 
     async def file_choices(self, mdq: Mdq) -> list[Choice]:
-        return await self._file_choices_from(mdq, await self._ranked_for(mdq), self.max_file_choices)
+        ranked, anchor = await self._ranked_for(mdq)
+        return await self._file_choices_from(mdq, ranked, anchor, self.max_file_choices)
 
-    async def _file_choices_from(self, mdq: Mdq, ranked: list[tuple[Any, ...]], limit: int) -> list[Choice]:
+    async def _file_choices_from(
+        self, mdq: Mdq, ranked: list[tuple[Any, ...]], anchor: MdqTrack, limit: int
+    ) -> list[Choice]:
         choices: list[Choice] = []
         seen: set[str] = set()
         for _key, release_id, recording_id in ranked:
@@ -213,11 +288,13 @@ class MetadataService:
             release = await self.mb.release(release_id)
             if release is None:
                 continue
-            pairs = self._match_tracks(release, mdq, recording_id)
+            pairs = self._match_tracks(release, mdq, anchor, recording_id)
             if not pairs:
                 continue
             tracks = [mdr.track_from_mb(mb_track, wanted.request_id) for wanted, mb_track in pairs]
-            album = mdr.album_from_release(release, tracks, mdq.request_id)
+            album = mdr.album_from_release(
+                release, tracks, mdq.request_id, collection_id=file_collection_id(release_id, mdq.request_id)
+            )
             index = {t.request_id: i for i, t in enumerate(mdq.tracks)}
             choices.append(
                 Choice(
