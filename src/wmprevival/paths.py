@@ -58,3 +58,11 @@ class Paths:
     @property
     def state_file(self) -> Path:
         return self.home / "state.json"
+
+    @property
+    def config_file(self) -> Path:
+        return self.home / "config.toml"
+
+    @property
+    def mb_cache(self) -> Path:
+        return self.home / "cache" / "musicbrainz.sqlite"

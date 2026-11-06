@@ -5,7 +5,7 @@ WMP chiede ancora le informazioni sugli album a `musicmatch-ssl.xboxlive.com`, c
 risponde senza dati. WMP Revival si presenta al suo posto, solo su questo PC, e risponderà
 con dati di MusicBrainz (e Discogs come ripiego). Nessun file di Windows viene modificato.
 
-Stato: **fasi 0 e 1** (infrastruttura TLS, redirect, registratore). Il server non dà
+Stato: **fasi 0, 1 e 2** e ricerca su MusicBrainz (fase 3 in corso). Il server non dà
 ancora risposte con metadati. Dettagli e piano completo in [CLAUDE.md](CLAUDE.md).
 
 ## Requisiti
@@ -64,6 +64,25 @@ Per trasformare una cattura in fixture di test, togliendo i GUID:
 
 ```powershell
 uv run wmprevival fixture --drop-upstream-body <cattura.json> tests/fixtures/captures/<nome>.json
+```
+
+## MusicBrainz
+
+La ricerca usa l'API pubblica di MusicBrainz (al massimo una richiesta al secondo, con cache
+locale). Serve un contatto per lo User-Agent, in `%LOCALAPPDATA%\WMPRevival\config.toml`:
+
+```toml
+[musicbrainz]
+contact = "indirizzo@esempio.it"
+# Per un mirror locale (musicbrainz-docker), stessa API:
+# base_url = "http://localhost:5000/ws/2"
+# min_interval = 0
+```
+
+Prova senza WMP, con il TOC come lo scrive WMP:
+
+```powershell
+uv run wmprevival mb-lookup "C+96+5370+9D42+EDBD+137FC+16546+1C6D5+2273F+29927+2EB78+32D76+36C84+3AC1A"
 ```
 
 ## Strumenti

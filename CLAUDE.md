@@ -489,7 +489,11 @@ Microsoft) in `tests/fixtures/captures/`.
    Microsoft reale (risoluzione DNS diretta, ignorando il file hosts), da usare
    solo nelle sessioni di cattura. Default: solo registrazione.
 2. Disc ID di riferimento: quelli di Picard.
-3. Mirror MusicBrainz rimandato: si parte con l'API pubblica + cache.
+3. Mirror MusicBrainz rimandato: si parte con l'API pubblica + cache
+   (implementata il 2026-11-06). Un accesso SQL remoto al database di
+   MusicBrainz non esiste come servizio pubblico. Se l'API non basta si passa a
+   un mirror (`musicbrainz-docker`, stessa API `ws/2`): basta cambiare
+   `base_url` e `min_interval` in `config.toml`, il codice non cambia.
 4. Repository GitHub **privato**.
 
 ## Piano di lavoro
@@ -536,7 +540,35 @@ Procedere in quest'ordine. Ogni fase si chiude con test verdi.
   ultima traccia, lead-out e 99 offset, Base64 con alfabeto `._-`).
 - Test con CD reali dell'utente di cui si conosce già il Disc ID (Picard).
 
+**Stato (2026-11-06): fatta.** `src/wmprevival/toc.py` (TOC di WMP ↔ Disc ID,
+parametro `toc` di MusicBrainz, durate delle tracce), verificata sui tre CD reali.
+
 ### Fase 3 — Risposta per i CD
+
+**Stato (2026-11-06): ricerca fatta, risposta a WMP da fare.**
+
+- `config.py`: `%LOCALAPPDATA%\WMPRevival\config.toml`, sezione `[musicbrainz]`
+  con `contact` (obbligatorio per l'API pubblica: l'alias pubblico
+  `github@maksimtech.com`, mai l'indirizzo personale), `base_url`, `min_interval`
+  (≥ 1 s per l'API pubblica, imposto dal codice).
+- `musicbrainz.py`: client aiohttp, una richiesta alla volta distanziate di
+  `min_interval`, ritentativi su 503/429 con `Retry-After`, cache SQLite in
+  `%LOCALAPPDATA%\WMPRevival\cache` (trovati 30 giorni, 404 un giorno).
+- `matching.py`: Disc ID esatto prima; poi ricerca per TOC con `cdstubs=no`; ogni
+  medium con lo stesso numero di tracce viene confrontato traccia per traccia
+  sulle durate; accettato se lo scarto massimo è ≤ 3 s (o se il Disc ID è
+  collegato a quel medium). Ordinamento deterministico.
+- `wmprevival mb-lookup <TOC>` mostra candidati e scelta (2 richieste per CD).
+- Risultati reali: *Joy* → Giovanni Allevi, *Joy* (2006, IT), due edizioni
+  accettate, scarto costante di ~2 s per traccia (le durate in MusicBrainz non
+  sembrano includere la pausa tra le tracce); CD da 14 tracce → dei 12
+  candidati restano accettati solo pochi, in cima *Das Spieluhren-Orchester -
+  Gute Nacht* (DE, scarto medio 0,3 s), **da confermare con l'utente**.
+- Fixture delle risposte di MusicBrainz (CC0) in `tests/fixtures/musicbrainz/`,
+  registrate con `tools/record_mb_fixture.py`.
+- Da fare: scelta tra edizioni equivalenti (paese, data, formato), lookup della
+  release scelta con le relazioni (compositore, direttore), costruzione
+  dell'MDR-CD, risposta a `GetMDRCD` e pagina FAI per il CD.
 
 - Lookup `/ws/2/discid/<id>?inc=recordings+artist-credits+labels+release-groups+work-rels+artist-rels`
   sull'**API pubblica** con cache (mirror rimandato, indirizzo configurabile).

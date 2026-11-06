@@ -129,6 +129,18 @@ def test_record_refuses_lan_without_flag(system) -> None:
     assert result.exit_code == 1 and "--allow-lan" in result.output
 
 
+def test_mb_lookup_requires_a_contact_for_the_public_api(home) -> None:
+    result = runner.invoke(cli.app, ["mb-lookup", "2+96+200+300"])
+    assert result.exit_code == 1 and "contatto" in result.output
+
+
+def test_mb_lookup_rejects_an_invalid_toc(home) -> None:
+    home.mkdir(parents=True, exist_ok=True)
+    (home / "config.toml").write_text('[musicbrainz]\ncontact = "x@example.org"\n', encoding="utf-8")
+    result = runner.invoke(cli.app, ["mb-lookup", "3+96+200"])
+    assert result.exit_code == 1 and "tracce" in result.output
+
+
 def test_fixture_command(tmp_path) -> None:
     src = tmp_path / "cap.json"
     src.write_text(json.dumps({"client": "::1", "request": {"raw_path": "/x?g=DEADBEEF-1234-4ABC-8DEF-0123456789AB"}}))

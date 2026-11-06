@@ -18,9 +18,12 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
-from wmprevival import __version__, capture, forward, hosts, recorder, tls, winsys
+from wmprevival import __version__, capture, forward, hosts, matching, recorder, tls, winsys
+from wmprevival.config import Config, ConfigError
+from wmprevival.musicbrainz import MusicBrainzClient, MusicBrainzError, ResponseCache
 from wmprevival.paths import SERVICE_HOST, Paths
 from wmprevival.state import STORES, InstallState
+from wmprevival.toc import Toc, TocError
 
 app = typer.Typer(
     no_args_is_help=True,
@@ -295,6 +298,66 @@ def record(
         console.print("Fermato.")
     except (OSError, forward.UnsafeUpstreamError) as exc:
         raise _fail(str(exc)) from exc
+
+
+@app.command("mb-lookup")
+def mb_lookup(
+    toc_value: str = typer.Argument(..., metavar="TOC", help="TOC nel formato di WMP, es. C+96+5370+...+3AC1A"),
+    no_cache: bool = typer.Option(False, "--no-cache", help="Ignora la cache locale delle risposte."),
+) -> None:
+    """Cerca un CD su MusicBrainz partendo dal TOC di WMP (Disc ID, poi ricerca per TOC)."""
+    paths = Paths.from_env()
+    try:
+        mb_config = Config.load(paths.config_file).musicbrainz.validate()
+        toc = Toc.from_wmp(toc_value)
+    except (ConfigError, TocError) as exc:
+        raise _fail(f"{exc}\n  (configurazione: {paths.config_file})") from exc
+
+    console.print(f"Disc ID {toc.disc_id}, {toc.track_count} tracce, via {mb_config.base_url}")
+
+    async def run() -> tuple[list[matching.Candidate], dict[str, Any] | None, int]:
+        cache = None if no_cache else ResponseCache(paths.mb_cache)
+        try:
+            async with MusicBrainzClient(mb_config, cache) as client:
+                exact = await client.lookup_discid(toc.disc_id)
+                stub = exact if matching.is_cd_stub(exact) else None
+                releases = [] if exact is None or stub else list(exact.get("releases", []))
+                found = matching.candidates(toc, releases)
+                if not any(c.exact for c in found):
+                    found = matching.candidates(toc, releases + await client.search_toc(toc))
+                return found, stub, client.requests_made
+        finally:
+            if cache is not None:
+                cache.close()
+
+    try:
+        found, stub, requests = asyncio.run(run())
+    except (MusicBrainzError, OSError) as exc:
+        raise _fail(str(exc)) from exc
+
+    if stub:
+        console.print(f"[yellow]CD stub (dati anonimi):[/yellow] {stub.get('artist', '')} - {stub.get('title', '')}")
+    table = Table("", "esatto", "artista - titolo", "data", "paese", "max Δ", "media Δ", "release")
+    for cand in found[:10]:
+        delta = f"{cand.max_diff_ms / 1000:.1f} s" if cand.max_diff_ms is not None else "?"
+        mean = f"{cand.mean_diff_ms / 1000:.1f} s" if cand.mean_diff_ms is not None else "?"
+        table.add_row(
+            "[green]✓[/green]" if cand.accepted else "[red]✗[/red]",
+            "sì" if cand.exact else "",
+            f"{cand.artist} - {cand.title}",
+            cand.date,
+            cand.country,
+            delta,
+            mean,
+            cand.release_id,
+        )
+    if found:
+        console.print(table)
+    best = next((c for c in found if c.accepted), None)
+    verdict = (
+        f"[green]scelta:[/green] {best.artist} - {best.title}" if best else "[yellow]nessuna scelta affidabile[/yellow]"
+    )
+    console.print(f"{verdict}  ({requests} richieste a MusicBrainz)")
 
 
 @app.command()

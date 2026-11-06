@@ -1,0 +1,120 @@
+{
+  "recorded_at": "2026-11-06T14:32:46+00:00",
+  "url": "https://musicbrainz.org/ws/2/discid/VmZDxBuy2zdDckDHiiPB0XwTnNA-?inc=artist-credits+labels+recordings+release-groups&fmt=json",
+  "status": 200,
+  "body": {
+    "title": "Miniclub Compilation",
+    "barcode": "[none]",
+    "tracks": [
+      {
+        "length": 198586,
+        "artist": null,
+        "title": "Il coccodrillo come fa?"
+      },
+      {
+        "length": 239960,
+        "artist": null,
+        "title": "La canzone del capitano"
+      },
+      {
+        "length": 197520,
+        "artist": null,
+        "title": "I due Liocorni"
+      },
+      {
+        "title": "Chihuahua",
+        "length": 184706,
+        "artist": null
+      },
+      {
+        "title": "Mi scappa la pipì papà",
+        "artist": null,
+        "length": 212693
+      },
+      {
+        "length": 282026,
+        "artist": null,
+        "title": "Ciapa La Galeina"
+      },
+      {
+        "artist": null,
+        "length": 157786,
+        "title": "La tartaruga"
+      },
+      {
+        "artist": null,
+        "length": 247506,
+        "title": "Avvedi come balla Nando"
+      },
+      {
+        "length": 188293,
+        "artist": null,
+        "title": "Ci vuole un fiore"
+      },
+      {
+        "title": "Dragostea din te!",
+        "length": 185306,
+        "artist": null
+      },
+      {
+        "title": "Heidi",
+        "length": 175720,
+        "artist": null
+      },
+      {
+        "length": 200080,
+        "artist": null,
+        "title": "Bomba"
+      },
+      {
+        "title": "44 Gatti",
+        "artist": null,
+        "length": 181573
+      },
+      {
+        "title": "Asereje",
+        "length": 258733,
+        "artist": null
+      },
+      {
+        "title": "Nella vecchia fattoria",
+        "artist": null,
+        "length": 160560
+      },
+      {
+        "length": 192426,
+        "artist": null,
+        "title": "Pinocchio"
+      },
+      {
+        "title": "La casa",
+        "length": 130053,
+        "artist": null
+      },
+      {
+        "length": 261293,
+        "artist": null,
+        "title": "Barbie Girl"
+      },
+      {
+        "title": "Pesciolino rosso",
+        "length": 188853,
+        "artist": null
+      },
+      {
+        "artist": null,
+        "length": 163546,
+        "title": "Il Ballo Del Qua Qua"
+      },
+      {
+        "title": "Tanti auguri a te",
+        "length": 194760,
+        "artist": null
+      }
+    ],
+    "disambiguation": "",
+    "track-count": 21,
+    "artist": "Various",
+    "id": "VmZDxBuy2zdDckDHiiPB0XwTnNA-"
+  }
+}

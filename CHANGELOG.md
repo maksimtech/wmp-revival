@@ -8,6 +8,15 @@ Versioni: [CalVer](https://calver.org/) `YYYY.MM.PATCH`.
 
 ### Aggiunto
 
+- **Fase 2, dal TOC di WMP al Disc ID** (`toc.py`), verificata sui tre CD reali.
+- **Ricerca su MusicBrainz** con l'API pubblica: client con limite di una richiesta al secondo,
+  User-Agent con contatto da `config.toml`, ritentativi su 503/429 e cache SQLite; l'indirizzo
+  base è configurabile per passare a un mirror locale senza cambiare codice.
+- **Scelta del disco** (`matching.py`): Disc ID esatto, poi ricerca per TOC con scarto massimo
+  di 3 s traccia per traccia; scarta i dischi estranei proposti da MusicBrainz.
+- `wmprevival mb-lookup <TOC>` mostra candidati e scelta; `tools/record_mb_fixture.py` registra
+  risposte di MusicBrainz come fixture.
+
 - `record` segnala ogni ClientHello TLS: se non segue una richiesta, il client ha
   rifiutato il certificato.
 - `scripts/cattura.cmd` per una sessione di cattura completa da un prompt amministratore.
