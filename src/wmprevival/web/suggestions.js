@@ -1,8 +1,8 @@
-// WMP Revival: logica della pagina dei risultati. ES3 (MSHTML in modalità IE7).
-// Usa le variabili globali `mdrcds` (un MDR-CD per album), `matches` (indici delle
-// tracce richieste coperte da ciascun album), `writeType`, `writeId` e `renameFiles`
-// (argomenti di WriteNamesEx), definite dalla pagina.
-// L'MDR arriva già in ASCII con riferimenti &#N;, quindi va passato a WMP così com'è.
+// WMP Revival: results page logic. ES3 (MSHTML in IE7 mode).
+// Uses the globals `mdrcds` (one MDR-CD per album), `matches` (indices of the requested
+// tracks covered by each album), `writeType`, `writeId` and `renameFiles`
+// (WriteNamesEx arguments), defined by the page.
+// The MDR already arrives as ASCII with &#N; references, so it is passed to WMP as is.
 
 var chosen = -1;
 
@@ -25,7 +25,7 @@ function toggleClass(el, name, on) {
     }
 }
 
-// Segnala un evento al server (finisce nelle catture): utile quando WMP rifiuta l'MDR.
+// Reports an event to the server (it ends up in the captures): useful when WMP rejects the MDR.
 function report(kind, detail) {
     var img = new Image();
     img.src = "log?kind=" + encodeURIComponent(kind) + "&detail=" + encodeURIComponent(detail) +
@@ -62,14 +62,14 @@ function finish() {
         return;
     }
     try {
-        // Destinatario esplicito: per un CD il suo TOC (tipo 0, CD_BY_TOC); per i file la
-        // richiesta MDQ che ha generato la pagina (tipo 2, CD_BY_MDQCD, id vuoto). Con tipo 2
-        // anche per il CD, WMP ha applicato l'MDR di un CD a un file di una FAI precedente.
+        // Explicit target: for a CD its TOC (type 0, CD_BY_TOC); for files the MDQ request
+        // that produced the page (type 2, CD_BY_MDQCD, empty id). With type 2 for the CD too,
+        // WMP applied a CD's MDR to a file from an earlier FAI.
         window.external.WriteNamesEx(writeType, writeId, mdrcds[chosen], renameFiles);
     } catch (e) {
         var detail = (e.number !== undefined ? "0x" + (e.number >>> 0).toString(16) + " " : "") + (e.message || "");
         report("WriteNamesEx-error", detail);
-        showError("WMP ha rifiutato i dati: " + detail);
+        showError("WMP rejected the data: " + detail);
         return;
     }
     report("WriteNamesEx-ok", String(chosen));

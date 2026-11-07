@@ -1,9 +1,9 @@
-"""Inoltro delle richieste di WMP al server Microsoft vero (``record --forward``).
+"""Forwarding WMP's requests to the real Microsoft server (``record --forward``).
 
-Il file hosts punta il nome su 127.0.0.1, quindi l'indirizzo vero si chiede direttamente
-a un DNS pubblico. Il client si collega a quell'indirizzo tramite un resolver fissato, ma
-l'URL resta ``https://musicmatch-ssl.xboxlive.com/...``: SNI, header Host e verifica del
-certificato usano il nome originale, con l'archivio di fiducia di sistema.
+The hosts file points the name at 127.0.0.1, so the real address is asked directly of a
+public DNS server. The client connects to that address through a pinned resolver, but the
+URL stays ``https://musicmatch-ssl.xboxlive.com/...``: SNI, the Host header and certificate
+verification use the original name, with the system trust store.
 """
 
 from __future__ import annotations
@@ -24,7 +24,7 @@ from yarl import URL
 
 PUBLIC_RESOLVERS = ("1.1.1.1", "9.9.9.9")
 
-# RFC 9110 §7.6.1 più quelli che il client ricalcola da sé.
+# RFC 9110 §7.6.1 plus the ones the client computes itself.
 HOP_BY_HOP = frozenset(
     {
         "connection",
@@ -43,19 +43,19 @@ _RESPONSE_DROP = HOP_BY_HOP | {"content-length"}
 
 
 class UnsafeUpstreamError(RuntimeError):
-    """Il DNS ha restituito un indirizzo che non può essere il server vero."""
+    """DNS returned an address that can't be the real server."""
 
 
 def check_public(addresses: Iterable[str]) -> list[str]:
-    """Rifiuta loopback, reti private e simili: inoltrare lì farebbe un giro su sé stessi."""
+    """Reject loopback, private networks and the like: forwarding there would loop back on itself."""
     result = []
     for addr in addresses:
         ip = ipaddress.ip_address(addr)
         if not ip.is_global:
-            raise UnsafeUpstreamError(f"{addr} non è un indirizzo pubblico")
+            raise UnsafeUpstreamError(f"{addr} is not a public address")
         result.append(str(ip))
     if not result:
-        raise UnsafeUpstreamError("nessun indirizzo")
+        raise UnsafeUpstreamError("no addresses")
     return result
 
 
@@ -76,7 +76,7 @@ async def resolve_direct(
 
 
 class PinnedResolver(AbstractResolver):
-    """Risolve un solo nome, sugli indirizzi dati; qualunque altro nome è un errore."""
+    """Resolves a single name to the given addresses; any other name is an error."""
 
     def __init__(self, hostname: str, addresses: Sequence[str]) -> None:
         self._hostname = hostname.lower()
@@ -86,7 +86,7 @@ class PinnedResolver(AbstractResolver):
         self, host: str, port: int = 0, family: socket.AddressFamily = socket.AF_INET
     ) -> list[ResolveResult]:
         if host.lower() != self._hostname:
-            raise OSError(f"il resolver di inoltro conosce solo {self._hostname}, non {host}")
+            raise OSError(f"the forwarding resolver only knows {self._hostname}, not {host}")
         results: list[ResolveResult] = []
         for addr in self._addresses:
             fam = socket.AF_INET6 if ":" in addr else socket.AF_INET
@@ -96,7 +96,7 @@ class PinnedResolver(AbstractResolver):
                 ResolveResult(hostname=host, host=addr, port=port, family=fam, proto=0, flags=socket.AI_NUMERICHOST)
             )
         if not results:
-            raise OSError(f"nessun indirizzo per {host} nella famiglia {family!r}")
+            raise OSError(f"no address for {host} in family {family!r}")
         return results
 
     async def close(self) -> None:
@@ -138,7 +138,7 @@ class Forwarder:
 
     async def __aenter__(self) -> Forwarder:
         connector = aiohttp.TCPConnector(resolver=PinnedResolver(self.hostname, self.addresses), ssl=self._ssl)
-        # auto_decompress=False: a WMP torna esattamente il corpo che ha mandato il server.
+        # auto_decompress=False: WMP gets back exactly the body the server sent.
         self._session = aiohttp.ClientSession(connector=connector, timeout=self._timeout, auto_decompress=False)
         return self
 
@@ -151,14 +151,14 @@ class Forwarder:
 
     def url_for(self, raw_path: str) -> URL:
         authority = self.hostname if self._port == 443 else f"{self.hostname}:{self._port}"
-        # encoded=True: percorso e query passano byte per byte, senza ricodifiche di yarl.
+        # encoded=True: path and query pass through byte for byte, without yarl re-encoding.
         return URL(f"https://{authority}{raw_path}", encoded=True)
 
     async def forward(
         self, method: str, raw_path: str, headers: Iterable[tuple[str, str]], body: bytes
     ) -> UpstreamResponse:
         if self._session is None:
-            raise RuntimeError("Forwarder va usato con 'async with'")
+            raise RuntimeError("Forwarder must be used with 'async with'")
         out = CIMultiDict((k, v) for k, v in headers if k.lower() not in _REQUEST_DROP)
         async with self._session.request(
             method,
@@ -166,7 +166,7 @@ class Forwarder:
             headers=out,
             data=body or None,
             allow_redirects=False,
-            # Niente header aggiunti da aiohttp: al server arriva quello che ha mandato WMP.
+            # No headers added by aiohttp: the server gets what WMP sent.
             skip_auto_headers=("User-Agent", "Accept", "Accept-Encoding", "Content-Type"),
         ) as resp:
             data = await resp.read()

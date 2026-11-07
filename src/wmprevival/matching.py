@@ -1,15 +1,15 @@
-"""Scelta del disco: dal TOC di WMP ai candidati di MusicBrainz, con un punteggio.
+"""Disc selection: from the WMP TOC to scored MusicBrainz candidates.
 
-Il test zero ha mostrato che il Disc ID esatto spesso non è collegato (2 CD su 3) e che la
-ricerca per TOC di MusicBrainz restituisce anche dischi estranei (12 per un CD da 14 tracce).
-Per questo ogni candidato si misura confrontando, traccia per traccia, le durate del TOC con
-quelle del medium in MusicBrainz:
+Test zero showed that the exact Disc ID is often not attached (2 CDs out of 3) and that the
+MusicBrainz TOC search also returns unrelated discs (12 for a 14-track CD). So each
+candidate is measured by comparing, track by track, the TOC lengths with those of the
+medium in MusicBrainz:
 
-- ``exact``: il Disc ID è collegato a quel medium: corrispondenza certa;
-- altrimenti si accetta solo se tutte le tracce con durata nota distano al massimo
-  ``MAX_TRACK_DIFF_MS`` e le durate note coprono almeno metà delle tracce.
+- ``exact``: the Disc ID is attached to that medium: a certain match;
+- otherwise it is accepted only if every track with a known length is at most
+  ``MAX_TRACK_DIFF_MS`` off and the known lengths cover at least half of the tracks.
 
-Ordinamento deterministico: esatti prima, poi scarto massimo, scarto medio, data, MBID.
+Deterministic order: exact first, then max difference, mean difference, date, MBID.
 """
 
 from __future__ import annotations
@@ -79,7 +79,7 @@ def _medium_candidate(toc: Toc, release: dict[str, Any], medium: dict[str, Any],
 
 
 def candidates(toc: Toc, releases: list[dict[str, Any]]) -> list[Candidate]:
-    """Un candidato per ogni medium con lo stesso numero di tracce del TOC, ordinati."""
+    """One candidate per medium with the same track count as the TOC, sorted."""
     disc_id = toc.disc_id
     found: dict[tuple[str, int], Candidate] = {}
     for release in releases:
@@ -94,5 +94,5 @@ def candidates(toc: Toc, releases: list[dict[str, Any]]) -> list[Candidate]:
 
 
 def is_cd_stub(body: dict[str, Any] | None) -> bool:
-    """Una risposta di ``/discid`` che è un CD stub (dati anonimi) e non un elenco di release."""
+    """A ``/discid`` response that is a CD stub (anonymous data) rather than a list of releases."""
     return body is not None and "releases" not in body and "tracks" in body

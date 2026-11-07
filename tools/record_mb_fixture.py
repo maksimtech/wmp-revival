@@ -1,12 +1,12 @@
-"""Registra una risposta dell'API di MusicBrainz come fixture di test.
+"""Records a MusicBrainz API response as a test fixture.
 
-Uso (dalla radice del repo, con config.toml che contiene il contatto):
+Usage (from the repo root, with a config.toml that contains the contact):
 
-    uv run python tools/record_mb_fixture.py discid <DISC_ID> tests/fixtures/musicbrainz/<nome>.json
-    uv run python tools/record_mb_fixture.py toc <TOC_WMP> tests/fixtures/musicbrainz/<nome>.json
+    uv run python tools/record_mb_fixture.py discid <DISC_ID> tests/fixtures/musicbrainz/<name>.json
+    uv run python tools/record_mb_fixture.py toc <WMP_TOC> tests/fixtures/musicbrainz/<name>.json
 
-I dati principali di MusicBrainz sono CC0: le risposte possono stare nel repository.
-Usa il client vero (limite di richieste, User-Agent), senza cache.
+MusicBrainz core data is CC0: the responses can live in the repository.
+Uses the real client (rate limit, User-Agent), without cache.
 """
 
 from __future__ import annotations
@@ -35,7 +35,7 @@ async def record(kind: str, value: str) -> dict[str, object]:
         elif kind == "recording-search":
             path, params = "recording", {"query": value, "limit": "10"}
         else:
-            raise SystemExit(f"tipo sconosciuto: {kind}")
+            raise SystemExit(f"unknown kind: {kind}")
         body = await client.get(path, params)
         return {
             "recorded_at": dt.datetime.now(dt.UTC).isoformat(timespec="seconds"),

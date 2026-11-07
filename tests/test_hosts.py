@@ -44,9 +44,9 @@ def test_remove_leaves_unmarked_lines_for_the_same_name() -> None:
 
 def test_foreign_entries_detects_conflicts_but_not_ours_or_comments() -> None:
     text = hosts.add_entries(
-        WINDOWS_HOSTS + f"0.0.0.0 {SERVICE_HOST.upper()} # blocco\r\n# 1.2.3.4 {SERVICE_HOST}\r\n", SERVICE_HOST
+        WINDOWS_HOSTS + f"0.0.0.0 {SERVICE_HOST.upper()} # block\r\n# 1.2.3.4 {SERVICE_HOST}\r\n", SERVICE_HOST
     )
-    assert hosts.foreign_entries(text, SERVICE_HOST) == [f"0.0.0.0 {SERVICE_HOST.upper()} # blocco"]
+    assert hosts.foreign_entries(text, SERVICE_HOST) == [f"0.0.0.0 {SERVICE_HOST.upper()} # block"]
 
 
 def test_mapped_names() -> None:
@@ -57,7 +57,7 @@ def test_mapped_names() -> None:
 
 def test_read_write_preserve_bytes_and_backup(tmp_path) -> None:
     path = tmp_path / "hosts"
-    original = WINDOWS_HOSTS.encode() + b"# byte non UTF-8: \xe8\r\n"
+    original = WINDOWS_HOSTS.encode() + b"# non-UTF-8 byte: \xe8\r\n"
     path.write_bytes(original)
     saved = hosts.backup(path, tmp_path / "bk", now=dt.datetime(2026, 11, 6, 14, 0, 0))
     assert saved.name == "hosts.20261106-140000-000000.bak"

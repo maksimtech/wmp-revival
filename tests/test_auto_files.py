@@ -1,6 +1,6 @@
-"""Ricerca automatica dei file della libreria (POST a GetMDRCD), catturata nella prima prova
-con il nostro server il 2026-11-06: quattro FLAC di "Mine All Day" (PewDiePie & Party in
-Backyard), uno dei quali è la versione [Edit] che in quell'edizione non esiste."""
+"""Automatic lookup of library files (POST to GetMDRCD), captured in the first test with
+our server on 2026-11-06: four FLACs of "Mine All Day" (PewDiePie & Party in Backyard),
+one of which is the [Edit] version that doesn't exist in that edition."""
 
 from __future__ import annotations
 
@@ -30,7 +30,7 @@ def _capture() -> dict:
 def test_the_automatic_file_lookup_is_a_post_with_xml() -> None:
     req = _capture()["request"]
     assert req["method"] == "POST" and req["path"] == "/cdinfo/GetMDRCD.aspx"
-    assert req["query_string"].endswith(f"&requestID={REQUEST_ID}")  # 'requestID', non 'requestid'
+    assert req["query_string"].endswith(f"&requestID={REQUEST_ID}")  # 'requestID', not 'requestid'
     headers = dict(req["headers"])
     assert headers["Content-Type"] == "text/xml"
     assert headers["User-Agent"].startswith("Windows-Media-Player/")
@@ -54,8 +54,8 @@ def test_shared_album_is_applied_to_every_track() -> None:
         ("Mine All Day [Explicit]", "Mine All Day"),
         ("Mine All Day (Instrumental) [Explicit]", "Mine All Day (Instrumental)"),
         ("Song (Clean Version)", "Song"),
-        ("Mine All Day [Edit]", "Mine All Day [Edit]"),  # un'altra versione: resta
-        ("Explicit Content", "Explicit Content"),  # parola nel titolo, non marcatore
+        ("Mine All Day [Edit]", "Mine All Day [Edit]"),  # a different version: kept
+        ("Explicit Content", "Explicit Content"),  # a word in the title, not a marker
     ],
 )
 def test_store_markers(raw: str, clean: str) -> None:
@@ -76,7 +76,7 @@ async def test_automatic_mdr_matches_three_files_and_skips_the_edit() -> None:
     assert m is not None
     assert m.findtext("mdqRequestID") == REQUEST_ID
     assert m.findtext("albumTitle") == "Mine All Day"
-    assert m.findtext("label") == ""  # "[no label]" di MusicBrainz non va scritto
+    assert m.findtext("label") == ""  # MusicBrainz "[no label]" must not be written
     tracks = [
         (t.findtext("trackRequestID"), t.findtext("trackNumber"), t.findtext("trackTitle")) for t in m.iter("track")
     ]

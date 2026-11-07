@@ -1,16 +1,16 @@
-"""TOC dei CD nel formato di WMP e Disc ID di MusicBrainz (fase 2).
+"""CD TOCs in WMP's format and MusicBrainz Disc IDs (phase 2).
 
-Formato di WMP, verificato su tre CD reali (test zero e catture del 2026-11-06), identico
-in ``Album.TOC`` della libreria e nel parametro ``CD=``/``cd=`` delle richieste::
+WMP's format, verified on three real CDs (test zero and the 2026-11-06 captures), is the
+same in the library's ``Album.TOC`` and in the ``CD=``/``cd=`` request parameter::
 
     C+96+5370+9D42+...+3AC1A
     │ │                 └ lead-out
-    │ └ offset di inizio di ogni traccia (qui 12)
-    └ numero di tracce
+    │ └ start offset of each track (12 here)
+    └ track count
 
-Tutti i valori in esadecimale senza zeri iniziali; gli offset includono già i 150 settori di
-pregap, come quelli del Disc ID. WMP non indica il numero della prima traccia: si assume 1
-(quasi tutti i CD). I CD Enhanced (traccia dati finale) restano da verificare.
+All values are hexadecimal without leading zeros; the offsets already include the 150
+pregap sectors, like the Disc ID ones. WMP does not give the first track number: 1 is
+assumed (nearly all CDs). Enhanced CDs (final data track) are still to be verified.
 """
 
 from __future__ import annotations
@@ -45,16 +45,16 @@ class Toc:
         try:
             numbers = [int(part, 16) for part in value.strip().split("+")]
         except ValueError as exc:
-            raise TocError(f"TOC non esadecimale: {value!r}") from exc
+            raise TocError(f"TOC is not hexadecimal: {value!r}") from exc
         if len(numbers) < 3:
-            raise TocError(f"TOC troppo corto: {value!r}")
+            raise TocError(f"TOC too short: {value!r}")
         count, offsets, leadout = numbers[0], tuple(numbers[1:-1]), numbers[-1]
         if count != len(offsets):
-            raise TocError(f"il TOC dichiara {count} tracce ma ha {len(offsets)} offset")
+            raise TocError(f"the TOC declares {count} tracks but has {len(offsets)} offsets")
         if not 1 <= count <= 99:
-            raise TocError(f"numero di tracce impossibile: {count}")
+            raise TocError(f"impossible track count: {count}")
         if list(offsets) != sorted(set(offsets)) or offsets[0] < 150 or leadout <= offsets[-1]:
-            raise TocError(f"offset non crescenti o lead-out non valido: {value!r}")
+            raise TocError(f"offsets not increasing or invalid lead-out: {value!r}")
         return cls(offsets=offsets, leadout=leadout)
 
     def to_wmp(self) -> str:
@@ -62,8 +62,8 @@ class Toc:
 
     @property
     def disc_id(self) -> str:
-        """Disc ID di MusicBrainz (algoritmo di libdiscid)."""
-        sha = hashlib.sha1()  # noqa: S324 - è la definizione del Disc ID, non sicurezza
+        """MusicBrainz Disc ID (libdiscid algorithm)."""
+        sha = hashlib.sha1()  # noqa: S324 - this is the Disc ID definition, not security
         sha.update(f"{self.first_track:02X}{self.last_track:02X}{self.leadout:08X}".encode("ascii"))
         for i in range(99):
             sha.update(f"{self.offsets[i] if i < self.track_count else 0:08X}".encode("ascii"))
@@ -71,7 +71,7 @@ class Toc:
 
     @property
     def mb_toc(self) -> str:
-        """Valore del parametro ``toc`` di ``/ws/2/discid/-``: prima, ultima, lead-out, offset."""
+        """Value of the ``toc`` parameter of ``/ws/2/discid/-``: first, last, lead-out, offsets."""
         return "+".join(str(n) for n in (self.first_track, self.last_track, self.leadout, *self.offsets))
 
     @property

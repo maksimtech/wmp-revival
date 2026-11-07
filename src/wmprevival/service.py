@@ -1,8 +1,8 @@
-"""Dalle richieste di WMP alle scelte da proporre: CD (TOC) e file (MDQ).
+"""From WMP requests to the choices to offer: CDs (TOC) and files (MDQ).
 
-Ogni scelta porta l'MDR-CD già pronto e gli indici delle tracce richieste che copre
-(``matches`` nella pagina dei risultati). Una release completa costa una richiesta a
-MusicBrainz: le scelte sono limitate a ``max_choices``.
+Each choice carries a ready-made MDR-CD and the indices of the requested tracks it covers
+(``matches`` in the results page). A full release costs one MusicBrainz request, so the
+choices are capped at ``max_choices``.
 """
 
 from __future__ import annotations
@@ -38,14 +38,14 @@ class Choice:
 
 
 def norm(text: str) -> str:
-    """Confronto tollerante: maiuscole, accenti, apostrofi tipografici, spazi."""
+    """Lenient comparison: case, accents, typographic apostrophes, whitespace."""
     text = unicodedata.normalize("NFKD", text).replace("’", "'").replace("‘", "'")
     text = "".join(c for c in text if not unicodedata.combining(c))
     return " ".join(text.casefold().split())
 
 
-# Marcatori aggiunti dai negozi online ("[Explicit]", "(Clean)"): MusicBrainz non li ha nei
-# titoli. "[Edit]" invece resta: distingue davvero un'altra versione.
+# Markers added by online stores ("[Explicit]", "(Clean)"): MusicBrainz titles don't have
+# them. "[Edit]" stays, though: it really marks a different version.
 _STORE_MARKERS = re.compile(r"\s*[\[(](?:explicit|clean)(?: version)?[\])]\s*", re.IGNORECASE)
 
 
@@ -60,7 +60,7 @@ def norm_title(text: str) -> str:
 def _details(release: dict[str, Any], med: dict[str, Any] | None = None) -> str:
     parts = [release.get("date") or "", release.get("country") or ""]
     if med is not None:
-        parts += [med.get("format") or "", f"{med.get('track-count', '?')} tracce"]
+        parts += [med.get("format") or "", f"{med.get('track-count', '?')} tracks"]
     if release.get("disambiguation"):
         parts.append(release["disambiguation"])
     return " · ".join(p for p in parts if p)
@@ -70,17 +70,17 @@ def lucene_phrase(text: str) -> str:
     return '"' + text.replace("\\", "\\\\").replace('"', '\\"') + '"'
 
 
-MAX_ANCHORS = 3  # file da cui partire con la ricerca, se il primo non trova niente
-MAX_SEARCHES = 5  # ricerche al massimo per una richiesta (1 al secondo sull'API pubblica)
+MAX_ANCHORS = 3  # files to start the search from, if the first one finds nothing
+MAX_SEARCHES = 5  # max searches per request (1 per second on the public API)
 
 _ARTIST_SEPARATORS = re.compile(r"\s*[;/]\s*|,\s+")
 _VARIOUS = {"various artists", "artisti vari", "various", "va", "verschiedene interpreten"}
 
 
 def collapse_artist(artist: str) -> str:
-    """'ABBA, Abba' -> 'ABBA': WMP unisce con ', ' i valori multipli del tag artista.
+    """'ABBA, Abba' -> 'ABBA': WMP joins multiple artist tag values with ', '.
 
-    Solo se tutte le parti sono lo stesso nome: 'Earth, Wind & Fire' resta com'è.
+    Only if all parts are the same name: 'Earth, Wind & Fire' stays as is.
     """
     parts = [p for p in _ARTIST_SEPARATORS.split(artist) if p.strip()]
     if len(parts) > 1 and len({norm(p) for p in parts}) == 1:
@@ -89,7 +89,7 @@ def collapse_artist(artist: str) -> str:
 
 
 def artist_candidates(track: MdqTrack) -> list[str]:
-    """Artista della traccia, sua forma compattata, artista dell'album (tranne 'Various Artists')."""
+    """Track artist, its collapsed form, album artist (except 'Various Artists')."""
     found: list[str] = []
     raw = (track.artist, collapse_artist(track.artist), track.album_artist, collapse_artist(track.album_artist))
     for artist in raw:
@@ -103,11 +103,11 @@ _EXTENSION = re.compile(r"\.[A-Za-z0-9]{2,5}$")
 
 
 def filename_guess(track: MdqTrack) -> tuple[str, str]:
-    """(artista, titolo) ricavati dal nome del file.
+    """(artist, title) taken from the file name.
 
-    '01. Stupid Girls.flac' -> ('', 'Stupid Girls'); 'P!nk - Who Knew.wma' con artista P!nk
-    -> ('', 'Who Knew'); '10. ABBA, Abba - Arrival.flac' con il tag rovinato "Giovanni Allevi"
-    -> ('ABBA, Abba', 'Arrival'). L'artista è vuoto se il nome non ne indica uno diverso.
+    '01. Stupid Girls.flac' -> ('', 'Stupid Girls'); 'P!nk - Who Knew.wma' with artist P!nk
+    -> ('', 'Who Knew'); '10. ABBA, Abba - Arrival.flac' with the damaged tag "Giovanni Allevi"
+    -> ('ABBA, Abba', 'Arrival'). The artist is empty unless the name gives a different one.
     """
     name = _EXTENSION.sub("", track.filename.strip())
     name = _FILENAME_NUMBER.sub("", name, count=1)
@@ -130,10 +130,10 @@ def filename_number(track: MdqTrack) -> int | None:
 
 
 def tag_is_suspect(track: MdqTrack) -> bool:
-    """Il nome del file indica un altro artista e un altro titolo: il tag non è affidabile.
+    """The file name gives another artist and another title: the tag can't be trusted.
 
-    Succede quando WMP ha già scritto nella libreria i dati di un altro album (il FLAC di
-    "Arrival" degli ABBA diventato "Panic" di Giovanni Allevi).
+    Happens when WMP has already written another album's data into the library (ABBA's
+    "Arrival" FLAC turned into Giovanni Allevi's "Panic").
     """
     artist, title = filename_guess(track)
     if not artist or norm_title(title) == norm_title(track.title):
@@ -142,7 +142,7 @@ def tag_is_suspect(track: MdqTrack) -> bool:
 
 
 def title_candidates(track: MdqTrack) -> list[str]:
-    """Titolo del tag e, se diverso, quello del nome del file."""
+    """The tag title and, if different, the one from the file name."""
     found: list[str] = []
     for title in (track.title, filename_title(track) if track.filename else ""):
         if title and norm_title(title) not in {norm_title(t) for t in found}:
@@ -154,13 +154,13 @@ _COLLECTION_NS = uuid.UUID("6f1d0b1e-3c55-5a8e-9d2b-7d3b6a9c4e10")
 
 
 def file_collection_id(release_id: str, request_id: str) -> str:
-    """``WMCollectionID`` per una risposta sui file: uno nuovo per ogni richiesta.
+    """``WMCollectionID`` for a file response: a new one for every request.
 
-    WMP conserva **un solo documento MDR per WMCollectionID** e, se ne riceve un altro con lo
-    stesso ID, tiene le tracce di quello vecchio applicando i ``trackRequestID`` nuovi, che però
-    contano da 0 in ogni richiesta. Risultato visto il 2026-11-06: tre file di P!nk diventati
-    tutti "Long Way to Happy". Un ID per richiesta evita il riuso; per i CD resta l'MBID della
-    release, perché lì ``trackRequestID`` è sempre l'indice nel TOC.
+    WMP keeps **a single MDR document per WMCollectionID** and, when it receives another one
+    with the same ID, keeps the old one's tracks while applying the new ``trackRequestID``s,
+    which however count from 0 in every request. Result seen on 2026-11-06: three P!nk files
+    all turned into "Long Way to Happy". One ID per request avoids the reuse; CDs keep the
+    release MBID, because there ``trackRequestID`` is always the index in the TOC.
     """
     return str(uuid.uuid5(_COLLECTION_NS, f"{release_id.lower()}:{request_id.upper()}"))
 
@@ -204,7 +204,7 @@ class MetadataService:
         return choices
 
     async def cd_automatic(self, toc: Toc) -> str | None:
-        """L'MDR della scelta migliore, per la ricerca automatica; ``None`` se non c'è."""
+        """The MDR of the best choice, for the automatic lookup; ``None`` if there is none."""
         choices = await self.cd_choices(toc)
         return choices[0].mdr if choices else None
 
@@ -235,8 +235,8 @@ class MetadataService:
                     str(number) != str(track.number) if track.number is not None else False,
                     rel.get("status") != "Official",
                     group.get("primary-type") != "Album",
-                    # Un file viene più spesso da un acquisto digitale (es. il FLAC Qobuz
-                    # dell'utente, edizione Digital Media senza data): prima quelle.
+                    # A file more often comes from a digital purchase (e.g. the user's Qobuz
+                    # FLAC, an undated Digital Media edition): those first.
                     med.get("format") != "Digital Media",
                     diff if diff is not None else MAX_FILE_LENGTH_DIFF_MS,
                     rel.get("date") or "9999",
@@ -250,13 +250,13 @@ class MetadataService:
     def _match_tracks(
         release: dict[str, Any], mdq: Mdq, anchor: MdqTrack, recording_id: str
     ) -> list[tuple[MdqTrack, dict[str, Any]]]:
-        """Abbina ogni file a una traccia diversa della release.
+        """Match each file to a different track of the release.
 
-        Il file usato per la ricerca prende la registrazione trovata; gli altri il titolo del
-        tag o, in alternativa, quello ricavato dal nome del file (senza marcatori dei negozi),
-        sempre con uno scarto di durata di al massimo 5 s; a parità, la durata più vicina.
-        Due file non prendono mai la stessa traccia. Il nome del file salva i tag già rovinati
-        (es. tre file diversi tutti intitolati "Long Way to Happy").
+        The file used for the search gets the recording that was found; the others go by the
+        tag title or, failing that, the one from the file name (without store markers),
+        always with a length difference of at most 5 s; on a tie, the closest length wins.
+        Two files never get the same track. The file name rescues already damaged tags
+        (e.g. three different files all titled "Long Way to Happy").
         """
         all_tracks = [t for med in release.get("media", []) for t in med.get("tracks", [])]
         used: set[str] = set()
@@ -291,15 +291,15 @@ class MetadataService:
         return pairs
 
     async def _ranked_for(self, mdq: Mdq) -> tuple[list[tuple[Any, ...]], MdqTrack]:
-        """Cerca partendo dai primi file, con il titolo del tag e poi quello del nome del file.
+        """Search starting from the first files, with the tag title and then the file name one.
 
-        Un tag rovinato (titolo giusto per un'altra traccia, durata diversa) non blocca più
-        tutta la ricerca: si passa all'alternativa successiva. Al massimo ``MAX_SEARCHES``.
+        A damaged tag (title right for another track, different length) no longer blocks the
+        whole search: the next alternative is tried. At most ``MAX_SEARCHES``.
         """
         attempts: list[tuple[MdqTrack, bool]] = []
         for track in mdq.tracks[:MAX_ANCHORS]:
             if tag_is_suspect(track):
-                # Prima il nome del file, senza l'album del tag (anch'esso sospetto).
+                # The file name first, without the tag's album (suspect as well).
                 guess_artist, guess_title = filename_guess(track)
                 number = filename_number(track)
                 for artist in dict.fromkeys((guess_artist, collapse_artist(guess_artist))):
@@ -328,16 +328,16 @@ class MetadataService:
         return [], mdq.tracks[0]
 
     async def file_automatic(self, mdq: Mdq) -> str | None:
-        """Ricerca automatica dei file (POST a GetMDRCD): solo se anche l'album corrisponde.
+        """Automatic file lookup (POST to GetMDRCD): only if the album matches too.
 
-        Mai quando il tag è sospetto (il nome del file indica un altro artista): lì decide
-        l'utente dalla pagina "Trova informazioni album", non WMP in background.
+        Never when the tag is suspect (the file name gives another artist): there the user
+        decides from the "Find album info" page, not WMP in the background.
         """
         if any(tag_is_suspect(t) for t in mdq.tracks):
             return None
         ranked, anchor = await self._ranked_for(mdq)
         if anchor.album:
-            ranked = [r for r in ranked if not r[0][0]]  # chiave[0]: album diverso
+            ranked = [r for r in ranked if not r[0][0]]  # key[0]: different album
         choices = await self._file_choices_from(mdq, ranked, anchor, limit=1)
         return choices[0].mdr if choices else None
 

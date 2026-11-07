@@ -1,19 +1,19 @@
-"""Documenti MDR-CD 4.0 per WMP, costruiti da una release di MusicBrainz.
+"""MDR-CD 4.0 documents for WMP, built from a MusicBrainz release.
 
-Struttura dal modello vuoto in ``wmp.dll`` e dai controlli che WMP fa sulla risposta
-(messaggi d'errore nello stesso file):
+Structure taken from the empty template in ``wmp.dll`` and from the checks WMP runs on the
+response (error messages in the same file):
 
-- ``mdqRequestID`` sempre presente ("request id tag not found in MDR");
-- ogni ``<track>`` ha ``trackRequestID`` (< numero di tracce richieste) e ``WMContentID``;
-- ``trackNumber`` > 0; mai un album senza tracce.
+- ``mdqRequestID`` always present ("request id tag not found in MDR");
+- every ``<track>`` has ``trackRequestID`` (< number of requested tracks) and ``WMContentID``;
+- ``trackNumber`` > 0; never an album without tracks.
 
-Da verificare su WMP vero: formato dei GUID (qui ``{MAIUSCOLO}``), posizione di
-``trackRequestID`` (qui ultimo figlio di ``<track>``, come nell'MDQ), formato di
-``releaseDate`` (qui la data di MusicBrainz così com'è: ``2006`` o ``2006-03-24``).
+To be verified on real WMP: GUID format (``{UPPERCASE}`` here), position of
+``trackRequestID`` (last child of ``<track>`` here, as in the MDQ), format of
+``releaseDate`` (the MusicBrainz date as is here: ``2006`` or ``2006-03-24``).
 
-L'XML è serializzato in ASCII: ogni carattere non ASCII diventa ``&#N;``, che è quello che
-fa ``EncodeOMI`` nella pagina del server Microsoft prima di ``WriteNamesEx``.
-XML costruito con ElementTree, mai concatenando stringhe.
+The XML is serialized as ASCII: every non-ASCII character becomes ``&#N;``, which is what
+``EncodeOMI`` does in the Microsoft server page before ``WriteNamesEx``.
+XML is built with ElementTree, never by concatenating strings.
 """
 
 from __future__ import annotations
@@ -56,7 +56,7 @@ class MdrAlbum:
     label: str = ""
     genre: str = ""
     tracks: tuple[MdrTrack, ...] = field(default_factory=tuple)
-    # WMCollectionID se diverso dalla release (risposte sui file: vedi service.file_collection_id).
+    # WMCollectionID when it differs from the release (file responses: see service.file_collection_id).
     collection_id: str = ""
 
 
@@ -71,7 +71,7 @@ def _names(relations: Iterable[dict[str, Any]], types: tuple[str, ...]) -> list[
 
 
 def composers(recording: dict[str, Any]) -> str:
-    """Compositori dalle opere eseguite nella registrazione; in mancanza, gli autori."""
+    """Composers of the works performed in the recording; failing that, the writers."""
     names: list[str] = []
     for rel in recording.get("relations", []):
         if rel.get("type") == "performance" and rel.get("target-type") == "work":
@@ -87,7 +87,7 @@ def conductors(recording: dict[str, Any]) -> str:
 
 
 def genre(release: dict[str, Any]) -> str:
-    """Il genere più votato del gruppo di release (o della release); a pari voti, alfabetico."""
+    """The top-voted genre of the release group (or of the release); ties broken alphabetically."""
     for source in (release.get("release-group") or {}, release):
         genres = sorted(source.get("genres", []), key=lambda g: (-g.get("count", 0), g.get("name", "")))
         if genres:
@@ -95,7 +95,7 @@ def genre(release: dict[str, Any]) -> str:
     return ""
 
 
-SPECIAL_LABELS = {"[no label]"}  # etichetta speciale di MusicBrainz per le autoproduzioni
+SPECIAL_LABELS = {"[no label]"}  # MusicBrainz special label for self-releases
 
 
 def label(release: dict[str, Any]) -> str:
@@ -110,7 +110,7 @@ def medium(release: dict[str, Any], position: int) -> dict[str, Any]:
     for med in release.get("media", []):
         if med.get("position") == position:
             return dict(med)
-    raise KeyError(f"la release {release.get('id')} non ha il medium {position}")
+    raise KeyError(f"release {release.get('id')} has no medium {position}")
 
 
 def track_from_mb(track: dict[str, Any], request_id: int) -> MdrTrack:
@@ -148,7 +148,7 @@ def album_from_release(
 
 
 def cd_album(release: dict[str, Any], medium_position: int, request_id: str = ZERO_GUID) -> MdrAlbum:
-    """Tutte le tracce del medium, con ``trackRequestID`` = indice da 0 nel TOC."""
+    """All tracks of the medium, with ``trackRequestID`` = 0-based index in the TOC."""
     tracks = [track_from_mb(t, i) for i, t in enumerate(medium(release, medium_position).get("tracks", []))]
     return album_from_release(release, tracks, request_id)
 
@@ -167,9 +167,9 @@ def _serialize(root: ET.Element) -> str:
 
 def build(album: MdrAlbum) -> str:
     if not album.tracks:
-        raise ValueError("un MDR-CD senza tracce non è valido per WMP")
+        raise ValueError("an MDR-CD without tracks is not valid for WMP")
     if any(t.number <= 0 for t in album.tracks):
-        raise ValueError("trackNumber deve essere maggiore di zero")
+        raise ValueError("trackNumber must be greater than zero")
     root = ET.Element("METADATA", {"xmlns:sql": SQL_NS})
     mdr = ET.SubElement(root, "MDR-CD")
     _el(mdr, "version", "4.0")
@@ -187,7 +187,7 @@ def build(album: MdrAlbum) -> str:
         _el(mdr, tag)
     _el(mdr, "moreInfoParams")
     _el(mdr, "dataProvider", DATA_PROVIDER)
-    # La release resta rintracciabile anche quando WMCollectionID è uno per richiesta.
+    # The release stays traceable even when WMCollectionID is one per request.
     _el(mdr, "dataProviderParams", f"musicbrainz-release={album.release_id}" if album.release_id else "")
     for tag in ("dataProviderLogo", "validated"):
         _el(mdr, tag)
@@ -206,7 +206,7 @@ def build(album: MdrAlbum) -> str:
 
 
 def build_not_found(request_id: str = ZERO_GUID, code: str = "No match", backoff: int = 5) -> str:
-    """Risposta "nessun dato" con la stessa forma di quella del server Microsoft di oggi."""
+    """A "no data" response shaped like the one the Microsoft server sends today."""
     root = ET.Element("METADATA")
     back = ET.SubElement(root, "Backoff")
     _el(back, "Time", backoff)

@@ -1,12 +1,12 @@
-"""Client dell'API ``/ws/2`` di MusicBrainz, con limite di richieste e cache su disco.
+"""Client for the MusicBrainz ``/ws/2`` API, with rate limiting and an on-disk cache.
 
-Lo stesso codice serve l'API pubblica e un mirror locale (``musicbrainz-docker`` espone la
-stessa API): cambiano solo ``base_url`` e ``min_interval`` in configurazione.
+The same code serves the public API and a local mirror (``musicbrainz-docker`` exposes the
+same API): only ``base_url`` and ``min_interval`` change in the configuration.
 
-- Una richiesta alla volta, distanziate di almeno ``min_interval`` secondi.
-- 503 e 429 (limite superato) si ritentano rispettando ``Retry-After``.
-- Cache SQLite: risposte trovate per 30 giorni, "non trovato" per 1 giorno (un Disc ID
-  collegato oggi con Picard deve comparire presto).
+- One request at a time, at least ``min_interval`` seconds apart.
+- 503 and 429 (rate limit exceeded) are retried, honouring ``Retry-After``.
+- SQLite cache: found responses for 30 days, "not found" for 1 day (a Disc ID attached
+  today with Picard should show up soon).
 """
 
 from __future__ import annotations
@@ -71,7 +71,7 @@ class ResponseCache:
 
 
 def _query(params: dict[str, str]) -> str:
-    # '+' resta letterale: separa i valori di inc e del toc, come negli esempi della documentazione.
+    # '+' stays literal: it separates the inc and toc values, as in the documentation examples.
     return "&".join(f"{k}={urllib.parse.quote(v, safe='+-._~')}" for k, v in params.items())
 
 
@@ -117,13 +117,13 @@ class MusicBrainzClient:
         self._last_start = time.monotonic()
 
     async def get(self, path: str, params: dict[str, str]) -> Any | None:
-        """JSON della risposta, o ``None`` se MusicBrainz risponde 404."""
+        """The response JSON, or ``None`` if MusicBrainz answers 404."""
         url = self.url_for(path, params)
         key = str(url)
         if self.cache is not None and (hit := self.cache.get(key)) is not None:
             return hit[1]
         if self._session is None:
-            raise RuntimeError("MusicBrainzClient va usato con 'async with'")
+            raise RuntimeError("MusicBrainzClient must be used with 'async with'")
         async with self._lock:
             for attempt in range(self.max_retries + 1):
                 await self._wait_turn()
@@ -139,28 +139,28 @@ class MusicBrainzClient:
                         body = await resp.json(content_type=None)
                     else:
                         text = (await resp.text())[:200]
-                        raise MusicBrainzError(f"MusicBrainz {resp.status} su {path}: {text}")
+                        raise MusicBrainzError(f"MusicBrainz {resp.status} on {path}: {text}")
                     if self.cache is not None:
                         self.cache.put(key, resp.status, body)
                     return body
-        raise MusicBrainzError(f"MusicBrainz non risponde dopo {self.max_retries} tentativi su {path}")
+        raise MusicBrainzError(f"MusicBrainz not responding after {self.max_retries} retries on {path}")
 
     async def lookup_discid(self, disc_id: str) -> Any | None:
-        """Release con questo Disc ID (o un CD stub); ``None`` se il Disc ID non è collegato."""
+        """Releases with this Disc ID (or a CD stub); ``None`` if the Disc ID is not attached."""
         return await self.get(f"discid/{disc_id}", {"inc": DISCID_INC})
 
     async def release(self, mbid: str) -> Any | None:
-        """Release completa: tracce, crediti, etichette, generi, compositori (via opere) e direttori."""
+        """Full release: tracks, credits, labels, genres, composers (via works) and conductors."""
         return await self.get(f"release/{mbid}", {"inc": RELEASE_INC})
 
     async def search_recordings(self, query: str, limit: int = 10) -> list[dict[str, Any]]:
-        """Ricerca di registrazioni (sintassi Lucene); ogni risultato elenca le sue release."""
+        """Recording search (Lucene syntax); each result lists its releases."""
         body = await self.get("recording", {"query": query, "limit": str(limit)})
         recordings: list[dict[str, Any]] = (body or {}).get("recordings", [])
         return recordings
 
     async def search_toc(self, toc: Toc) -> list[dict[str, Any]]:
-        """Ricerca per somiglianza sul TOC (stesso numero di tracce, durate vicine). Niente CD stub."""
+        """Fuzzy TOC search (same track count, close lengths). No CD stubs."""
         body = await self.get("discid/-", {"toc": toc.mb_toc, "cdstubs": "no", "inc": DISCID_INC})
         releases: list[dict[str, Any]] = (body or {}).get("releases", [])
         return releases

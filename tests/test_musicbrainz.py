@@ -1,4 +1,4 @@
-"""Client MusicBrainz contro un finto server locale: header, query, cache, limiti, ritentativi."""
+"""MusicBrainz client against a fake local server: headers, query, cache, rate limits, retries."""
 
 from __future__ import annotations
 
@@ -54,7 +54,7 @@ async def test_headers_and_query_format(fake_mb) -> None:
     assert ua == f"WMPRevival/{__version__} ( x@example.org )"
     assert raw_path == (
         "/ws/2/discid/-?toc=" + JOY.mb_toc + "&cdstubs=no&inc=artist-credits+labels+recordings+release-groups&fmt=json"
-    )  # '+' letterali, come nella documentazione dell'API
+    )  # literal '+', as in the API documentation
 
 
 async def test_404_means_not_found(fake_mb) -> None:
@@ -87,8 +87,8 @@ def test_cache_expiry(tmp_path) -> None:
         cache.put("found", 200, {"a": 1})
         cache.put("missing", 404, None)
         now[0] += 2 * 86400
-        assert cache.get("found") == (200, {"a": 1})  # 30 giorni
-        assert cache.get("missing") is None  # 1 giorno: si richiede
+        assert cache.get("found") == (200, {"a": 1})  # 30 days
+        assert cache.get("missing") is None  # 1 day: fetched again
     finally:
         cache.close()
 

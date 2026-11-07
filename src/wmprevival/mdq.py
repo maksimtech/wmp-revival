@@ -1,7 +1,7 @@
-"""Lettura dell'MDQ-CD che WMP manda con la pagina ponte di FAI (campo ``mdq``).
+"""Parsing of the MDQ-CD that WMP sends through the FAI bridge page (``mdq`` field).
 
-Formato osservato il 2026-11-06 (vedi ``tests/fixtures/captures/fai_file_2_post_mdq.json``).
-Parsing con defusedxml: l'MDQ arriva da una pagina web, niente entity expansion.
+Format observed on 2026-11-06 (see ``tests/fixtures/captures/fai_file_2_post_mdq.json``).
+Parsed with defusedxml: the MDQ comes from a web page, so no entity expansion.
 """
 
 from __future__ import annotations
@@ -51,19 +51,19 @@ def _text(el: Element, path: str) -> str:
 
 def parse(xml: str) -> Mdq:
     if len(xml) > MAX_MDQ:
-        raise MdqError("MDQ troppo grande")
+        raise MdqError("MDQ too large")
     try:
         root = SafeET.fromstring(xml)
-    except Exception as exc:  # noqa: BLE001 - defusedxml solleva tipi diversi per ogni attacco
-        raise MdqError(f"MDQ non valido: {type(exc).__name__}") from exc
+    except Exception as exc:  # noqa: BLE001 - defusedxml raises a different type for each attack
+        raise MdqError(f"invalid MDQ: {type(exc).__name__}") from exc
     query = root.find("MDQ-CD") if root.tag == "METADATA" else None
     if query is None:
-        raise MdqError("manca METADATA/MDQ-CD")
+        raise MdqError("missing METADATA/MDQ-CD")
     request_id = _text(query, "mdqRequestID")
     if not GUID_RE.match(request_id):
-        raise MdqError("mdqRequestID non è un GUID")
-    # Nella ricerca automatica (POST a GetMDRCD) l'album sta a livello di MDQ-CD, una volta
-    # sola per tutte le tracce; in FAI sta dentro ogni <track>.
+        raise MdqError("mdqRequestID is not a GUID")
+    # In the automatic lookup (POST to GetMDRCD) the album sits at MDQ-CD level, once for
+    # all tracks; in FAI it sits inside each <track>.
     shared_album = _text(query, "album/title/text")
     shared_album_artist = _text(query, "album/artist/text")
     tracks = []
@@ -82,5 +82,5 @@ def parse(xml: str) -> Mdq:
             )
         )
     if not tracks:
-        raise MdqError("MDQ senza tracce")
+        raise MdqError("MDQ without tracks")
     return Mdq(request_id=request_id, tracks=tuple(tracks))

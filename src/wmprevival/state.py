@@ -1,7 +1,7 @@
-"""Stato dell'installazione, scritto passo per passo da ``setup``.
+"""Installation state, written step by step by ``setup``.
 
-``teardown`` legge da qui cosa annullare: un ``setup`` interrotto a metà lascia
-annotati solo i passi effettivamente fatti.
+``teardown`` reads from here what to undo: a ``setup`` interrupted halfway leaves only
+the steps actually done on record.
 """
 
 from __future__ import annotations

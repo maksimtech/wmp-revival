@@ -1,17 +1,17 @@
-"""Regressione del 2026-11-06: tre file di P!nk diventati tutti "Long Way to Happy".
+"""Regression of 2026-11-06: three P!nk files all turned into "Long Way to Happy".
 
-Sequenza vera (catture e database della libreria di WMP):
+Actual sequence (captures and the WMP library database):
 
-1. FAI su 12 file di "I'm Not Dead": MDR della release 2EBD0F3C con trackRequestID 0 =
-   "Long Way to Happy" (traccia 3). Applicato da WMP.
-2. Ricerca automatica di "Who Knew" e di "Stupid Girls", una richiesta ciascuna: le nostre
-   risposte erano corrette (trackRequestID 0 = la traccia giusta), ma con lo **stesso
-   WMCollectionID** della 1.
-3. WMP conserva un solo MDR per WMCollectionID: ha aggiornato l'intestazione del documento
-   vecchio, tenuto le sue tracce e applicato trackRequestID 0 -> "Long Way to Happy".
+1. FAI on 12 files of "I'm Not Dead": MDR of release 2EBD0F3C with trackRequestID 0 =
+   "Long Way to Happy" (track 3). Applied by WMP.
+2. Automatic lookup of "Who Knew" and of "Stupid Girls", one request each: our responses
+   were correct (trackRequestID 0 = the right track), but with the **same WMCollectionID**
+   as in 1.
+3. WMP keeps a single MDR per WMCollectionID: it updated the old document's header, kept
+   its tracks and applied trackRequestID 0 -> "Long Way to Happy".
 
-Correzioni: un WMCollectionID per ogni risposta sui file, e la ricerca/abbinamento che usa
-anche il nome del file quando il titolo del tag non è compatibile con la durata.
+Fixes: one WMCollectionID for every file response, and search/matching that also uses the
+file name when the tag title doesn't fit the length.
 """
 
 from __future__ import annotations
@@ -25,7 +25,7 @@ from wmprevival import mdq
 from wmprevival.mdq import MdqTrack
 from wmprevival.service import MetadataService, file_collection_id, filename_title, title_candidates
 
-CAPTURE = Path(__file__).parent / "fixtures" / "captures" / "fai_file_pink_rovinati.json"
+CAPTURE = Path(__file__).parent / "fixtures" / "captures" / "fai_file_pink_damaged.json"
 IM_NOT_DEAD = "2ebd0f3c-758d-465c-b329-09f9905c73d5"
 
 
@@ -83,11 +83,11 @@ async def test_cd_responses_keep_the_release_id() -> None:
 async def test_ruined_tags_are_repaired_from_the_file_names() -> None:
     fake = FixtureMB()
     query = _ruined_mdq()
-    assert [t.title for t in query.tracks[:3]] == ["Long Way to Happy"] * 3  # il danno
+    assert [t.title for t in query.tracks[:3]] == ["Long Way to Happy"] * 3  # the damage
     choices = await MetadataService(fake).file_choices(query)
     searches = [c[1] for c in fake.calls if c[0] == "search"]
-    assert searches[0].startswith('recording:"Long Way to Happy"')  # tag: durata 197 s, scartata
-    assert searches[1].startswith('recording:"Stupid Girls"')  # nome del file: trovato
+    assert searches[0].startswith('recording:"Long Way to Happy"')  # tag: length 197 s, rejected
+    assert searches[1].startswith('recording:"Stupid Girls"')  # file name: found
     best = choices[0]
     assert best.release_id == IM_NOT_DEAD
     assert best.matches == tuple(range(14))
@@ -100,7 +100,7 @@ async def test_ruined_tags_are_repaired_from_the_file_names() -> None:
         ("2", "3", "Long Way to Happy"),
         ("3", "4", "Nobody Knows"),
     ]
-    assert len({n for _r, n, _t in got}) == 14  # nessuna traccia usata due volte
+    assert len({n for _r, n, _t in got}) == 14  # no track used twice
     assert m.findtext("WMCollectionID") == "{" + file_collection_id(IM_NOT_DEAD, query.request_id).upper() + "}"
 
 
@@ -112,7 +112,7 @@ def test_filename_titles() -> None:
     assert filename_title(_track(filename="03 - P!nk - Who Knew.m4a")) == "Who Knew"
     assert filename_title(_track(filename="Mine All Day [Edit].flac")) == "Mine All Day [Edit]"
     assert filename_title(_track(filename="")) == ""
-    # Titolo del tag prima, nome del file solo se diverso.
+    # Tag title first, file name only if different.
     assert title_candidates(_track(title="Stupid Girls", filename="01. Stupid Girls.flac")) == ["Stupid Girls"]
     assert title_candidates(_track(title="Long Way to Happy", filename="02. Who Knew.flac")) == [
         "Long Way to Happy",
@@ -129,4 +129,4 @@ async def test_a_track_is_never_given_to_two_files() -> None:
     ]
     query = mdq.Mdq(request_id="33333333-3333-3333-3333-333333333333", tracks=tuple(same))
     pairs = MetadataService._match_tracks(release, query, same[0], recording_id="")
-    assert len(pairs) == 1  # una sola traccia "Long Way to Happy": gli altri file restano fuori
+    assert len(pairs) == 1  # only one "Long Way to Happy" track: the other files are left out

@@ -45,12 +45,12 @@ def test_entity_expansion_is_refused() -> None:
 @pytest.mark.parametrize(
     ("xml", "message"),
     [
-        ("<nope>", "non valido"),
+        ("<nope>", "invalid"),
         ("<OTHER/>", "MDQ-CD"),
         ("<METADATA><MDQ-CD><mdqRequestID>x</mdqRequestID></MDQ-CD></METADATA>", "GUID"),
         (
             "<METADATA><MDQ-CD><mdqRequestID>00000000-0000-0000-0000-000000000001</mdqRequestID></MDQ-CD></METADATA>",
-            "senza tracce",
+            "without tracks",
         ),
     ],
 )

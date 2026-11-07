@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "recorder": "wmprevival/2026.11.0",
-  "received_at": "2026-11-06T15:03:30.569609+01:00",
+  "received_at": "2026-11-06T15:03:29.571385+01:00",
   "client": "127.0.0.1",
   "tls": {
     "version": "TLSv1.3",
@@ -11,9 +11,9 @@
   "request": {
     "method": "GET",
     "http_version": "1.1",
-    "raw_path": "/cdinfo/GetMDRCD.aspx?locale=410&geoid=76&version=12.0.26100.9549&userlocale=410&CD=15+96+3AC4+8111+BAEF+F10C+12F5C+181FC+1B036+1F8B9+22FE3+2662D+299A8+2D446+30978+35545+3844F+3BCAF+3E2C9+42F56+466AA+49694+4CFA3",
+    "raw_path": "/cdinfo/GetMDRCD.aspx?locale=410&geoid=76&version=12.0.26100.9549&userlocale=410&CD=E+96+1FA9+5584+902E+C94F+FCC6+12C48+16909+1A227+1D472+206E5+23140+26868+294B9+2D186",
     "path": "/cdinfo/GetMDRCD.aspx",
-    "query_string": "locale=410&geoid=76&version=12.0.26100.9549&userlocale=410&CD=15+96+3AC4+8111+BAEF+F10C+12F5C+181FC+1B036+1F8B9+22FE3+2662D+299A8+2D446+30978+35545+3844F+3BCAF+3E2C9+42F56+466AA+49694+4CFA3",
+    "query_string": "locale=410&geoid=76&version=12.0.26100.9549&userlocale=410&CD=E+96+1FA9+5584+902E+C94F+FCC6+12C48+16909+1A227+1D472+206E5+23140+26868+294B9+2D186",
     "headers": [
       [
         "Accept",
@@ -65,7 +65,7 @@
       ],
       [
         "MS-CV",
-        "PO2puzTyQUmpDtFVTM5tuw.0"
+        "i8wzFCX0ckqTRDAtSBMG2Q.0"
       ],
       [
         "X-Content-Type-Options",
@@ -73,7 +73,7 @@
       ],
       [
         "x-azure-ref",
-        "20261106T140335Z-16f555b7d86t89gdhC1BCNfe300000000epg000000002wpa"
+        "20261106T140334Z-16f555b7d86lvt7thC1BCN2wkg0000000dd0000000001skt"
       ],
       [
         "Accept-Ranges",
@@ -85,7 +85,7 @@
       ],
       [
         "Date",
-        "Fri, 06 Nov 2026 14:03:35 GMT"
+        "Fri, 06 Nov 2026 14:03:34 GMT"
       ],
       [
         "Connection",
@@ -96,7 +96,7 @@
       "length": 215,
       "decoded_length": 329,
       "text_encoding": "utf-8",
-      "omitted": "omesso: contenuto del server Microsoft, non ridistribuito nel repository"
+      "omitted": "omitted: content from the Microsoft server, not redistributed in the repository"
     }
   },
   "response": {

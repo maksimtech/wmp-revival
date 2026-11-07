@@ -10,7 +10,7 @@ from wmprevival import mdr
 
 def _parse(xml: str) -> ET.Element:
     assert xml.startswith('<?xml version="1.0"?>\n')
-    xml.encode("ascii")  # solo ASCII, come dopo EncodeOMI
+    xml.encode("ascii")  # ASCII only, as after EncodeOMI
     return ET.fromstring(xml)
 
 
@@ -18,7 +18,7 @@ def test_joy_cd_album() -> None:
     release = body("release_joy.json")
     album = mdr.cd_album(release, 1)
     xml = mdr.build(album)
-    # La dichiarazione di namespace del modello di wmp.dll (ElementTree non la espone dopo il parsing).
+    # The namespace declaration of the wmp.dll template (ElementTree doesn't expose it after parsing).
     assert xml.split("\n")[1].startswith(f'<METADATA xmlns:sql="{mdr.SQL_NS}"><MDR-CD><version>4.0</version>')
     root = _parse(xml)
     assert root.tag == "METADATA"
@@ -32,7 +32,7 @@ def test_joy_cd_album() -> None:
     assert m.findtext("albumArtist") == "Giovanni Allevi"
     assert m.findtext("releaseDate") == "2006"
     assert m.findtext("label") == "Ricordi"
-    assert m.findtext("genre") == "Classical"  # tre generi a pari voti: il primo in ordine alfabetico
+    assert m.findtext("genre") == "Classical"  # three genres tied on votes: the first alphabetically
     assert m.findtext("dataProvider") == "MusicBrainz"
     tracks = m.findall("track")
     assert len(tracks) == 12
@@ -42,7 +42,7 @@ def test_joy_cd_album() -> None:
     assert tracks[0].findtext("trackPerformer") == "Giovanni Allevi"
     rec_id = release["media"][0]["tracks"][0]["recording"]["id"]
     assert tracks[0].findtext("WMContentID") == "{" + rec_id.upper() + "}"
-    # Ogni elemento del modello di wmp.dll è presente, anche se vuoto.
+    # Every element of the wmp.dll template is present, even if empty.
     for tag in ("uniqueFileID", "providerStyle", "largeCoverParams", "smallCoverParams", "validated"):
         assert m.find(tag) is not None
     for tag in ("WMContentID", "uniqueFileID", "trackComposer", "trackConductor", "period"):
@@ -78,7 +78,7 @@ def test_non_ascii_and_markup_survive_as_character_references() -> None:
 
 def test_invalid_albums_are_refused() -> None:
     empty = mdr.MdrAlbum(release_id="r", release_group_id="", request_id=mdr.ZERO_GUID, title="t", artist="a")
-    with pytest.raises(ValueError, match="senza tracce"):
+    with pytest.raises(ValueError, match="without tracks"):
         mdr.build(empty)
     zero = mdr.MdrAlbum(
         release_id="r",

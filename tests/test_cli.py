@@ -14,7 +14,7 @@ runner = CliRunner()
 
 
 class FakeStore:
-    """Archivio radice simulato: registra i comandi certutil e risponde di conseguenza."""
+    """Simulated root store: records the certutil commands and answers accordingly."""
 
     def __init__(self) -> None:
         self.roots: set[tuple[str, str]] = set()
@@ -71,7 +71,7 @@ def test_setup_dry_run_touches_nothing(system, home) -> None:
 def test_setup_requires_admin(system, monkeypatch) -> None:
     monkeypatch.setattr(winsys, "is_admin", lambda: False)
     result = runner.invoke(cli.app, ["setup", "--yes"])
-    assert result.exit_code == 1 and "amministratore" in result.output
+    assert result.exit_code == 1 and "administrator" in result.output
     assert system.calls == []
 
 
@@ -93,9 +93,9 @@ def test_setup_then_teardown_round_trip(system, home) -> None:
     assert status.exit_code == 0, status.output
     assert "machine" in status.output and HOSTS_MARKER in status.output
 
-    # Un secondo setup riusa la PKI: stessa CA, nessuna riga doppia in hosts.
+    # A second setup reuses the PKI: same CA, no duplicate lines in hosts.
     again = runner.invoke(cli.app, ["setup", "--yes"])
-    assert again.exit_code == 0 and "riusa la PKI" in again.output
+    assert again.exit_code == 0 and "reuse the PKI" in again.output
     assert paths.hosts_file.read_bytes().decode().count(SERVICE_HOST) == 2
     assert InstallState.load(paths.state_file).ca_thumbprint == state.ca_thumbprint
 
@@ -116,7 +116,7 @@ def test_setup_switching_store_removes_the_old_root(system) -> None:
 
 def test_teardown_with_nothing_installed(system) -> None:
     result = runner.invoke(cli.app, ["teardown", "--yes"])
-    assert result.exit_code == 0 and "Niente da annullare" in result.output
+    assert result.exit_code == 0 and "Nothing to undo" in result.output
 
 
 def test_record_without_pki_fails_cleanly(system) -> None:
@@ -132,14 +132,14 @@ def test_record_refuses_lan_without_flag(system) -> None:
 
 def test_mb_lookup_requires_a_contact_for_the_public_api(home) -> None:
     result = runner.invoke(cli.app, ["mb-lookup", "2+96+200+300"])
-    assert result.exit_code == 1 and "contatto" in result.output
+    assert result.exit_code == 1 and "contact" in result.output
 
 
 def test_mb_lookup_rejects_an_invalid_toc(home) -> None:
     home.mkdir(parents=True, exist_ok=True)
     (home / "config.toml").write_text('[musicbrainz]\ncontact = "x@example.org"\n', encoding="utf-8")
     result = runner.invoke(cli.app, ["mb-lookup", "3+96+200"])
-    assert result.exit_code == 1 and "tracce" in result.output
+    assert result.exit_code == 1 and "tracks" in result.output
 
 
 def test_fixture_command(tmp_path) -> None:
@@ -161,7 +161,7 @@ def test_status_warns_when_wmp_moves_files(system, monkeypatch) -> None:
 
 
 def test_background_printer_never_blocks_the_caller() -> None:
-    """Regressione 2026-11-06: una selezione nella console ha fermato il server."""
+    """Regression 2026-11-06: a selection in the console stopped the server."""
     import threading
     import time
 
@@ -170,16 +170,16 @@ def test_background_printer_never_blocks_the_caller() -> None:
 
     class FrozenConsole:
         def print(self, *args, **kwargs) -> None:
-            release.wait(5)  # come una console in modalità selezione
+            release.wait(5)  # like a console in selection mode
             printed.append(args[0])
 
     printer = cli.BackgroundPrinter(FrozenConsole())  # type: ignore[arg-type]
     start = time.monotonic()
     for i in range(50):
-        printer.print(f"riga {i}")
-    assert time.monotonic() - start < 0.5  # il chiamante (il server) non aspetta
+        printer.print(f"line {i}")
+    assert time.monotonic() - start < 0.5  # the caller (the server) doesn't wait
     release.set()
     deadline = time.monotonic() + 5
     while len(printed) < 50 and time.monotonic() < deadline:
         time.sleep(0.01)
-    assert printed == [f"riga {i}" for i in range(50)]  # niente perso, in ordine
+    assert printed == [f"line {i}" for i in range(50)]  # nothing lost, in order

@@ -82,7 +82,7 @@ async def test_tls_handshake_with_the_service_name(pki, client_ctx) -> None:
 
 
 async def test_client_hello_is_reported_even_if_the_client_rejects_the_cert(pki) -> None:
-    """Un client che non si fida della CA chiude nell'handshake: l'avviso deve arrivare lo stesso."""
+    """A client that doesn't trust the CA closes during the handshake: the notice must still arrive."""
     import asyncio
 
     hellos: list[str | None] = []
@@ -103,7 +103,7 @@ async def test_client_hello_is_reported_even_if_the_client_rejects_the_cert(pki)
 
 
 async def test_name_constraints_reject_a_cert_for_another_site(tmp_path, ca, client_ctx) -> None:
-    """Anche firmato dalla nostra CA, un certificato per un altro nome non è valido."""
+    """Even signed by our CA, a certificate for another name is not valid."""
     rogue = tls.issue_server_cert(ca, "www.example.com")
     files = tls.PkiFiles.in_dir(tmp_path / "rogue")
     tls.write_pki(files, ca, rogue, restrict=lambda _p: None)

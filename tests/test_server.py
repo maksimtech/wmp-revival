@@ -1,4 +1,4 @@
-"""Il nostro server dal punto di vista di WMP: stesse richieste delle catture, nostre risposte."""
+"""Our server from WMP's point of view: the same requests as the captures, our responses."""
 
 from __future__ import annotations
 
@@ -81,11 +81,11 @@ async def test_fai_on_a_cd_lists_the_editions(server) -> None:
     assert len(mdrcds) == 2 and all(ET.fromstring(x).findtext("MDR-CD/albumTitle") == "Joy" for x in mdrcds)
     assert _js_array(html, "matches") == [list(range(12))] * 2
     assert '<script type="text/javascript" src="suggestions.js">' in html
-    # Regressione 2026-11-06: con (2, "") WMP ha applicato l'MDR di Joy al file di una FAI
-    # precedente (Arrival degli ABBA, rinominato "01 Panic.flac"). Il CD si indica per TOC.
+    # Regression 2026-11-06: with (2, "") WMP applied Joy's MDR to the file of an earlier FAI
+    # (ABBA's Arrival, renamed "01 Panic.flac"). The CD is targeted by TOC.
     assert "var writeType = 0;" in html
     assert f'var writeId = "{JOY.to_wmp()}";' in html
-    assert "var renameFiles = false;" in html  # niente file rinominati o spostati
+    assert "var renameFiles = false;" in html  # no files renamed or moved
 
 
 async def test_file_flow_bridge_then_results(server) -> None:
@@ -113,7 +113,7 @@ async def test_file_flow_bridge_then_results(server) -> None:
     assert root.findtext("MDR-CD/mdqRequestID") == "00000000-0000-0000-0000-000000000001"
     assert root.findtext("MDR-CD/track/trackRequestID") == "0"
     assert _js_array(html, "matches") == [[0]] * 5
-    assert "var writeType = 2;" in html and 'var writeId = "";' in html  # la richiesta MDQ corrente
+    assert "var writeType = 2;" in html and 'var writeId = "";' in html  # the current MDQ request
     assert "var renameFiles = false;" in html
 
 
@@ -139,7 +139,7 @@ async def test_static_files_and_log(server) -> None:
 
 
 async def test_hostile_metadata_cannot_escape_the_page(tmp_path) -> None:
-    """Regola 8: un titolo o un artista ostili da MusicBrainz restano testo."""
+    """Rule 8: a hostile title or artist from MusicBrainz stays text."""
     mb = FixtureMB()
     for release in mb.releases.values():
         if release["title"] == "Joy":
@@ -153,8 +153,8 @@ async def test_hostile_metadata_cannot_escape_the_page(tmp_path) -> None:
     assert "<script>alert(1)" not in html
     assert "</script><script>" not in html
     assert '"onmouseover="' not in html and 'onmouseover="alert' not in html
-    assert "&lt;/script&gt;&lt;script&gt;alert(1)&lt;/script&gt;" in html  # nell'HTML, come testo
-    mdrcds = _js_array(html, "mdrcds")  # nello script: JSON con <, e XML valido
+    assert "&lt;/script&gt;&lt;script&gt;alert(1)&lt;/script&gt;" in html  # in the HTML, as text
+    mdrcds = _js_array(html, "mdrcds")  # in the script: JSON with <, and valid XML
     assert ET.fromstring(mdrcds[0]).findtext("MDR-CD/albumTitle") == "</script><script>alert(1)</script>"
 
 
@@ -164,10 +164,10 @@ async def test_musicbrainz_down_never_gives_5xx(tmp_path) -> None:
         status, _ctype, text = await _get(f"{base}/cdinfo/GetMDRCD.aspx?{QUERY}&CD={JOY.to_wmp()}")
         assert status == 200 and ET.fromstring(text).findtext("ResponseCode") == "Lookup failed"
         status, _ctype, html = await _get(f"{base}/FAI/default.aspx?{QUERY}&cd={JOY.to_wmp()}")
-        assert status == 200 and "MusicBrainz non risponde" in html
+        assert status == 200 and "MusicBrainz is not responding" in html
         url = URL(f"{base}/FAI/default.aspx?{QUERY}&requestid=5FC5C9AD-67FD-4592-8C0D-8DE4A20F2DAF", encoded=True)
         async with aiohttp.ClientSession() as s, s.post(url, data={"mdq": _real_mdq()}) as r:
-            assert r.status == 200 and "MusicBrainz non risponde" in await r.text()
+            assert r.status == 200 and "MusicBrainz is not responding" in await r.text()
     finally:
         await runner.cleanup()
 
@@ -182,9 +182,9 @@ async def test_no_auto_answers_no_data_to_the_automatic_lookup(tmp_path) -> None
     try:
         _status, _ctype, text = await _get(f"{base}/cdinfo/GetMDRCD.aspx?{QUERY}&CD={JOY.to_wmp()}")
         assert ET.fromstring(text).findtext("ResponseCode") == "Automatic lookup disabled"
-        assert mb.calls == []  # nessuna richiesta a MusicBrainz
+        assert mb.calls == []  # no request to MusicBrainz
         _status, _ctype, html = await _get(f"{base}/FAI/default.aspx?{QUERY}&cd={JOY.to_wmp()}")
-        assert 'id="album-0"' in html  # la scelta manuale funziona
+        assert 'id="album-0"' in html  # the manual choice works
     finally:
         await runner.cleanup()
 

@@ -37,7 +37,7 @@ def test_same_guid_same_placeholder_everywhere() -> None:
     assert base64.b64decode(out["request"]["body"]["base64"]).decode() == text
     assert out["upstream"]["body"]["form"] == [["mdq", f"<id>{placeholder.upper()}</id>"]]
     assert out["client"] == "127.0.0.1"
-    assert warnings == [".binary: corpo binario non anonimizzato"]
+    assert warnings == [".binary: binary body not anonymized"]
 
 
 def test_drop_upstream_body_keeps_metadata_only() -> None:
@@ -51,7 +51,7 @@ def test_drop_upstream_body_keeps_metadata_only() -> None:
     out = capture.drop_upstream_body(rec)
     assert out["upstream"]["status"] == 200 and out["upstream"]["headers"] == [["Content-Type", "text/html"]]
     assert out["upstream"]["body"] == {"length": 22, "text_encoding": "utf-8", "omitted": capture.OMITTED}
-    assert "base64" in rec["upstream"]["body"]  # l'originale resta intatto
+    assert "base64" in rec["upstream"]["body"]  # the original stays intact
     assert capture.drop_upstream_body({"request": {}}) == {"request": {}}
 
 

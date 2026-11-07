@@ -15,8 +15,8 @@ CD21 = (
 @pytest.mark.parametrize(
     ("wmp", "disc_id"),
     [
-        # Calcolati anche dai Track*.cda dei dischi; quello da 21 tracce esiste su
-        # MusicBrainz (CD stub), il che conferma l'algoritmo contro il server.
+        # Also computed from the discs' Track*.cda files; the 21-track one exists on
+        # MusicBrainz (CD stub), which confirms the algorithm against the server.
         (JOY, "TJb.4XmLklobrhFK9kddqt3kbc8-"),
         (CD14, "vmDt7K4IGb_crskc3Ul1.rHoKRE-"),
         (CD21, "VmZDxBuy2zdDckDHiiPB0XwTnNA-"),
@@ -40,7 +40,7 @@ def test_mb_toc_parameter() -> None:
 
 
 def test_track_lengths_from_the_cda_files() -> None:
-    # Traccia 1 del CD da 14 tracce: 7955 settori nel Track01.cda = 106.07 s.
+    # Track 1 of the 14-track CD: 7955 sectors in Track01.cda = 106.07 s.
     lengths = Toc.from_wmp(CD14).track_lengths_ms
     assert len(lengths) == 14 and lengths[0] == 106067
 

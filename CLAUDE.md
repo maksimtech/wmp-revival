@@ -1,141 +1,140 @@
-# WMP Revival — server di metadati locale per Windows Media Player Legacy
+# WMP Revival — local metadata server for Windows Media Player Legacy
 
-## Obiettivo
+## Goal
 
-Far tornare a funzionare il recupero automatico delle informazioni album di
-**Windows Media Player Legacy** (WMP 12) su Windows 11, senza modificare un solo
-file di Windows.
+Bring back automatic album info retrieval in **Windows Media Player Legacy**
+(WMP 12) on Windows 11, without modifying a single Windows file.
 
-WMP funziona ancora ed è aggiornato da Windows Update. Il servizio online a cui
-chiedeva i metadati è ancora raggiungibile ma **non restituisce più dati**
-(test zero del 2026-11-06: "Album sconosciuto" con connessione HTTPS riuscita).
-Il progetto costruisce un **server locale che
-si presenta come quel servizio** e risponde con dati presi da **MusicBrainz**
-(fonte principale) e **Discogs** (ripiego).
+WMP still works and is updated by Windows Update. The online service it used to
+query for metadata is still reachable but **no longer returns any data**
+(test zero, 2026-11-06: "Unknown album" over a successful HTTPS connection).
+The project builds a **local server that
+poses as that service** and answers with data from **MusicBrainz**
+(main source) and **Discogs** (fallback).
 
 ```text
 WMP (x86) ──HTTPS──> musicmatch-ssl.xboxlive.com
-                     │  (file hosts → 127.0.0.1)
+                     │  (hosts file → 127.0.0.1)
                      ▼
-              traduttore locale  (questo progetto)
+              local translator  (this project)
                      │
          ┌───────────┼──────────────────┐
          ▼           ▼                  ▼
-   mirror MusicBrainz  Discogs API   Cover Art Archive
-   (in casa, Docker)   (token)       (copertine)
+   MusicBrainz mirror  Discogs API   Cover Art Archive
+   (at home, Docker)   (token)       (cover art)
 ```
 
-## Regole non negoziabili
+## Non-negotiable rules
 
-1. **Non modificare mai binari o risorse di Windows/WMP** (`wmp.dll`,
-   `wmploc.dll.mui`, ecc.). Sono firmati tramite catalogo e Windows Update li
-   sovrascrive. Si lavora solo per **interoperabilità**: file hosts, certificato
-   locale, server che risponde.
-2. **Non mettere binari Microsoft nel repository**, e nemmeno pagine, CSS o
-   script del server Microsoft (es. `suggestions.js`, firmato da Microsoft).
-   Le fixture si creano con `wmprevival fixture --drop-upstream-body`; i nostri
-   HTML/JS si scrivono da zero, rispettando solo l'interfaccia osservata.
-3. **Segreti fuori dal codice.** Il token Discogs si legge da variabile
-   d'ambiente (`DISCOGS_TOKEN`) o da un file di configurazione escluso da git.
-   Mai nei log, mai nelle risposte a WMP.
-4. **Niente fonti senza licenza.** Gracenote non si usa (servono accordi
-   commerciali). Solo MusicBrainz (dati principali CC0, supplementari
-   CC BY-NC-SA, uso personale) e Discogs (API con token personale).
-5. **La CA locale va limitata** con *name constraints* al solo
-   `musicmatch-ssl.xboxlive.com`. Chiave privata della CA fuori dal repo, con
-   permessi ristretti. Il server ascolta **solo su 127.0.0.1** (o sull'IP LAN se
-   e quando deciso esplicitamente).
-6. **Rispettare i limiti delle API**: MusicBrainz pubblico 1 richiesta/secondo
-   con User-Agent identificativo (`WMPRevival/<versione> ( <contatto> )`, contatto
-   da configurazione, nessuna email nel codice); Discogs ~60 richieste/minuto
-   autenticato. Cache locale obbligatoria.
-7. Prima di implementare un formato, **verificarlo su traffico reale catturato**.
-   Quello che segue è ricavato da analisi statica e va confermato.
-8. **Le pagine HTML si generano solo con un motore di template con escaping
-   automatico** (Jinja2 con `autoescape=True`), mai concatenando stringhe. Titoli,
-   artisti e ogni altro dato da MusicBrainz/Discogs sono input non fidato. Le
-   pagine girano dentro WMP con accesso a `window.external`
-   (`IWMPCDDVDWizardExternal`, che scrive nella libreria): **un XSS qui ha
-   accesso a WMP**. Quindi: dati destinati a uno `<script>` solo serializzati in
-   JSON sicuro per HTML (`|tojson`), niente gestori inline (`onclick=...`) con
-   dati dentro, niente script o risorse da altri host, nessun `|safe` su dati
-   esterni. Un test deve provare che un titolo con `</script><script>` o
-   `"onmouseover=` esce innocuo.
+1. **Never modify Windows/WMP binaries or resources** (`wmp.dll`,
+   `wmploc.dll.mui`, etc.). They are catalog-signed and Windows Update
+   overwrites them. Work only through **interoperability**: hosts file, local
+   certificate, a server that answers.
+2. **No Microsoft binaries in the repository**, and no pages, CSS or scripts
+   from the Microsoft server either (e.g. `suggestions.js`, signed by Microsoft).
+   Fixtures are made with `wmprevival fixture --drop-upstream-body`; our
+   HTML/JS is written from scratch, following only the observed interface.
+3. **Secrets stay out of the code.** The Discogs token is read from an
+   environment variable (`DISCOGS_TOKEN`) or from a config file excluded from
+   git. Never in logs, never in responses to WMP.
+4. **No unlicensed sources.** Gracenote is not used (it requires commercial
+   agreements). Only MusicBrainz (core data CC0, supplementary data
+   CC BY-NC-SA, personal use) and Discogs (API with a personal token).
+5. **The local CA must be restricted** with *name constraints* to
+   `musicmatch-ssl.xboxlive.com` only. The CA private key stays outside the
+   repo, with restricted permissions. The server listens **only on 127.0.0.1**
+   (or on the LAN IP if and when explicitly decided).
+6. **Respect API limits**: public MusicBrainz 1 request/second with an
+   identifying User-Agent (`WMPRevival/<version> ( <contact> )`, contact from
+   configuration, no email in the code); Discogs ~60 requests/minute
+   authenticated. A local cache is mandatory.
+7. Before implementing a format, **verify it on real captured traffic**.
+   What follows comes from static analysis and must be confirmed.
+8. **HTML pages are generated only with a template engine with automatic
+   escaping** (Jinja2 with `autoescape=True`), never by concatenating strings.
+   Titles, artists and any other data from MusicBrainz/Discogs are untrusted
+   input. The pages run inside WMP with access to `window.external`
+   (`IWMPCDDVDWizardExternal`, which writes to the library): **an XSS here has
+   access to WMP**. So: data meant for a `<script>` only serialized as
+   HTML-safe JSON (`|tojson`), no inline handlers (`onclick=...`) with data in
+   them, no scripts or resources from other hosts, no `|safe` on external
+   data. A test must prove that a title with `</script><script>` or
+   `"onmouseover=` comes out harmless.
 
-## Ambiente dell'utente
+## User environment
 
-Verificato sul PC di sviluppo il 2026-11-06.
+Verified on the development PC on 2026-11-06.
 
-- Windows 11 Pro **26H2, build 26300.9711** (il registro riporta "Windows 10 Pro"
-  in `ProductName`, come sempre). I file di WMP restano della serie 12.0.26100.x.
-- **WMP in uso: versione a 32 bit** (`C:\Program Files (x86)\Windows Media Player\wmplayer.exe`
-  12.0.26100.1, motore `C:\Windows\SysWOW64\wmp.dll` 12.0.26100.9549)
-- Versione a 64 bit presente: `System32\wmp.dll` 12.0.26100.9711
-- Funzionalità `Media.WindowsMediaPlayer~~~~0.0.12.0` installata.
-- Lettore CD: USB (esterno: va collegato per i test, unità F:).
+- Windows 11 Pro **26H2, build 26300.9711** (the registry says "Windows 10 Pro"
+  in `ProductName`, as always). The WMP files stay in the 12.0.26100.x series.
+- **WMP in use: the 32-bit version** (`C:\Program Files (x86)\Windows Media Player\wmplayer.exe`
+  12.0.26100.1, engine `C:\Windows\SysWOW64\wmp.dll` 12.0.26100.9549)
+- 64-bit version present: `System32\wmp.dll` 12.0.26100.9711
+- Feature `Media.WindowsMediaPlayer~~~~0.0.12.0` installed.
+- CD drive: USB (external: must be plugged in for tests, drive F:).
 - WSL2 (Ubuntu 24.04), Docker Desktop.
-- Python via uv: 3.12, 3.13, 3.14, 3.15. **Si usa 3.13/3.14** (la 3.15 c'è ma
-  le librerie compilate, es. lxml, possono non avere ancora le ruote).
-- Strumenti: MusicBrainz Picard 3.0.3 (local fork), foobar2000,
-  Qobuz, git/gh, openssl (quello di Git, non nel PATH). **EAC non è installato**:
-  i Disc ID di riferimento sono quelli di Picard.
-- Stile dei progetti dell'utente: CLI con Typer/Rich, pytest con fixture reali,
+- Python via uv: 3.12, 3.13, 3.14, 3.15. **We use 3.13/3.14** (3.15 is there but
+  compiled libraries, e.g. lxml, may not have wheels yet).
+- Tools: MusicBrainz Picard 3.0.3 (local fork), foobar2000,
+  Qobuz, git/gh, openssl (the one from Git, not on PATH). **EAC is not installed**:
+  the reference Disc IDs are Picard's.
+- The user's project style: CLI with Typer/Rich, pytest with real fixtures,
   ruff, mypy, CalVer `YYYY.MM.PATCH`, Docker, changelog.
 
-## Cosa sappiamo dall'analisi statica
+## What we know from static analysis
 
-### Indirizzi del servizio
+### Service addresses
 
-Stanno nella tabella stringhe di `System32\it-IT\wmploc.dll.mui` (12.0.26100.9549).
-Il codice di controllo MUI `1b62db44dabe2f2eae74868406bb2566` coincide tra lo
-stub a 32 bit, quello a 64 bit e il .mui (verificato anche sul PC di sviluppo, identico
-a quello del PC del lavoro): le due versioni usano gli stessi indirizzi.
-`SysWOW64\it-IT\wmploc.dll.mui` **non esiste**: il WMP a 32 bit prende le
-stringhe dal .mui di System32 (comunque si connette al server, vedi test zero).
+They live in the string table of `System32\it-IT\wmploc.dll.mui` (12.0.26100.9549).
+The MUI checksum `1b62db44dabe2f2eae74868406bb2566` is the same across the
+32-bit stub, the 64-bit one and the .mui (also verified on the development PC,
+identical to the one on the work PC): both versions use the same addresses.
+`SysWOW64\it-IT\wmploc.dll.mui` **does not exist**: the 32-bit WMP takes its
+strings from the System32 .mui (it connects to the server anyway, see test zero).
 
 ```text
-https://musicmatch-ssl.xboxlive.com/cdinfo/GetMDRCD.aspx?     ← CD (parametri aggiunti a runtime)
-https://musicmatch-ssl.xboxlive.com/FAI/default.aspx           ← "Find Album Info" per i file
+https://musicmatch-ssl.xboxlive.com/cdinfo/GetMDRCD.aspx?     ← CD (parameters appended at runtime)
+https://musicmatch-ssl.xboxlive.com/FAI/default.aspx           ← "Find Album Info" for files
 ```
 
-- Un solo host, tutto in **HTTPS**.
-- `redir.metaservices.microsoft.com` **non è più usato** da questa versione.
-- Nessun indirizzo dei metadati è scritto in chiaro in `wmp.dll`.
+- A single host, all over **HTTPS**.
+- `redir.metaservices.microsoft.com` is **no longer used** by this version.
+- No metadata address is written in clear text in `wmp.dll`.
 
-### Il server Microsoft oggi (2026-11-06)
+### The Microsoft server today (2026-11-06)
 
-- `musicmatch-ssl.xboxlive.com` risolve ancora (CNAME su Akamai,
-  `e87.dspb.akamaiedge.net`, anche IPv6). Certificato `CN=*.xboxlive.com`,
-  emesso da `Microsoft TLS G2 ECC CA OCSP 06`, TLS 1.3.
-- Con una GET semplice: `FAI/default.aspx` → **200**, `cdinfo/GetMDRCD.aspx?`
-  senza parametri → **400**, radice → 404.
-- Il DNS di casa a volte va in timeout su questo nome; 1.1.1.1 risponde.
+- `musicmatch-ssl.xboxlive.com` still resolves (CNAME to Akamai,
+  `e87.dspb.akamaiedge.net`, IPv6 too). Certificate `CN=*.xboxlive.com`,
+  issued by `Microsoft TLS G2 ECC CA OCSP 06`, TLS 1.3.
+- With a plain GET: `FAI/default.aspx` → **200**, `cdinfo/GetMDRCD.aspx?`
+  without parameters → **400**, root → 404.
+- The home DNS sometimes times out on this name; 1.1.1.1 answers.
 
-### Rete e certificati in `wmp.dll`
+### Networking and certificates in `wmp.dll`
 
-- Importa sia **WinHTTP** (`WinHttpOpen`, `WinHttpSetOption`) sia **WinINet**
+- It imports both **WinHTTP** (`WinHttpOpen`, `WinHttpSetOption`) and **WinINet**
   (`InternetOpenW`, `HttpOpenRequestW`, `HttpSendRequestW`).
-- Non chiama direttamente `CertGetCertificateChain` né
-  `CertVerifyCertificateChainPolicy`: niente pinning evidente, da confermare.
+- It does not call `CertGetCertificateChain` or
+  `CertVerifyCertificateChainPolicy` directly: no obvious pinning, to be confirmed.
 
-### Database della libreria
+### Library database
 
-- `%LOCALAPPDATA%\Microsoft\Media Player\CurrentDatabase_400.wmdb` e
-  `LocalMLS_3.wmdb`. **Non è ESE** (firma `a5 09 b6 f3`): formato proprietario.
-  Si studia confrontando le stringhe tra due copie (`tools/wmdb_strings.py`).
-- Contiene percorsi e nomi di file personali: le copie restano fuori dal repo.
+- `%LOCALAPPDATA%\Microsoft\Media Player\CurrentDatabase_400.wmdb` and
+  `LocalMLS_3.wmdb`. **Not ESE** (signature `a5 09 b6 f3`): proprietary format.
+  Studied by comparing the strings of two copies (`tools/wmdb_strings.py`).
+- Contains personal paths and file names: copies stay out of the repo.
 
-### Richiesta HTTP (da `wmp.dll`)
+### HTTP request (from `wmp.dll`)
 
-- `Content-Type: text/xml` (esiste anche `application/x-www-form-urlencoded` in
-  un'altra parte del codice, non necessariamente per i metadati)
-- `User-Agent: %s` con prefisso `Windows-Media-Player/` seguito dalla build
-  (es. `Windows-Media-Player/12.0.26100.9549`)
-- Header `Referer: %s` presente nel codice di download
+- `Content-Type: text/xml` (`application/x-www-form-urlencoded` also exists in
+  another part of the code, not necessarily for metadata)
+- `User-Agent: %s` with prefix `Windows-Media-Player/` followed by the build
+  (e.g. `Windows-Media-Player/12.0.26100.9549`)
+- `Referer: %s` header present in the download code
 
-### Domanda per i CD (DAI)
+### Query for CDs (DAI)
 
-Modelli trovati in `wmp.dll`:
+Templates found in `wmp.dll`:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -144,57 +143,57 @@ Modelli trovati in `wmp.dll`:
 </DAI>
 ```
 
-- `toc` contiene il TOC del disco. Il formato **salvato nella libreria**
-  (`Album.TOC`) è noto dal test zero, vedi sotto; resta da confermare che sia
-  identico a quello che viaggia nella richiesta.
-- `<base>` e `<confirm>` sono impronte audio per traccia. Il codice contiene
+- `toc` holds the disc TOC. The format **stored in the library**
+  (`Album.TOC`) is known from test zero, see below; it remains to be confirmed
+  that it is identical to what travels in the request.
+- `<base>` and `<confirm>` are per-track audio fingerprints. The code contains
   `No confirmation trace received for this track. Not doing fp confirmation`:
-  **se il server non manda impronte di conferma, WMP salta il controllo**.
-  Il server può ignorarle.
-- Da capire: se il TOC arriva nella query string di `GetMDRCD.aspx?`, nel corpo
-  DAI, o in entrambi.
+  **if the server sends no confirmation fingerprints, WMP skips the check**.
+  The server can ignore them.
+- To find out: whether the TOC arrives in the `GetMDRCD.aspx?` query string, in
+  the DAI body, or both.
 
-### Domanda per i file (MDQ-CD, usata da FAI)
+### Query for files (MDQ-CD, used by FAI)
 
 ```xml
 <?xml version="1.0"?><METADATA><MDQ-CD></MDQ-CD></METADATA>
 ```
 
-#### FAI è un flusso HTML, non una chiamata XML (2026-11-06)
+#### FAI is an HTML flow, not an XML call (2026-11-06)
 
-`GET https://musicmatch-ssl.xboxlive.com/FAI/default.aspx` senza parametri
-restituisce una **pagina ponte HTML**:
+`GET https://musicmatch-ssl.xboxlive.com/FAI/default.aspx` without parameters
+returns an **HTML bridge page**:
 
-1. lo script della pagina chiama `window.external.GetMDQByRequestID("<id>")`, che
-   restituisce l'XML MDQ preparato da WMP;
-2. mette l'XML in un campo nascosto `mdq` di un form;
-3. fa una **POST sulla stessa URL** (`application/x-www-form-urlencoded`).
+1. the page script calls `window.external.GetMDQByRequestID("<id>")`, which
+   returns the MDQ XML prepared by WMP;
+2. it puts the XML into a hidden form field `mdq`;
+3. it does a **POST to the same URL** (`application/x-www-form-urlencoded`).
 
-Nella pagina ricevuta l'id è vuoto perché non avevamo passato parametri: il
-server lo inserisce **prendendolo dalla query string** che manda WMP. Il nome del
-parametro va catturato. La risposta alla POST sarà presumibilmente la pagina dei
-risultati, che restituisce l'MDR a WMP con un altro metodo di `window.external`
-(vedi sotto).
+In the page we received the id is empty because we passed no parameters: the
+server fills it in **from the query string** sent by WMP. The parameter name
+must be captured. The response to the POST will presumably be the results page,
+which hands the MDR back to WMP through another `window.external` method
+(see below).
 
-#### L'oggetto `window.external`: `IWMPCDDVDWizardExternal`
+#### The `window.external` object: `IWMPCDDVDWizardExternal`
 
-Dalla type library incorporata in `wmp.dll` (risorsa `TYPELIB`, `WMPLib`
-`{6BF52A50-394A-11D3-B153-00C04F79FAA6}` v1.0), **identica** tra x86 e x64.
-Interfaccia dispatch `IWMPCDDVDWizardExternal`
+From the type library embedded in `wmp.dll` (`TYPELIB` resource, `WMPLib`
+`{6BF52A50-394A-11D3-B153-00C04F79FAA6}` v1.0), **identical** between x86 and x64.
+Dispatch interface `IWMPCDDVDWizardExternal`
 `{2D7EF888-1D3C-484A-A906-9F49D99BB344}`, "Not Public. Internal interface used by
 Windows Media Player":
 
-| DISPID | Metodo | Ritorno |
+| DISPID | Method | Returns |
 | --- | --- | --- |
 | 0x2711 | `WriteNames(BSTR bstrTOC, BSTR bstrMetadata)` | void |
 | 0x2712 | `ReturnToMainTask()` | void |
 | 0x2717 | `WriteNamesEx(WMP_WRITENAMESEX_TYPE type, BSTR bstrTypeId, BSTR bstrMetadata, VARIANT_BOOL fRenameRegroupFiles)` | void |
-| 0x2718 | `GetMDQByRequestID(BSTR bstrRequestID)` | BSTR (l'MDQ) |
+| 0x2718 | `GetMDQByRequestID(BSTR bstrRequestID)` | BSTR (the MDQ) |
 | 0x271a | `IsMetadataAvailableForEdit()` | VARIANT_BOOL |
 | 0x271b | `EditMetadata()` | void |
 | 0x2727 | `BuyCD(BSTR bstrTitle, BSTR bstrArtist, BSTR bstrAlbum, BSTR bstrUFID, BSTR bstrWMID)` | void |
 
-Più le proprietà comuni a tutti gli `external` di WMP: `version`,
+Plus the properties shared by every WMP `external`: `version`,
 `appColorLight/Medium/Dark/ButtonHighlight/ButtonShadow/ButtonHoverFace`
 (propget), `OnColorChange` (propput).
 
@@ -202,36 +201,36 @@ Più le proprietà comuni a tutti gli `external` di WMP: `version`,
 enum WMP_WRITENAMESEX_TYPE {
   WMP_WRITENAMES_TYPE_CD_BY_TOC        = 0,
   WMP_WRITENAMES_TYPE_CD_BY_CONTENT_ID = 1,
-  WMP_WRITENAMES_TYPE_CD_BY_MDQCD      = 2,   // risposta a FAI (MDQ-CD)
+  WMP_WRITENAMES_TYPE_CD_BY_MDQCD      = 2,   // response to FAI (MDQ-CD)
   WMP_WRITENAMES_TYPE_DVD_BY_DVDID     = 3,
 }
 ```
 
-Ipotesi da verificare sulle catture:
+Hypotheses to verify against captures:
 
-- la pagina dei risultati FAI chiama
-  `window.external.WriteNamesEx(2, <requestID>, <MDR-CD>, <rinomina?>)`;
-- `WriteNames(toc, mdr)` / `WriteNamesEx(0, toc, ...)` sono la via del CD quando
-  l'utente sceglie a mano ("Trova informazioni album" su un CD);
-- `ReturnToMainTask()` chiude la procedura guidata.
+- the FAI results page calls
+  `window.external.WriteNamesEx(2, <requestID>, <MDR-CD>, <rename?>)`;
+- `WriteNames(toc, mdr)` / `WriteNamesEx(0, toc, ...)` are the CD path when
+  the user picks manually ("Find album info" on a CD);
+- `ReturnToMainTask()` closes the wizard.
 
-Le altre interfacce `external` nella type library (`IWMPExternal`,
-`IWMPBaseExternal`, `IWMPOfflineExternal` con `forceOnline()`,
-`IWMPDiscoExternal`, `IWMPSubscriptionServiceExternal`) riguardano negozi online e
-servizi, non i metadati. Le pagine HTML locali in `wmploc.dll.mui`
-(`BLOCKED_ALBUMINFO.HTM`, `OFFLINE_ALBUMINFO.HTM`, ...) non usano i metodi del
-wizard.
+The other `external` interfaces in the type library (`IWMPExternal`,
+`IWMPBaseExternal`, `IWMPOfflineExternal` with `forceOnline()`,
+`IWMPDiscoExternal`, `IWMPSubscriptionServiceExternal`) are about online stores
+and services, not metadata. The local HTML pages in `wmploc.dll.mui`
+(`BLOCKED_ALBUMINFO.HTM`, `OFFLINE_ALBUMINFO.HTM`, ...) do not use the wizard
+methods.
 
-#### Campi MDQ
+#### MDQ fields
 
-Nomi di campi visti accanto al codice MDQ (da confermare sul traffico):
+Field names seen next to the MDQ code (to be confirmed on traffic):
 `mdqRequestID`, `flags`, `word`, `text`, `album`, `title`, `filename`,
 `artist`, `track`, `trackNumber`, `trackDuration`, `bitrate`, `drmProtected`.
-Esiste una modalità `ALBUM` e una `TRACK` (`MDQCD MODE Determined from data`).
+There is an `ALBUM` mode and a `TRACK` mode (`MDQCD MODE Determined from data`).
 
-### Risposta attesa: MDR-CD 4.0
+### Expected response: MDR-CD 4.0
 
-Modello vuoto che WMP usa internamente (punto di partenza per la risposta):
+Empty template WMP uses internally (starting point for the response):
 
 ```xml
 <?xml version="1.0"?>
@@ -243,7 +242,7 @@ Modello vuoto che WMP usa internamente (punto di partenza per la risposta):
     <providerStyle /><publisherRating /><communityRating />
     <buyParams /><largeCoverParams /><smallCoverParams /><moreInfoParams />
     <dataProvider /><dataProviderParams /><dataProviderLogo /><validated />
-    <!-- una per traccia -->
+    <!-- one per track -->
     <track>
       <WMContentID /><trackTitle /><uniqueFileID /><trackNumber>%d</trackNumber>
       <trackPerformer /><trackComposer /><trackConductor /><period />
@@ -252,121 +251,120 @@ Modello vuoto che WMP usa internamente (punto di partenza per la risposta):
 </METADATA>
 ```
 
-Controlli che WMP fa sulla risposta (messaggi d'errore in `wmp.dll` x86):
+Checks WMP runs on the response (error messages in x86 `wmp.dll`):
 
-- `request id tag not found in MDR` → restituire l'`mdqRequestID` ricevuto
-- `track request id tag not found in MDR` → ogni traccia ha un `trackRequestID`
-  (non presente nel modello vuoto: posizione esatta da verificare)
-- `content id tag not found in track tag` → ogni traccia ha un `WMContentID`
-  (proposta: MBID della recording)
+- `request id tag not found in MDR` → return the `mdqRequestID` received
+- `track request id tag not found in MDR` → every track has a `trackRequestID`
+  (not in the empty template: exact position to be verified)
+- `content id tag not found in track tag` → every track has a `WMContentID`
+  (proposal: the recording MBID)
 - `<trackRequestID> value in MDRCD out of range` / `invalid <trackNumber>` →
-  valori coerenti con la richiesta, `trackNumber > 0`
-- `Album node given but no tracks found` → mai album senza tracce
+  values consistent with the request, `trackNumber > 0`
+- `Album node given but no tracks found` → never an album without tracks
 
-Esiste anche `MDR-DVD` (fuori ambito per ora) e un modello DVD
+There is also `MDR-DVD` (out of scope for now) and a DVD template
 `DVDID=%s&VC=%s&VN=%s&DS=%s&TC=%s&%s`.
 
-### Comportamenti di WMP da considerare
+### WMP behaviours to keep in mind
 
-- **Throttling e backoff**: contatori `AutoMetadataCurrent500ServerErrorCount`,
+- **Throttling and backoff**: counters `AutoMetadataCurrent500ServerErrorCount`,
   `AutoMetadataCurrent503ServerErrorCount`, `AutoMetadataCurrentNetworkErrorCount`,
-  ritardo minimo tra richieste in background (`qwNextAllowedBackgroundTime`).
-  Durante lo sviluppo **non rispondere con 5xx** se evitabile: WMP rallenta.
-- **Memoria delle richieste**: il database della libreria ha una tabella
-  `MetadataRequest` con `CollectionID`, `TOCorDVDID`, `ISCD`, `Pending`,
-  `Downloaded`, `Validated`, `MDRDocument`. Album già marcati come non trovati
-  potrebbero non essere richiesti di nuovo in automatico: documentare come
-  forzarli ("Trova informazioni album" manuale o pulizia cache).
-- **Valori di registro** in `HKCU\Software\Microsoft\MediaPlayer\Preferences`
-  (verificato). Presenti sul PC di sviluppo: `MetadataRetrieval=3`, `SendUserGUID=0`,
+  minimum delay between background requests (`qwNextAllowedBackgroundTime`).
+  During development **do not answer with 5xx** if avoidable: WMP slows down.
+- **Request memory**: the library database has a `MetadataRequest` table with
+  `CollectionID`, `TOCorDVDID`, `ISCD`, `Pending`, `Downloaded`, `Validated`,
+  `MDRDocument`. Albums already marked as not found might not be requested
+  again automatically: document how to force them (manual "Find album info" or
+  clearing the cache).
+- **Registry values** in `HKCU\Software\Microsoft\MediaPlayer\Preferences`
+  (verified). Present on the development PC: `MetadataRetrieval=3`, `SendUserGUID=0`,
   `AcceptedPrivacyStatement=1`, `SilentAcquisition=1`, `AutoMetadataLastResetTime`,
-  i contatori `AutoMetadataCurrent{Download,500ServerError,503ServerError,OtherServerError,NetworkError}Count`.
-  Assenti (WMP usa i valori predefiniti nel codice): `AutoMetadataUpdate`,
+  the counters `AutoMetadataCurrent{Download,500ServerError,503ServerError,OtherServerError,NetworkError}Count`.
+  Absent (WMP uses the defaults in its code): `AutoMetadataUpdate`,
   `AutoMetadataFuzzyMatch`, `AutoMetadataMaxAllowedTracks`.
-  In HKLM esiste `SOFTWARE\Microsoft\MediaPlayer\PREFERENCES` (solo
-  `OEMServiceOverride11`, vuoto).
-- **Criteri di gruppo** che bloccano tutto se impostati
+  HKLM has `SOFTWARE\Microsoft\MediaPlayer\PREFERENCES` (only
+  `OEMServiceOverride11`, empty).
+- **Group policies** that block everything when set
   (`Software\Policies\Microsoft\WindowsMediaPlayer`):
   `PreventCDDVDMetadataRetrieval`, `PreventMusicFileMetadataRetrieval`.
-  Verificarli prima di ogni test.
-- Pista da indagare: `fpmdqlog.txt` compare accanto al codice MDQ; forse un log
-  di debug attivabile.
-- Altre stringhe utili in `wmp.dll`: `Album.TOC='%s'` e `Track.WMContentId="%s"`
-  (interrogazioni sulla libreria), `AlbumArtSmall.jpg`, `LargeAlbumArtSize`,
-  `SmallAlbumArtSize`, `CPAlbumArtCachePath`. Nel .mui: `Blocked_AlbumInfo.htm`
-  (pagina mostrata quando il recupero è bloccato).
+  Check them before every test.
+- Lead to follow: `fpmdqlog.txt` appears next to the MDQ code; maybe a debug log
+  that can be enabled.
+- Other useful strings in `wmp.dll`: `Album.TOC='%s'` and `Track.WMContentId="%s"`
+  (library queries), `AlbumArtSmall.jpg`, `LargeAlbumArtSize`,
+  `SmallAlbumArtSize`, `CPAlbumArtCachePath`. In the .mui: `Blocked_AlbumInfo.htm`
+  (page shown when retrieval is blocked).
 
-## Test zero (2026-11-06, WMP non modificato)
+## Test zero (2026-11-06, unmodified WMP)
 
-CD audio da 14 tracce nel lettore USB, WMP a 32 bit aperto senza nessuna
-modifica al sistema.
+14-track audio CD in the USB drive, 32-bit WMP opened with no change at all
+to the system.
 
-- WMP ha aperto una connessione HTTPS verso `2a02:26f0:8d00:594::57`
-  (Akamai, cioè il server vero) e l'ha chiusa poco dopo.
-- Risultato in WMP: **"Album sconosciuto"**. Contatori di errore in registro
-  rimasti a 0, quindi il server ha risposto "senza dati", non con un errore.
-- Nel database è comparso il TOC:
+- WMP opened an HTTPS connection to `2a02:26f0:8d00:594::57`
+  (Akamai, i.e. the real server) and closed it shortly after.
+- Result in WMP: **"Unknown album"**. The error counters in the registry stayed
+  at 0, so the server answered "no data", not with an error.
+- The TOC appeared in the database:
 
   ```text
   E+96+1FA9+5584+902E+C94F+FCC6+12C48+16909+1A227+1D472+206E5+23140+26868+294B9+2D186
   ```
 
-  **Formato:** numero di tracce, poi l'offset di inizio di ogni traccia, poi il
-  lead-out; tutti in esadecimale senza zeri iniziali, separati da `+`. Gli
-  offset includono già i 150 settori di pregap (`0x96` = 150 = LBA 0 + 150),
-  come gli offset del Disc ID MusicBrainz. Coincide esattamente con il valore
-  calcolato dai file `Track*.cda` del disco.
-- Disc ID MusicBrainz calcolato dagli stessi offset: `vmDt7K4IGb_crskc3Ul1.rHoKRE-`
-  (da confermare con Picard).
-- Attenzione ai CD Enhanced: la traccia dati non compare tra i `.cda` e sposta
-  il lead-out del Disc ID; da verificare cosa mette WMP nel TOC in quel caso.
-- **Altri due CD** (stesso giorno, WMP riaperto): uno da 12 tracce, molto noto, e
-  uno da 21. Per entrambi **"Album sconosciuto"**, ma
-  `AutoMetadataCurrentDownloadCount` è passato **da 0 a 6** senza errori: il
-  server vero risponde "con successo" ma senza dati, anche per album famosi.
-  Il formato del TOC è confermato (`C+96+5370+...+3AC1A` identico al calcolo dai
-  `.cda`). Per ogni disco una nuova riga in `MetadataRequest` con id
+  **Format:** number of tracks, then the start offset of each track, then the
+  lead-out; all in hexadecimal without leading zeros, separated by `+`. The
+  offsets already include the 150 pregap sectors (`0x96` = 150 = LBA 0 + 150),
+  like the MusicBrainz Disc ID offsets. It matches exactly the value computed
+  from the disc's `Track*.cda` files.
+- MusicBrainz Disc ID computed from the same offsets: `vmDt7K4IGb_crskc3Ul1.rHoKRE-`
+  (to be confirmed with Picard).
+- Watch out for Enhanced CDs: the data track does not show up among the `.cda`
+  files and shifts the Disc ID lead-out; check what WMP puts in the TOC then.
+- **Two more CDs** (same day, WMP reopened): a very well-known 12-track one and
+  a 21-track one. Both **"Unknown album"**, but
+  `AutoMetadataCurrentDownloadCount` went **from 0 to 6** without errors: the
+  real server answers "successfully" but with no data, even for famous albums.
+  TOC format confirmed (`C+96+5370+...+3AC1A` identical to the computation from
+  the `.cda` files). For each disc a new `MetadataRequest` row with id
   `{GUID}0001`.
-- **Verifica su MusicBrainz** (API pubblica, Disc ID calcolati dal TOC di WMP):
+- **Check on MusicBrainz** (public API, Disc IDs computed from the WMP TOC):
 
-  | CD | Disc ID esatto | Ricerca per TOC (`/ws/2/discid/-?toc=`) |
+  | CD | Exact Disc ID | TOC search (`/ws/2/discid/-?toc=`) |
   | --- | --- | --- |
-  | 14 tracce | 404, non collegato | 12 release diverse: rumore |
-  | 12 tracce | 404, non collegato | 1 candidata (2 edizioni): Giovanni Allevi, *Joy* (2006, IT), **confermato dall'utente** |
-  | 21 tracce | solo **CD stub** "Miniclub Compilation" (Various) | - |
+  | 14 tracks | 404, not attached | 12 different releases: noise |
+  | 12 tracks | 404, not attached | 1 candidate (2 editions): Giovanni Allevi, *Joy* (2006, IT), **confirmed by the user** |
+  | 21 tracks | only a **CD stub** "Miniclub Compilation" (Various) | - |
 
-  Conseguenze per le fasi 2-3: il Disc ID esatto da solo non basta; la ricerca
-  per TOC serve ma va filtrata con un punteggio sulla distanza delle durate e
-  una soglia (sotto: "non trovato" o pagina di scelta); i CD stub sono dati
-  anonimi di bassa qualità, da decidere se e come usarli. Collegare i Disc ID
-  con Picard ("Aggiungi ID disco") migliora il lookup esatto per tutti.
-- Colonne viste nel database (oltre a quelle già elencate):
+  Consequences for phases 2-3: the exact Disc ID alone is not enough; the TOC
+  search is needed but must be filtered with a score on the duration distance
+  and a threshold (below it: "not found" or a choice page); CD stubs are
+  anonymous low-quality data, to decide whether and how to use them. Attaching
+  the Disc IDs with Picard ("Submit disc ID") improves the exact lookup for
+  everyone.
+- Columns seen in the database (besides those already listed):
   `MetadataRequest.RequestID`, `.Locale`, `.Key`, `.TOCorDVDIDExBit`,
   `.TOCorDVDIDExText`; `Album.TOCExBit`, `Album.TOCExText`;
   `Track.MetadataState`, `.MetadataNeedsWork`, `.MetadataProviderRequestState`,
-  `.MetadataProviderRequestTime`. Compare anche una stringa nella forma
-  `{GUID}0001`, forse un `RequestID` (GUID + contatore): da confrontare con la
-  cattura. È un identificativo della libreria dell'utente, quindi va trattato
-  come i GUID nelle fixture.
+  `.MetadataProviderRequestTime`. A string of the form `{GUID}0001` also shows
+  up, maybe a `RequestID` (GUID + counter): to compare with the capture. It is
+  an identifier of the user's library, so treat it like the GUIDs in fixtures.
 
-### Altri file analizzati (nessuna logica di metadati)
+### Other files analysed (no metadata logic)
 
-`wmplayer.exe` (guscio "WMP Skin Host"), `wmpshell.dll` (menu contestuale,
-gestore skin), `wmpdxm.dll` (compatibilità WMP 6.4 / NetShow `NSPlay`),
-`wmpeffects.dll` (equalizzatore, plugin DSP), `wmpps.dll` (proxy/stub COM),
-`wmprph.exe` (anteprima in Esplora risorse), `wmpnetwk.exe` (server DLNA, solo
-64 bit; legge i tag dall'indice di Windows Search).
+`wmplayer.exe` ("WMP Skin Host" shell), `wmpshell.dll` (context menu, skin
+handler), `wmpdxm.dll` (WMP 6.4 / NetShow `NSPlay` compatibility),
+`wmpeffects.dll` (equalizer, DSP plugins), `wmpps.dll` (COM proxy/stub),
+`wmprph.exe` (File Explorer preview), `wmpnetwk.exe` (DLNA server, 64-bit
+only; reads tags from the Windows Search index).
 
-## Prima cattura (2026-11-06, `setup` + `record --forward`)
+## First capture (2026-11-06, `setup` + `record --forward`)
 
-WMP a 32 bit, CD *Joy* nel lettore, poi "Trova informazioni album" sul CD.
-Catture in `%LOCALAPPDATA%\WMPRevival\captures`, fixture (senza materiale
-Microsoft) in `tests/fixtures/captures/`.
+32-bit WMP, *Joy* CD in the drive, then "Find album info" on the CD.
+Captures in `%LOCALAPPDATA%\WMPRevival\captures`, fixtures (without Microsoft
+material) in `tests/fixtures/captures/`.
 
-- **WMP accetta la CA locale**: TLS 1.3 completato, SNI
-  `musicmatch-ssl.xboxlive.com`. Nessun pinning (domanda 5 chiusa).
-- **Ricerca automatica del CD: `GET`, senza corpo** (il modello DAI non è stato
-  usato):
+- **WMP accepts the local CA**: TLS 1.3 completed, SNI
+  `musicmatch-ssl.xboxlive.com`. No pinning (question 5 closed).
+- **Automatic CD lookup: `GET`, no body** (the DAI template was not used):
 
   ```text
   GET /cdinfo/GetMDRCD.aspx?locale=410&geoid=76&version=12.0.26100.9549&userlocale=410&CD=C+96+5370+...+3AC1A
@@ -375,16 +373,16 @@ Microsoft) in `tests/fixtures/captures/`.
   Accept-Encoding: gzip, deflate
   ```
 
-  - `locale` e `userlocale` sono LCID in esadecimale (0x410 = it-IT), `geoid` è
-    un GEOID in esadecimale (0x76 = 118 = Italia).
-  - `version` è la versione di `SysWOW64\wmp.dll` (9549), mentre lo User-Agent
-    porta 9711 (la versione della `wmp.dll` a 64 bit / del sistema): non fidarsi
-    dello User-Agent per la versione.
-  - `CD=` (maiuscolo) è **esattamente** il TOC salvato in `Album.TOC`, con `+`
-    letterali. Mai decodificarlo con `unquote_plus`/`parse_qsl`.
-  - All'avvio WMP ha richiesto **tutti e tre** i CD visti in giornata (e due
-    volte *Joy*): i dischi "non trovati" vengono richiesti di nuovo.
-- **Risposta del server vero oggi** (200, gzip, `Cache-Control: no-cache, no-store`):
+  - `locale` and `userlocale` are hexadecimal LCIDs (0x410 = it-IT), `geoid` is
+    a hexadecimal GEOID (0x76 = 118 = Italy).
+  - `version` is the version of `SysWOW64\wmp.dll` (9549), while the User-Agent
+    carries 9711 (the version of the 64-bit `wmp.dll` / of the system): do not
+    trust the User-Agent for the version.
+  - `CD=` (upper case) is **exactly** the TOC stored in `Album.TOC`, with literal
+    `+`. Never decode it with `unquote_plus`/`parse_qsl`.
+  - At startup WMP requested **all three** CDs seen that day (and *Joy*
+    twice): "not found" discs get requested again.
+- **The real server's response today** (200, gzip, `Cache-Control: no-cache, no-store`):
 
   ```xml
   <?xml version="1.0"?>
@@ -395,11 +393,11 @@ Microsoft) in `tests/fixtures/captures/`.
   </METADATA>
   ```
 
-  Il servizio era basato su Gracenote, ora rimosso. `<Backoff><Time>` dice a WMP
-  quanto aspettare (unità da capire: probabilmente minuti); è un elemento che
-  possiamo usare anche noi per regolare i tentativi. WMP conta queste risposte
-  come download riusciti (`AutoMetadataCurrentDownloadCount`).
-- **"Trova informazioni album" sul CD: pagina HTML**, non XML:
+  The service was based on Gracenote, now removed. `<Backoff><Time>` tells WMP
+  how long to wait (unit unknown: probably minutes); we can use this element
+  too to regulate retries. WMP counts these responses as successful downloads
+  (`AutoMetadataCurrentDownloadCount`).
+- **"Find album info" on the CD: an HTML page**, not XML:
 
   ```text
   GET /FAI/default.aspx?locale=410&geoid=76&version=12.0.26100.9549&userlocale=410&cd=C+96+...+3AC1A
@@ -407,45 +405,45 @@ Microsoft) in `tests/fixtures/captures/`.
   Accept-Language: it-IT
   ```
 
-  `cd=` qui è **minuscolo**. Il motore è MSHTML in **modalità documento IE7**:
-  niente `JSON`, `querySelector`, `addEventListener`, `const/let`; solo ES3.
-  La pagina carica `style.css` e `suggestions.js` (percorsi relativi, quindi
-  `/FAI/style.css` e `/FAI/suggestions.js`, con `Referer`).
-- **Struttura della pagina risultati** (oggi vuota, "Nessuna corrispondenza
-  trovata"): uno script inline con
+  `cd=` here is **lower case**. The engine is MSHTML in **IE7 document mode**:
+  no `JSON`, `querySelector`, `addEventListener`, `const/let`; ES3 only.
+  The page loads `style.css` and `suggestions.js` (relative paths, hence
+  `/FAI/style.css` and `/FAI/suggestions.js`, with `Referer`).
+- **Results page structure** (empty today, "No matches found"): an inline
+  script with
 
   ```js
-  var mdrcds = [];   // un documento MDR-CD (stringa XML) per ogni album candidato
-  var matches = [];  // per ogni candidato, gli indici delle tracce che corrispondono
+  var mdrcds = [];   // one MDR-CD document (XML string) per candidate album
+  var matches = [];  // for each candidate, the indexes of the matching tracks
   ```
 
-  due colonne ("Elenco di tracce" con righe `tr.track` id `track-N`, "Album" con
-  elementi id `album-N` selezionabili), pulsante "Fine" (`finish()`, disabilitato
-  finché non si sceglie un album) e "Annulla" (`window.external.ReturnToMainTask()`).
-- **Come la pagina restituisce i dati a WMP** (da `suggestions.js`, letto, non
-  copiato):
+  two columns ("Track list" with `tr.track` rows, id `track-N`, "Album" with
+  selectable elements, id `album-N`), a "Finish" button (`finish()`, disabled
+  until an album is chosen) and "Cancel" (`window.external.ReturnToMainTask()`).
+- **How the page hands the data back to WMP** (from `suggestions.js`, read, not
+  copied):
 
   ```js
-  window.external.WriteNamesEx(2, "", EncodeOMI(mdrcds[scelto]), true);
+  window.external.WriteNamesEx(2, "", EncodeOMI(mdrcds[chosen]), true);
   window.external.ReturnToMainTask();
   ```
 
-  - tipo **2 (`WMP_WRITENAMES_TYPE_CD_BY_MDQCD`) anche per un CD**, `bstrTypeId`
-    vuoto, `fRenameRegroupFiles = true`;
-  - `EncodeOMI`: nel testo tra `>` e `<`, ogni carattere con codice > 126
-    diventa un riferimento numerico `&#N;`. L'MDR passato a WMP è quindi ASCII.
-    Il nostro server può produrlo già così (lxml con `encoding="us-ascii"`), e
-    la nostra pagina non ha bisogno di ricodificare.
-- **"Trova informazioni album" su un file** (seconda e terza sessione, FLAC
-  scaricato *Alphaville - Big in Japan*). Attenzione: un brano della libreria
-  ancora legato a un CD usa `cd=<toc>` come sopra; per vedere il flusso dei file
-  serve un brano non estratto da CD.
+  - type **2 (`WMP_WRITENAMES_TYPE_CD_BY_MDQCD`) even for a CD**, empty
+    `bstrTypeId`, `fRenameRegroupFiles = true`;
+  - `EncodeOMI`: in the text between `>` and `<`, every character with a code
+    > 126 becomes a numeric reference `&#N;`. The MDR passed to WMP is
+    therefore ASCII. Our server can produce it that way already (lxml with
+    `encoding="us-ascii"`), and our page needs no re-encoding.
+- **"Find album info" on a file** (second and third sessions, downloaded FLAC
+  *Alphaville - Big in Japan*). Note: a library track still tied to a CD uses
+  `cd=<toc>` as above; to see the file flow you need a track that was not ripped
+  from a CD.
   1. `GET /FAI/default.aspx?locale=410&geoid=76&version=...&userlocale=410&requestid=<GUID>`
-     (GUID generato da WMP, maiuscolo, **senza graffe**) → pagina ponte: form
-     `#bridge` (POST, nessuna action) con campo nascosto `mdq`, e lo script
-     `window.external.GetMDQByRequestID("<GUID>")` → valore del campo → `submit()`.
-  2. `POST` **sulla stessa URL** (query compresa), `application/x-www-form-urlencoded`,
-     `Referer` = URL della GET, corpo `mdq=<MDQ-CD url-encoded>`:
+     (GUID generated by WMP, upper case, **without braces**) → bridge page: form
+     `#bridge` (POST, no action) with hidden field `mdq`, and the script
+     `window.external.GetMDQByRequestID("<GUID>")` → field value → `submit()`.
+  2. `POST` **to the same URL** (query included), `application/x-www-form-urlencoded`,
+     `Referer` = the GET URL, body `mdq=<url-encoded MDQ-CD>`:
 
      ```xml
      <METADATA>
@@ -456,355 +454,360 @@ Microsoft) in `tests/fixtures/captures/`.
                  <artist><text>Alphaville</text><word>Alphaville</word></artist>
                  <trackNumber>3</trackNumber>
                  <filename>03. Alphaville - Big in Japan.flac</filename>
-                 <trace>2533 2122 1934 ... 1088</trace>   <!-- 30 interi: impronta audio -->
-                 <trackDuration>286000</trackDuration>      <!-- millisecondi -->
+                 <trace>2533 2122 1934 ... 1088</trace>   <!-- 30 integers: audio fingerprint -->
+                 <trackDuration>286000</trackDuration>      <!-- milliseconds -->
                  <bitrate>807728</bitrate>
                  <album>
                      <title><text>Forever Young</text><word>Forever</word><word>Young</word></title>
                      <artist><text>Alphaville</text><word>Alphaville</word></artist>
                  </album>
-                 <trackRequestID>0</trackRequestID>         <!-- indice da 0 della traccia -->
+                 <trackRequestID>0</trackRequestID>         <!-- 0-based track index -->
              </track>
          </MDQ-CD>
      </METADATA>
      ```
 
-     Una sola traccia selezionata → un solo `<track>`; con più file selezionati
-     ci si aspetta più `<track>` con `trackRequestID` 0, 1, ... (da verificare).
-     Righe con CRLF e rientri di 4 spazi. Nessun TOC, nessun GUID utente.
-  3. Il server Microsoft risponde **`410 Gone`** senza corpo (`Connection:
-     close`): è l'"errore 410" che WMP mostra all'utente. Il contatore
-     `AutoMetadataCurrentOtherServerErrorCount` non è salito.
-  - Il nostro server risponderà alla POST con la **pagina risultati** (stessa
-    struttura `mdrcds`/`matches` della pagina CD) e `WriteNamesEx(2, "", mdr, true)`;
-    l'MDR dovrà riportare l'`mdqRequestID` ricevuto e, per ogni traccia, il
-    `trackRequestID` ricevuto.
-- **Contatori dopo le sessioni**: `AutoMetadataCurrentDownloadCount=13`,
-  `NetworkErrorCount=3`. Gli errori di rete vengono dai momenti con il redirect
-  attivo e il registratore fermo: fare sempre `teardown` a fine sessione.
+     A single selected track → a single `<track>`; with several selected files
+     we expect several `<track>` with `trackRequestID` 0, 1, ... (to verify).
+     CRLF lines and 4-space indentation. No TOC, no user GUID.
+  3. The Microsoft server answers **`410 Gone`** with no body (`Connection:
+     close`): this is the "410 error" WMP shows the user. The counter
+     `AutoMetadataCurrentOtherServerErrorCount` did not go up.
+  - Our server will answer the POST with the **results page** (same
+    `mdrcds`/`matches` structure as the CD page) and `WriteNamesEx(2, "", mdr, true)`;
+    the MDR must carry the `mdqRequestID` received and, for each track, the
+    `trackRequestID` received.
+- **Counters after the sessions**: `AutoMetadataCurrentDownloadCount=13`,
+  `NetworkErrorCount=3`. The network errors come from the times when the
+  redirect was active and the recorder stopped: always run `teardown` at the
+  end of a session.
 
-## Decisioni prese (2026-11-06)
+## Decisions taken (2026-11-06)
 
-1. Fase 1: registratore con modalità opzionale `--forward` verso il server
-   Microsoft reale (risoluzione DNS diretta, ignorando il file hosts), da usare
-   solo nelle sessioni di cattura. Default: solo registrazione.
-2. Disc ID di riferimento: quelli di Picard.
-3. Mirror MusicBrainz rimandato: si parte con l'API pubblica + cache
-   (implementata il 2026-11-06). Un accesso SQL remoto al database di
-   MusicBrainz non esiste come servizio pubblico. Se l'API non basta si passa a
-   un mirror (`musicbrainz-docker`, stessa API `ws/2`): basta cambiare
-   `base_url` e `min_interval` in `config.toml`, il codice non cambia.
-4. Repository GitHub **privato**.
+1. Phase 1: recorder with an optional `--forward` mode towards the real
+   Microsoft server (direct DNS resolution, bypassing the hosts file), to be
+   used only in capture sessions. Default: record only.
+2. Reference Disc IDs: Picard's.
+3. MusicBrainz mirror postponed: we start with the public API + cache
+   (implemented on 2026-11-06). Remote SQL access to the MusicBrainz database
+   does not exist as a public service. If the API is not enough we move to a
+   mirror (`musicbrainz-docker`, same `ws/2` API): just change `base_url` and
+   `min_interval` in `config.toml`, the code does not change.
+4. GitHub repository, **private** at first; made **public** on 2026-11-07.
 
-## Piano di lavoro
+## Work plan
 
-Procedere in quest'ordine. Ogni fase si chiude con test verdi.
+Proceed in this order. Every phase ends with green tests.
 
-### Fase 0 — Infrastruttura TLS e redirect
+### Phase 0 — TLS infrastructure and redirect
 
-- Script (PowerShell o Python) che:
-  - crea una CA locale con name constraints su `musicmatch-ssl.xboxlive.com`
-  - emette il certificato del server per quel nome
-  - installa la CA in "Autorità di certificazione radice attendibili" del
-    computer (richiede conferma dell'utente)
-  - aggiunge/rimuove la riga `127.0.0.1 musicmatch-ssl.xboxlive.com` nel file
-    hosts, con backup
-- Comando di disinstallazione che annulla tutto (CA, certificato, riga hosts).
+- A script (PowerShell or Python) that:
+  - creates a local CA with name constraints on `musicmatch-ssl.xboxlive.com`
+  - issues the server certificate for that name
+  - installs the CA in the computer's "Trusted Root Certification
+    Authorities" (requires user confirmation)
+  - adds/removes the line `127.0.0.1 musicmatch-ssl.xboxlive.com` in the hosts
+    file, with a backup
+- An uninstall command that undoes everything (CA, certificate, hosts line).
 
-### Fase 1 — Registratore (prima di scrivere qualsiasi risposta)
+### Phase 1 — Recorder (before writing any response)
 
-- Server HTTPS su 127.0.0.1:443 che **registra tutto** (metodo, percorso, query,
-  header, corpo) in file datati, uno per richiesta.
-- Risponde in modo neutro (preferibilmente 404 veloce, non 5xx).
-- Con `--forward`: inoltra la richiesta al server vero (IP ottenuto con DNS
-  diretto, SNI e verifica del certificato sul nome originale), registra anche la
-  risposta e la restituisce a WMP. I dati di WMP (TOC, impronte) vanno quindi a
-  Microsoft: solo nelle sessioni di cattura.
-- Il corpo delle risposte (anche HTML) viene registrato per intero: base64 dei
-  byte esatti, più il testo decodificato con il charset dichiarato. I form
-  `application/x-www-form-urlencoded` (la POST della pagina ponte) vengono anche
-  scomposti nei campi, così l'MDQ nel campo `mdq` si legge in chiaro.
-- Obiettivo: catturare `GetMDRCD.aspx?...` con un CD reale e `FAI/default.aspx`
-  con "Trova informazioni album" su un file.
-- Le catture diventano **fixture di test** (anonimizzando eventuali GUID utente).
-- Se WMP non si connette nonostante CA e hosts: verificare certificate pinning,
-  criteri di gruppo, impostazioni privacy di WMP ("Recupera informazioni
-  aggiuntive da Internet").
+- HTTPS server on 127.0.0.1:443 that **records everything** (method, path, query,
+  headers, body) in dated files, one per request.
+- Answers neutrally (preferably a fast 404, not 5xx).
+- With `--forward`: forwards the request to the real server (IP obtained with
+  direct DNS, SNI and certificate verification on the original name), also
+  records the response and returns it to WMP. WMP's data (TOC, fingerprints)
+  therefore goes to Microsoft: capture sessions only.
+- Response bodies (HTML included) are recorded in full: base64 of the exact
+  bytes, plus the text decoded with the declared charset.
+  `application/x-www-form-urlencoded` forms (the bridge page POST) are also
+  split into fields, so the MDQ in the `mdq` field is readable in clear text.
+- Goal: capture `GetMDRCD.aspx?...` with a real CD and `FAI/default.aspx`
+  with "Find album info" on a file.
+- Captures become **test fixtures** (anonymising any user GUIDs).
+- If WMP does not connect despite CA and hosts: check certificate pinning,
+  group policies, WMP privacy settings ("Retrieve additional information from
+  the Internet").
 
-### Fase 2 — Dal TOC di WMP al Disc ID di MusicBrainz
+### Phase 2 — From the WMP TOC to the MusicBrainz Disc ID
 
-- Decodificare il formato `toc` catturato (ipotesi forte dal test zero, vedi sopra).
-- Se il Disc ID non è in MusicBrainz: ripiego su `/ws/2/discid/-?toc=...`
-  (ricerca per somiglianza sul TOC).
-- Calcolare il Disc ID MusicBrainz (algoritmo libdiscid: SHA-1 su prima traccia,
-  ultima traccia, lead-out e 99 offset, Base64 con alfabeto `._-`).
-- Test con CD reali dell'utente di cui si conosce già il Disc ID (Picard).
+- Decode the captured `toc` format (strong hypothesis from test zero, see above).
+- If the Disc ID is not in MusicBrainz: fall back to `/ws/2/discid/-?toc=...`
+  (similarity search on the TOC).
+- Compute the MusicBrainz Disc ID (libdiscid algorithm: SHA-1 over first track,
+  last track, lead-out and 99 offsets, Base64 with the `._-` alphabet).
+- Test with the user's real CDs whose Disc ID is already known (Picard).
 
-**Stato (2026-11-06): fatta.** `src/wmprevival/toc.py` (TOC di WMP ↔ Disc ID,
-parametro `toc` di MusicBrainz, durate delle tracce), verificata sui tre CD reali.
+**Status (2026-11-06): done.** `src/wmprevival/toc.py` (WMP TOC ↔ Disc ID,
+MusicBrainz `toc` parameter, track durations), verified on the three real CDs.
 
-### Fase 3 — Risposta per i CD
+### Phase 3 — Response for CDs
 
-**Stato (2026-11-06): ricerca fatta, risposta a WMP da fare.**
+**Status (2026-11-06): lookup done, response to WMP to do.**
 
-- `config.py`: `%LOCALAPPDATA%\WMPRevival\config.toml`, sezione `[musicbrainz]`
-  con `contact` (obbligatorio per l'API pubblica: l'alias pubblico
-  `github@maksimtech.com`, mai l'indirizzo personale), `base_url`, `min_interval`
-  (≥ 1 s per l'API pubblica, imposto dal codice).
-- `musicbrainz.py`: client aiohttp, una richiesta alla volta distanziate di
-  `min_interval`, ritentativi su 503/429 con `Retry-After`, cache SQLite in
-  `%LOCALAPPDATA%\WMPRevival\cache` (trovati 30 giorni, 404 un giorno).
-- `matching.py`: Disc ID esatto prima; poi ricerca per TOC con `cdstubs=no`; ogni
-  medium con lo stesso numero di tracce viene confrontato traccia per traccia
-  sulle durate; accettato se lo scarto massimo è ≤ 3 s (o se il Disc ID è
-  collegato a quel medium). Ordinamento deterministico.
-- `wmprevival mb-lookup <TOC>` mostra candidati e scelta (2 richieste per CD).
-- Risultati reali: *Joy* → Giovanni Allevi, *Joy* (2006, IT), due edizioni
-  accettate, scarto costante di ~2 s per traccia (le durate in MusicBrainz non
-  sembrano includere la pausa tra le tracce); CD da 14 tracce → dei 12
-  candidati restano accettati solo pochi, in cima *Das Spieluhren-Orchester -
-  Gute Nacht* (DE, scarto medio 0,3 s), **da confermare con l'utente**.
-- Fixture delle risposte di MusicBrainz (CC0) in `tests/fixtures/musicbrainz/`,
-  registrate con `tools/record_mb_fixture.py`.
-- **Risposte a WMP implementate (2026-11-06), da provare su WMP vero** con
-  `scripts\servi.cmd` (`wmprevival serve`, opzione `--no-auto`):
-  - `mdr.py`: MDR-CD 4.0 con tutti gli elementi del modello di `wmp.dll`;
-    `WMCollectionID` = `{MBID release}`, `WMCollectionGroupID` = `{MBID release group}`,
-    `WMContentID` = `{MBID recording}` (GUID maiuscoli tra graffe), `trackRequestID`
-    ultimo figlio di `<track>`, `releaseDate` come in MusicBrainz, genere più votato
-    del release group, etichetta, compositori dalle opere (`performance` → work →
-    `composer`, in mancanza `writer`), direttori (`conductor`). XML in ASCII con
-    `&#N;` (equivalente di `EncodeOMI`).
-  - `GetMDRCD`: MDR della prima scelta, altrimenti la risposta "nessun dato" con la
-    forma di quella Microsoft (`Backoff`, `mdqRequestID`, `ResponseCode`).
-  - FAI su CD: fino a 3 edizioni accettate dalla scelta per durate, tutte le tracce.
-  - FAI su file: nostra pagina ponte (`requestid` validato come GUID), poi ricerca
-    `recording:"…" AND artist:"…" AND release:"…"` (senza album se non trova
-    niente), ordinamento: titolo uguale e durata entro 5 s obbligatori, poi album
-    uguale, numero di traccia, ufficiale, tipo Album, **Digital Media prima**
-    (l'utente ha l'edizione digitale `10f85058` di *Forever Young*), data, MBID;
-    fino a 5 edizioni; l'MDR contiene solo le tracce richieste con il loro
+- `config.py`: `%LOCALAPPDATA%\WMPRevival\config.toml`, section `[musicbrainz]`
+  with `contact` (mandatory for the public API: the public alias
+  `github@maksimtech.com`, never the personal address), `base_url`, `min_interval`
+  (≥ 1 s for the public API, enforced by the code).
+- `musicbrainz.py`: aiohttp client, one request at a time spaced by
+  `min_interval`, retries on 503/429 with `Retry-After`, SQLite cache in
+  `%LOCALAPPDATA%\WMPRevival\cache` (hits 30 days, 404 one day).
+- `matching.py`: exact Disc ID first; then TOC search with `cdstubs=no`; every
+  medium with the same number of tracks is compared track by track on
+  durations; accepted if the maximum gap is ≤ 3 s (or if the Disc ID is
+  attached to that medium). Deterministic ordering.
+- `wmprevival mb-lookup <TOC>` shows candidates and choice (2 requests per CD).
+- Real results: *Joy* → Giovanni Allevi, *Joy* (2006, IT), two editions
+  accepted, constant gap of ~2 s per track (MusicBrainz durations do not seem
+  to include the pause between tracks); 14-track CD → of the 12 candidates only
+  a few remain accepted, with *Das Spieluhren-Orchester - Gute Nacht* on top
+  (DE, mean gap 0.3 s), **to be confirmed with the user**.
+- MusicBrainz response fixtures (CC0) in `tests/fixtures/musicbrainz/`,
+  recorded with `tools/record_mb_fixture.py`.
+- **Responses to WMP implemented (2026-11-06), to be tried on real WMP** with
+  `scripts\serve.cmd` (`wmprevival serve`, option `--no-auto`):
+  - `mdr.py`: MDR-CD 4.0 with every element of the `wmp.dll` template;
+    `WMCollectionID` = `{release MBID}`, `WMCollectionGroupID` = `{release group MBID}`,
+    `WMContentID` = `{recording MBID}` (upper-case GUIDs in braces), `trackRequestID`
+    last child of `<track>`, `releaseDate` as in MusicBrainz, top-voted genre
+    of the release group, label, composers from the works (`performance` → work →
+    `composer`, falling back to `writer`), conductors (`conductor`). XML in ASCII
+    with `&#N;` (equivalent of `EncodeOMI`).
+  - `GetMDRCD`: MDR of the first choice, otherwise the "no data" response shaped
+    like Microsoft's (`Backoff`, `mdqRequestID`, `ResponseCode`).
+  - FAI on a CD: up to 3 editions accepted by the duration-based choice, all tracks.
+  - FAI on files: our own bridge page (`requestid` validated as a GUID), then the
+    search `recording:"…" AND artist:"…" AND release:"…"` (without the album if
+    it finds nothing), ordering: same title and duration within 5 s mandatory,
+    then same album, track number, official, Album type, **Digital Media first**
+    (the user has the digital edition `10f85058` of *Forever Young*), date, MBID;
+    up to 5 editions; the MDR contains only the requested tracks with their
     `trackRequestID`.
-  - Pagine e JS nostri (`src/wmprevival/web/`), ES3; se `WriteNamesEx` solleva
-    un errore la pagina lo mostra e lo manda a `/FAI/log` (finisce nelle catture
-    e nella console di `serve`).
-  - Prova locale con MusicBrainz vero (curl sulla porta 8443): `GetMDRCD` di *Joy*
-    1,3 s, FAI del file 8,3 s la prima volta (1 ricerca + 5 release), poi cache.
-- Ipotesi da verificare su WMP: formato dei GUID, posizione di `trackRequestID`,
-  `releaseDate` solo anno, `mdqRequestID` a zero per i CD, `WriteNamesEx(2, "", …)`
-  anche per il CD, tempi di attesa accettati da WMP.
+  - Our own pages and JS (`src/wmprevival/web/`), ES3; if `WriteNamesEx` raises
+    an error the page shows it and sends it to `/FAI/log` (it ends up in the
+    captures and in the `serve` console).
+  - Local test with real MusicBrainz (curl on port 8443): `GetMDRCD` for *Joy*
+    1.3 s, FAI on the file 8.3 s the first time (1 search + 5 releases), then cache.
+- Hypotheses to verify on WMP: GUID format, position of `trackRequestID`,
+  year-only `releaseDate`, zero `mdqRequestID` for CDs, `WriteNamesEx(2, "", …)`
+  for the CD too, waiting times WMP accepts.
 
-### Prima prova con il nostro server (2026-11-06, `serve` senza `--no-auto`)
+### First run with our server (2026-11-06, `serve` without `--no-auto`)
 
-- `GetMDRCD` automatico per *Joy* → nostro MDR. Poi "Trova informazioni album"
-  sul CD: la pagina ha ricevuto **`wmid=12C5606B-1B33-4AB3-BEC1-F556972B5F89`**,
-  cioè il nostro `WMCollectionID` senza graffe: **WMP ha accettato e salvato
-  l'MDR automatico**. Scelta l'edizione 1 → `WriteNamesEx` **senza errori**
-  (`/FAI/log?kind=WriteNamesEx-ok`). Formato dei GUID tra graffe e
-  `mdqRequestID` a zero per i CD: accettati.
-- Il CD da 14 tracce ha ricevuto in automatico *Gute Nacht* (Das
-  Spieluhren-Orchester): **da confermare con l'utente**.
-- Scoperta: **ricerca automatica dei file della libreria** =
-  `POST /cdinfo/GetMDRCD.aspx?locale=…&userlocale=410&requestID=<GUID>` (qui
-  `requestID` con le maiuscole), `Content-Type: text/xml`, corpo MDQ-CD con
-  **`<album>` a livello di `MDQ-CD`** (non dentro le tracce) e più `<track>`
-  dello stesso album con `trackRequestID` non in ordine (0, 3, 1, 2). Fixture
-  `tests/fixtures/captures/auto_file_post_mdq.json`. Ora gestita: MDR con le sole
-  tracce abbinate e i loro `trackRequestID`, solo se anche l'album corrisponde.
-- I titoli dei negozi portano marcatori (`[Explicit]`, `(Clean)`) assenti in
-  MusicBrainz: tolti per ricerca e confronti (`[Edit]` no: è un'altra versione).
-  L'etichetta speciale `[no label]` di MusicBrainz non si scrive.
-- Su Windows il ProactorEventLoop stampava un traceback innocuo quando WMP
-  chiude la connessione per primo (`_call_connection_lost` → `shutdown`):
-  zittito per i soli reset di connessione (`recorder.quiet_connection_resets`).
-- Da guardare in WMP: cosa mostra dopo `WriteNamesEx` (titoli, anno, genere,
-  rinomina dei file con `fRenameRegroupFiles = true`), e se i file di
-  *Mine All Day* vengono aggiornati dalla ricerca automatica.
+- Automatic `GetMDRCD` for *Joy* → our MDR. Then "Find album info"
+  on the CD: the page received **`wmid=12C5606B-1B33-4AB3-BEC1-F556972B5F89`**,
+  i.e. our `WMCollectionID` without braces: **WMP accepted and stored the
+  automatic MDR**. Picked edition 1 → `WriteNamesEx` **without errors**
+  (`/FAI/log?kind=WriteNamesEx-ok`). GUIDs in braces and a zero
+  `mdqRequestID` for CDs: accepted.
+- The 14-track CD automatically received *Gute Nacht* (Das
+  Spieluhren-Orchester): **to be confirmed with the user**.
+- Finding: **automatic lookup of library files** =
+  `POST /cdinfo/GetMDRCD.aspx?locale=…&userlocale=410&requestID=<GUID>` (here
+  `requestID` with capitals), `Content-Type: text/xml`, MDQ-CD body with
+  **`<album>` at the `MDQ-CD` level** (not inside the tracks) and several
+  `<track>` from the same album with `trackRequestID` out of order (0, 3, 1, 2).
+  Fixture `tests/fixtures/captures/auto_file_post_mdq.json`. Now handled: MDR
+  with only the matched tracks and their `trackRequestID`, only if the album
+  matches too.
+- Store titles carry markers (`[Explicit]`, `(Clean)`) absent from
+  MusicBrainz: stripped for searching and comparing (`[Edit]` is not: it is a
+  different version). The special MusicBrainz label `[no label]` is not written.
+- On Windows the ProactorEventLoop printed a harmless traceback when WMP
+  closes the connection first (`_call_connection_lost` → `shutdown`):
+  silenced for connection resets only (`recorder.quiet_connection_resets`).
+- To check in WMP: what it shows after `WriteNamesEx` (titles, year, genre,
+  file renaming with `fRenameRegroupFiles = true`), and whether the
+  *Mine All Day* files get updated by the automatic lookup.
 
-### WMP conserva un solo MDR per `WMCollectionID` (bug del 2026-11-06)
+### WMP keeps a single MDR per `WMCollectionID` (bug of 2026-11-06)
 
-Segnalazione dell'utente: nell'album *I'm Not Dead* di P!nk le tracce 1, 2 e 3
-sono diventate tutte "Long Way to Happy" (traccia 3).
+User report: in P!nk's album *I'm Not Dead* tracks 1, 2 and 3 all became
+"Long Way to Happy" (track 3).
 
-- Sequenza dalle catture: FAI su 12 file → MDR della release `2EBD0F3C` con
-  `trackRequestID 0` = "Long Way to Happy"; poi due ricerche automatiche (*Who
-  Knew*, *Stupid Girls*), ognuna con il suo file a `trackRequestID 0`: **risposte
-  corrette ma con lo stesso `WMCollectionID`**.
-- Nel database della libreria (copia) c'è **un solo** documento MDR per
-  `2EBD0F3C`: intestazione con l'`mdqRequestID` dell'ultima ricerca automatica,
-  ma **tracce del documento della FAI**. WMP aggiorna l'intestazione, tiene le
-  tracce vecchie e applica i `trackRequestID` nuovi, che però contano da 0 in
-  ogni richiesta. I documenti stanno in UTF-16, riformattati, nella
-  `CurrentDatabase_*.wmdb` (anche spezzati tra pagine).
-- La pagina FAI invece **sostituisce** il documento (i *Pink Floyd* rifatti più
-  volte sono rimasti giusti): il riuso riguarda la ricerca automatica.
-- **Regola**: per le risposte sui file `WMCollectionID` è un UUID v5 di
-  (release, `mdqRequestID`), diverso per ogni richiesta
-  (`service.file_collection_id`); la release resta in `dataProviderParams`
-  (`musicbrainz-release=<MBID>`). Per i CD resta l'MBID della release, perché lì
-  `trackRequestID` è sempre l'indice nel TOC e quindi stabile.
-- Effetti da verificare: raggruppamento degli album in libreria (WMP sembra
-  raggruppare per titolo e artista dell'album) e copertine (`AlbumArt_{ID}_*.jpg`
-  sono per `WMCollectionID`: fase 6).
-- Riparazione dei tag già rovinati: la ricerca prova fino a 3 file e, per
-  ciascuno, il titolo del tag e quello ricavato dal **nome del file**
-  (`01. Stupid Girls.flac`), sempre con lo scarto di durata ≤ 5 s; lo stesso
-  vale per l'abbinamento, che non dà mai la stessa traccia a due file. Al
-  massimo 4 ricerche per richiesta. Fixture `fai_file_pink_rovinati.json`.
+- Sequence from the captures: FAI on 12 files → MDR of release `2EBD0F3C` with
+  `trackRequestID 0` = "Long Way to Happy"; then two automatic lookups (*Who
+  Knew*, *Stupid Girls*), each with its file at `trackRequestID 0`: **correct
+  responses but with the same `WMCollectionID`**.
+- The library database (copy) holds **a single** MDR document for
+  `2EBD0F3C`: header with the `mdqRequestID` of the last automatic lookup,
+  but **tracks from the FAI document**. WMP updates the header, keeps the old
+  tracks and applies the new `trackRequestID`s, which however count from 0 in
+  every request. The documents are stored in UTF-16, reformatted, in
+  `CurrentDatabase_*.wmdb` (even split across pages).
+- The FAI page instead **replaces** the document (the *Pink Floyd* albums
+  redone several times stayed correct): the reuse concerns the automatic lookup.
+- **Rule**: for file responses `WMCollectionID` is a UUID v5 of
+  (release, `mdqRequestID`), different for every request
+  (`service.file_collection_id`); the release stays in `dataProviderParams`
+  (`musicbrainz-release=<MBID>`). For CDs it stays the release MBID, because
+  there `trackRequestID` is always the TOC index and therefore stable.
+- Effects to verify: grouping of albums in the library (WMP seems to group by
+  album title and artist) and cover art (`AlbumArt_{ID}_*.jpg` are per
+  `WMCollectionID`: phase 6).
+- Repairing already damaged tags: the lookup tries up to 3 files and, for
+  each, the tag title and the one derived from the **file name**
+  (`01. Stupid Girls.flac`), always with the duration gap ≤ 5 s; the same goes
+  for matching, which never gives the same track to two files. At most 4
+  searches per request. Fixture `fai_file_pink_damaged.json`.
 
-### Artisti con valori multipli (*Arrival*, ABBA, 2026-11-06)
+### Multi-valued artists (*Arrival*, ABBA, 2026-11-06)
 
-- WMP unisce i valori multipli del tag artista con `, `: i FLAC di *Arrival*
-  arrivavano come `ABBA, Abba`, e `artist:"ABBA, Abba"` su MusicBrainz non dà
-  risultati.
-- `service.artist_candidates`: artista della traccia, sua forma compattata (solo
-  se tutte le parti separate da `,` `;` `/` sono lo stesso nome: *Earth, Wind &
-  Fire* resta intatto), artista dell'album; mai "Various Artists". Le ricerche
-  provano le combinazioni artista × titolo, al massimo 5 per richiesta.
-- Edizione scelta: `f121c662` (2012-03-30), **confermata dall'utente**.
-- **Verificato su WMP dall'utente (2026-11-06)**: dopo il riavvio di `serve`,
-  *Arrival* viene trovato e applicato correttamente.
+- WMP joins the multiple values of the artist tag with `, `: the *Arrival*
+  FLACs arrived as `ABBA, Abba`, and `artist:"ABBA, Abba"` on MusicBrainz gives
+  no results.
+- `service.artist_candidates`: track artist, its collapsed form (only if all
+  the parts separated by `,` `;` `/` are the same name: *Earth, Wind & Fire*
+  stays intact), album artist; never "Various Artists". The searches try the
+  artist × title combinations, at most 5 per request.
+- Edition chosen: `f121c662` (2012-03-30), **confirmed by the user**.
+- **Verified on WMP by the user (2026-11-06)**: after restarting `serve`,
+  *Arrival* is found and applied correctly.
 
-### `WriteNamesEx(2, "")` dalla pagina del CD colpisce l'ultima richiesta MDQ (2026-11-06)
+### `WriteNamesEx(2, "")` from the CD page hits the last MDQ request (2026-11-06)
 
-- Sequenza: FAI sul file di *Arrival* (scelta applicata), poi FAI sul CD *Joy*
-  nel lettore (`cd=<toc>&wmid=12C5606B…`) con la pagina che chiamava, come
-  quella Microsoft, `WriteNamesEx(2, "", mdr, true)`. WMP ha applicato l'MDR di
-  *Joy* alla **richiesta MDQ precedente**: il file di *Arrival* è diventato
-  *Panic* e, per `fRenameRegroupFiles = true`, è stato **rinominato e spostato**
-  in `Music\Giovanni Allevi\Joy\01 Panic.flac` (tag del FLAC intatti: WMP non
-  scrive i tag dei FLAC). Nella stessa cartella WMP ha creato `Folder.jpg`,
-  `AlbumArtSmall.jpg` e `AlbumArt_{WMCollectionID}_Large/Small.jpg`.
-- Con `true` WMP ha anche **riorganizzato tutta la cartella Musica** in
-  `Artista\Album\NN Titolo.flac` per gli album toccati (16:26-16:28).
-- **Regole**: la pagina del CD usa `WriteNamesEx(0 = CD_BY_TOC, "<TOC WMP>", …)`;
-  quella dei file `(2, "", …)` (la richiesta corrente è quella della pagina);
-  `fRenameRegroupFiles` è **false** salvo `serve --rename-files`.
-- Da verificare: che `CD_BY_TOC` con il TOC nel formato di WMP sia accettato
-  (la pagina riporta l'eventuale errore su `/FAI/log`).
-- Ripristino fatto con l'utente: FLAC spostato in
-  `Music\ABBA\Arrival\10. ABBA, Abba - Arrival.flac` (SHA-256 verificato),
-  tolte le immagini generate da WMP e le cartelle vuote; il resto della
-  riorganizzazione lasciato com'è per scelta dell'utente.
-- **WMP non rilegge i tag di un file spostato**: la libreria tiene "Panic" /
-  Giovanni Allevi / Joy, con il nome file nuovo. Il server ora riconosce il
-  **tag sospetto** (`service.tag_is_suspect`: il nome del file `NN. Artista -
-  Titolo` indica un altro artista e un altro titolo) e cerca prima dal nome del
-  file, senza l'album del tag; la ricerca automatica in quel caso **non scrive
-  niente** (decide l'utente dalla pagina). Fixture `fai_file_abba_come_panic.json`.
-- **Il file è tornato in `Giovanni Allevi\Joy\01 Panic.flac` da solo** (16:38,
-  con le immagini ricreate): in `HKCU\…\MediaPlayer\Preferences` risultano
-  `AutoRename = 1` e `AutoOrganize = 1` (Opzioni > Catalogo multimediale:
-  "Rinomina i file musicali…" e "Ridisponi la musica…"), assenti all'inizio della
-  sessione insieme a `FlushMetadataToFiles = 1` e `AutoMetadataUpdate = 0`. Con
-  queste opzioni WMP rinomina e sposta i file secondo la **sua libreria**,
-  indipendentemente da `fRenameRegroupFiles`. `wmprevival status` ora le segnala.
-  Per rimediare a un dato sbagliato in libreria: togliere le due opzioni,
-  eliminare la voce **solo dalla raccolta**, rimettere il file al suo posto con
-  WMP chiuso, riaprire WMP (rilegge i tag del file).
-- Pagine e script si caricano una volta all'avvio (`StrictUndefined`, niente
-  ricarica): un server avviato prima di un aggiornamento serviva la pagina nuova
-  con il codice vecchio (`Object of type Undefined is not JSON serializable`).
+- Sequence: FAI on the *Arrival* file (choice applied), then FAI on the *Joy*
+  CD in the drive (`cd=<toc>&wmid=12C5606B…`) with the page calling, like the
+  Microsoft one, `WriteNamesEx(2, "", mdr, true)`. WMP applied the *Joy* MDR to
+  the **previous MDQ request**: the *Arrival* file became *Panic* and, because
+  of `fRenameRegroupFiles = true`, was **renamed and moved** to
+  `Music\Giovanni Allevi\Joy\01 Panic.flac` (FLAC tags untouched: WMP does not
+  write FLAC tags). In the same folder WMP created `Folder.jpg`,
+  `AlbumArtSmall.jpg` and `AlbumArt_{WMCollectionID}_Large/Small.jpg`.
+- With `true` WMP also **reorganised the whole Music folder** into
+  `Artist\Album\NN Title.flac` for the albums involved (16:26-16:28).
+- **Rules**: the CD page uses `WriteNamesEx(0 = CD_BY_TOC, "<WMP TOC>", …)`;
+  the file page `(2, "", …)` (the current request is the page's own);
+  `fRenameRegroupFiles` is **false** unless `serve --rename-files`.
+- To verify: that `CD_BY_TOC` with the TOC in WMP's format is accepted
+  (the page reports any error to `/FAI/log`).
+- Restore done with the user: FLAC moved to
+  `Music\ABBA\Arrival\10. ABBA, Abba - Arrival.flac` (SHA-256 verified),
+  removed the images generated by WMP and the empty folders; the rest of the
+  reorganisation left as is, by the user's choice.
+- **WMP does not re-read the tags of a moved file**: the library keeps "Panic" /
+  Giovanni Allevi / Joy, with the new file name. The server now recognises the
+  **suspect tag** (`service.tag_is_suspect`: the file name `NN. Artist -
+  Title` points to another artist and another title) and searches from the file
+  name first, without the tag's album; in that case the automatic lookup
+  **writes nothing** (the user decides from the page). Fixture
+  `fai_file_abba_as_panic.json`.
+- **The file went back to `Giovanni Allevi\Joy\01 Panic.flac` by itself** (16:38,
+  with the images recreated): `HKCU\…\MediaPlayer\Preferences` shows
+  `AutoRename = 1` and `AutoOrganize = 1` (Options > Library:
+  "Rename music files using rip music settings" and "Rearrange music in rip
+  music folder, using rip music settings"), absent at the start of the session
+  along with `FlushMetadataToFiles = 1` and `AutoMetadataUpdate = 0`. With
+  these options WMP renames and moves files according to **its library**,
+  regardless of `fRenameRegroupFiles`. `wmprevival status` now reports them.
+  To fix wrong data in the library: turn off the two options, delete the entry
+  **from the library only**, put the file back in its place with WMP closed,
+  reopen WMP (it re-reads the file tags).
+- Pages and scripts are loaded once at startup (`StrictUndefined`, no
+  reloading): a server started before an update served the new page with the
+  old code (`Object of type Undefined is not JSON serializable`).
 
 - Lookup `/ws/2/discid/<id>?inc=recordings+artist-credits+labels+release-groups+work-rels+artist-rels`
-  sull'**API pubblica** con cache (mirror rimandato, indirizzo configurabile).
-- Se più release corrispondono: scelta deterministica e documentata (paese,
-  data, formato CD).
-- Mappatura verso MDR-CD (tabella in `docs/mapping.md`):
+  on the **public API** with cache (mirror postponed, configurable address).
+- If several releases match: deterministic, documented choice (country,
+  date, CD format).
+- Mapping to MDR-CD (table in `docs/mapping.md`):
   `albumTitle`←release title, `albumArtist`←artist credit, `releaseDate`←date,
-  `label`←label, `genre`←genere/tag, `trackTitle`, `trackPerformer`,
-  `trackComposer` e `trackConductor` dalle relazioni, `period` (da definire),
+  `label`←label, `genre`←genre/tag, `trackTitle`, `trackPerformer`,
+  `trackComposer` and `trackConductor` from the relationships, `period` (to define),
   `WMContentID`←recording MBID, `WMCollectionID`←release MBID,
   `dataProvider`="MusicBrainz".
-- Test golden: richiesta catturata → risposta attesa.
+- Golden tests: captured request → expected response.
 
-### Fase 4 — Risposta per i file (FAI)
+### Phase 4 — Response for files (FAI)
 
-- **Il server serve HTML, non solo XML** (vedi "FAI è un flusso HTML"):
-  - `GET /FAI/default.aspx?<param>=<id>` → **pagina ponte**: chiama
-    `window.external.GetMDQByRequestID(id)`, mette l'MDQ nel campo nascosto `mdq`
-    e fa la POST sulla stessa URL;
-  - `POST /FAI/default.aspx` (form con `mdq`) → **pagina dei risultati**:
-    parsing MDQ-CD con `defusedxml`, ricerca su MusicBrainz, risposta a WMP via
-    `window.external` (presumibilmente `WriteNamesEx(2, ...)`), eventuale scelta
-    tra più candidati, `ReturnToMainTask()`.
-- Pagine generate con Jinja2 e autoescape (regola 8), con test anti-XSS.
-- Pagine adatte al motore HTML di WMP (MSHTML, **modalità documento IE7**,
-  verificato): JavaScript ES3, niente `JSON`, `fetch`, `querySelector`,
-  `addEventListener`, niente librerie esterne. Servire anche `/FAI/style.css` e
-  `/FAI/suggestions.js` nostri.
-- La stessa pagina risultati serve anche per "Trova informazioni album" su un
-  CD (`?cd=<toc>`), con `WriteNamesEx(2, "", mdr, true)`: va fatta insieme alla
-  fase 3.
-- Ricerca su MusicBrainz per artista/album/titolo con corrispondenza per durata
-  e numero traccia, sull'API pubblica (gli indici del mirror servirebbero solo
-  con il mirror).
+- **The server serves HTML, not just XML** (see "FAI is an HTML flow"):
+  - `GET /FAI/default.aspx?<param>=<id>` → **bridge page**: calls
+    `window.external.GetMDQByRequestID(id)`, puts the MDQ in the hidden field
+    `mdq` and POSTs to the same URL;
+  - `POST /FAI/default.aspx` (form with `mdq`) → **results page**:
+    MDQ-CD parsing with `defusedxml`, MusicBrainz search, response to WMP via
+    `window.external` (presumably `WriteNamesEx(2, ...)`), optional choice
+    among several candidates, `ReturnToMainTask()`.
+- Pages generated with Jinja2 and autoescape (rule 8), with anti-XSS tests.
+- Pages suited to WMP's HTML engine (MSHTML, **IE7 document mode**,
+  verified): ES3 JavaScript, no `JSON`, `fetch`, `querySelector`,
+  `addEventListener`, no external libraries. Also serve our own
+  `/FAI/style.css` and `/FAI/suggestions.js`.
+- The same results page also serves "Find album info" on a CD
+  (`?cd=<toc>`), with `WriteNamesEx(2, "", mdr, true)`: to be done together with
+  phase 3.
+- MusicBrainz search by artist/album/title with matching on duration and
+  track number, on the public API (the mirror's indexes would only matter
+  with the mirror).
 
-### Fase 5 — Ripiego Discogs
+### Phase 5 — Discogs fallback
 
-- Se MusicBrainz non trova niente: ricerca Discogs, stessa mappatura.
-- Coda con rispetto del limite di richieste e cache.
+- If MusicBrainz finds nothing: Discogs search, same mapping.
+- Queue respecting the request limit, plus cache.
 
-### Fase 6 — Copertine
+### Phase 6 — Cover art
 
-- Scoprire dalle catture come WMP usa `largeCoverParams` / `smallCoverParams`
-  (URL completo? parametri accodati a un indirizzo fisso? altro host?).
-- Fonte: Cover Art Archive `.../release/<MBID>/front-500`; Discogs ridimensionato
-  con lato lungo **massimo 500 px**, mai ingrandito.
-- Solo la frontale va a WMP. Gli altri tipi (back, spine, booklet, medium, tray)
-  sono fuori dal perimetro del server.
+- Find out from captures how WMP uses `largeCoverParams` / `smallCoverParams`
+  (full URL? parameters appended to a fixed address? another host?).
+- Source: Cover Art Archive `.../release/<MBID>/front-500`; Discogs resized
+  to a long side of **at most 500 px**, never upscaled.
+- Only the front cover goes to WMP. The other types (back, spine, booklet,
+  medium, tray) are outside the server's scope.
 
-### Fase 7 — Confezionamento
+### Phase 7 — Packaging
 
-- Avvio come servizio Windows (o attività pianificata), file di configurazione,
-  log a rotazione, comando `status` che mostra CA, hosts, porta, ultimo esito.
+- Run as a Windows service (or scheduled task), config file, rotating logs,
+  a `status` command showing CA, hosts, port, last outcome.
 
-### Componente separato (facoltativo): watcher per Picard
+### Separate component (optional): watcher for Picard
 
-- Sorveglia la cartella musica; per i FLAC nuovi lancia Picard con i comandi
+- Watches the music folder; for new FLACs it launches Picard with the commands
   `-e LOAD ... -e CLUSTER -e LOOKUP -e SAVE_MATCHED -e QUIT` (Picard ≥ 2.9),
-  così WMP trova i file già taggati.
+  so WMP finds files already tagged.
 
-## Mirror MusicBrainz
+## MusicBrainz mirror
 
-- Progetto ufficiale `metabrainz/musicbrainz-docker`.
-- Senza indici di ricerca: ~2 thread, 4 GB RAM, ~100 GB. Basta per i CD (Disc ID).
-- Con indici: ~16 thread, 16 GB RAM, ~350 GB. Serve per FAI e per Picard.
-- Replica automatica con token MetaBrainz (gratuito per uso personale); gli
-  indici di ricerca vanno ricostruiti periodicamente.
-- Destinazione prevista: prima WSL2 sul PC, poi una macchina Debian dedicata.
+- Official project `metabrainz/musicbrainz-docker`.
+- Without search indexes: ~2 threads, 4 GB RAM, ~100 GB. Enough for CDs (Disc ID).
+- With indexes: ~16 threads, 16 GB RAM, ~350 GB. Needed for FAI and for Picard.
+- Automatic replication with a MetaBrainz token (free for personal use); the
+  search indexes must be rebuilt periodically.
+- Planned target: first WSL2 on the PC, then a dedicated Debian machine.
 
-## Convenzioni del codice
+## Code conventions
 
-- Python ≥ 3.13 (sviluppo su 3.13, uv). aiohttp per il server e per il client di
-  `--forward` (resolver su misura); httpx ammesso per le API esterne.
-- Pacchetto `wmprevival` in `src/`, comando `wmprevival`. Dati locali (PKI,
-  catture, stato, backup di hosts) in `%LOCALAPPDATA%\WMPRevival`, mai nel repo.
-- Identificatori in inglese; commenti, documenti, messaggi della CLI, changelog
-  e commit in italiano.
-- XML costruito con una libreria (lxml o ElementTree), **mai concatenando
-  stringhe**: escaping corretto di titoli con `&`, `<`, apostrofi tipografici.
-- Parsing dell'XML in ingresso con protezioni contro entity expansion
+- Python ≥ 3.13 (development on 3.13, uv). aiohttp for the server and for the
+  `--forward` client (custom resolver); httpx allowed for external APIs.
+- Package `wmprevival` in `src/`, command `wmprevival`. Local data (PKI,
+  captures, state, hosts backups) in `%LOCALAPPDATA%\WMPRevival`, never in the repo.
+- Everything in the repo is in English: identifiers, comments, docs, CLI and
+  page messages, changelog and commit messages.
+- The maintainer prefers to be addressed in Italian in conversation.
+- XML built with a library (lxml or ElementTree), **never by concatenating
+  strings**: correct escaping of titles with `&`, `<`, typographic apostrophes.
+- Incoming XML parsed with protection against entity expansion
   (`defusedxml`).
-- Test con pytest su fixture reali catturate; ruff; mypy; CI su GitHub Actions.
-- CHANGELOG e versionamento CalVer, come gli altri progetti dell'autore.
-- Licenza MIT.
+- Tests with pytest on real captured fixtures; ruff; mypy; CI on GitHub Actions.
+- CHANGELOG and CalVer versioning, like the author's other projects.
+- MIT licence.
 
-## Domande aperte (da risolvere nell'ordine)
+## Open questions (to resolve in order)
 
-Chiuse dalla prima cattura: formato della query CD (1), metodo per il CD (2,
-GET senza corpo), pinning (5, assente), risposta attuale del server (7), metodo
-`window.external` della pagina risultati (9, `WriteNamesEx(2, "", mdr, true)`).
+Closed by the first capture: CD query format (1), method for the CD (2,
+GET without body), pinning (5, none), current server response (7), the
+results page's `window.external` method (9, `WriteNamesEx(2, "", mdr, true)`).
 
-1. Com'è fatta una risposta `GetMDRCD` **con** dati che WMP accetta: radice
-   `METADATA` con dentro `MDR-CD`? Quale `mdqRequestID`, dato che la richiesta
-   GET non ne porta uno? Da provare con il nostro server, partendo dal modello
-   MDR-CD 4.0 e dai messaggi d'errore di `wmp.dll`.
-2. Dove va `trackRequestID` nell'MDR (nella richiesta MDQ è l'indice da 0 della
-   traccia, dentro `<track>`): presumibilmente dentro ogni `<track>` dell'MDR,
-   con lo stesso valore.
-3. Come vengono risolte le copertine (`largeCoverParams`/`smallCoverParams`).
-4. Unità di `<Backoff><Time>` e se WMP lo rispetta.
-5. FAI con **più file** selezionati: un MDQ con più `<track>`?
-6. Come forzare il nuovo tentativo sugli album già marcati "non trovato"
-   (all'avvio WMP li richiede da solo: forse basta riaprirlo).
+1. What does a `GetMDRCD` response **with** data that WMP accepts look like:
+   a `METADATA` root with `MDR-CD` inside? Which `mdqRequestID`, given that the
+   GET request does not carry one? To try with our server, starting from the
+   MDR-CD 4.0 template and the `wmp.dll` error messages.
+2. Where `trackRequestID` goes in the MDR (in the MDQ request it is the 0-based
+   track index, inside `<track>`): presumably inside every `<track>` of the
+   MDR, with the same value.
+3. How cover art is resolved (`largeCoverParams`/`smallCoverParams`).
+4. Unit of `<Backoff><Time>` and whether WMP honours it.
+5. FAI with **several files** selected: one MDQ with several `<track>`?
+6. How to force a new attempt on albums already marked "not found"
+   (WMP requests them by itself at startup: reopening it may be enough).

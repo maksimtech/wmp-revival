@@ -8,8 +8,8 @@ __pycache__/
 /build/
 *.egg-info/
 
-# Dati locali: PKI, catture, stato e backup stanno in %LOCALAPPDATA%\WMPRevival.
-# Queste righe sono una rete di sicurezza se qualcuno li copia qui per errore.
+# Local data: PKI, captures, state and backups live in %LOCALAPPDATA%\WMPRevival.
+# These lines are a safety net in case someone copies them here by mistake.
 *.key
 *.pem
 *.pfx

@@ -14,7 +14,7 @@ from wmprevival import recorder
 from wmprevival.forward import Forwarder, PinnedResolver
 from wmprevival.paths import SERVICE_HOST
 
-# Corpo nel formato dei modelli trovati in wmp.dll, con il TOC del test zero.
+# Body in the format of the templates found in wmp.dll, with the TOC from test zero.
 DAI = (
     '<?xml version="1.0" encoding="utf-8"?><DAI trackCount="14" '
     'toc="E+96+1FA9+5584+902E+C94F+FCC6+12C48+16909+1A227+1D472+206E5+23140+26868+294B9+2D186"></DAI>'
@@ -30,7 +30,7 @@ async def _start(rec: recorder.Recorder, pki) -> tuple[web.AppRunner, int]:
 
 
 def _client(client_ctx) -> aiohttp.ClientSession:
-    """Client che arriva al registratore come WMP: nome del servizio, IP di loopback."""
+    """Client that reaches the recorder like WMP: service name, loopback IP."""
     connector = aiohttp.TCPConnector(resolver=PinnedResolver(SERVICE_HOST, ["127.0.0.1"]), ssl=client_ctx)
     return aiohttp.ClientSession(connector=connector)
 
@@ -45,7 +45,7 @@ async def test_records_request_and_answers_404(tmp_path, pki, client_ctx) -> Non
     runner, port = await _start(rec, pki)
     try:
         async with _client(client_ctx) as s:
-            # encoded=True: il client di prova non deve normalizzare %41%2b (yarl lo farebbe).
+            # encoded=True: the test client must not normalize %41%2b (yarl would).
             url = URL(f"https://{SERVICE_HOST}:{port}/cdinfo/GetMDRCD.aspx?CD=E+96+1FA9&x=%41%2b", encoded=True)
             async with s.post(
                 url, data=DAI.encode(), headers={"User-Agent": WMP_UA, "Content-Type": "text/xml"}
@@ -59,8 +59,8 @@ async def test_records_request_and_answers_404(tmp_path, pki, client_ctx) -> Non
     assert seen and seen[0].name.endswith("_0001_POST_cdinfo-GetMDRCD.aspx.json")
     req = cap["request"]
     assert req["method"] == "POST"
-    assert req["raw_path"] == "/cdinfo/GetMDRCD.aspx?CD=E+96+1FA9&x=%41%2b"  # nessuna ricodifica
-    assert req["query_string"] == "CD=E+96+1FA9&x=%41%2b"  # grezza: '+' resta '+'
+    assert req["raw_path"] == "/cdinfo/GetMDRCD.aspx?CD=E+96+1FA9&x=%41%2b"  # no re-encoding
+    assert req["query_string"] == "CD=E+96+1FA9&x=%41%2b"  # raw: '+' stays '+'
     assert ["User-Agent", WMP_UA] in req["headers"]
     assert req["body"]["text"] == DAI
     assert base64.b64decode(req["body"]["base64"]) == DAI.encode()
@@ -119,13 +119,13 @@ def test_connection_resets_are_silenced_but_other_errors_are_not() -> None:
             recorder.quiet_connection_resets(loop)
             handler = loop.get_exception_handler()
             assert handler is not None
-            # Come lo solleva Windows: OSError con winerror 10054 (o 10053, 10057).
-            reset = OSError(None, "connessione chiusa dall'host remoto", None, 10054)
+            # As Windows raises it: OSError with winerror 10054 (or 10053, 10057).
+            reset = OSError(None, "connection closed by the remote host", None, 10054)
             assert reset.winerror == 10054 if hasattr(reset, "winerror") else True
             for exc in (ConnectionResetError(), ConnectionAbortedError(), reset):
                 handler(loop, {"message": "Exception in callback _call_connection_lost", "exception": exc})
             default.assert_not_called()
-            other = {"message": "altro", "exception": ValueError("vero errore")}
+            other = {"message": "other", "exception": ValueError("real error")}
             handler(loop, other)
             default.assert_called_once_with(other)
     finally:
@@ -137,17 +137,17 @@ def test_check_listen() -> None:
     with pytest.raises(ValueError, match="--allow-lan"):
         recorder.check_listen(["192.168.178.10"], allow_lan=False)
     assert recorder.check_listen(["192.168.178.10"], allow_lan=True) == ["192.168.178.10"]
-    with pytest.raises(ValueError, match="non è un indirizzo IP"):
+    with pytest.raises(ValueError, match="is not an IP address"):
         recorder.check_listen(["localhost"], allow_lan=True)
 
 
-# --- --forward contro un finto server Microsoft --------------------------------------
+# --- --forward against a fake Microsoft server ----------------------------------------
 
 BRIDGE_HTML = (
     "<html><head><script>function go(){document.forms[0].mdq.value="
     'window.external.GetMDQByRequestID("");document.forms[0].submit();}</script></head>'
     '<body onload="go()"><form method="post"><input type="hidden" name="mdq"></form>'
-    "<p>Informazioni sull’album</p></body></html>"
+    "<p>Album information – Sigur Rós</p></body></html>"
 )
 
 
@@ -206,7 +206,7 @@ async def test_forward_relays_exactly_and_records_html_response(tmp_path, pki, c
     assert up["raw_path"] == "/FAI/default.aspx?id=%7B42%7D"
     assert up["host"] == f"{SERVICE_HOST}:{upstream_port}"
     ua = [v for k, v in up["headers"] if k.lower() == "user-agent"]
-    assert ua == [WMP_UA]  # nessun User-Agent di aiohttp aggiunto o sostituito
+    assert ua == [WMP_UA]  # no aiohttp User-Agent added or replaced
 
     [cap] = _captures(tmp_path / "cap")
     assert cap["forwarded"] is True
@@ -217,7 +217,7 @@ async def test_forward_relays_exactly_and_records_html_response(tmp_path, pki, c
 
 
 async def test_forward_failure_becomes_404_not_5xx(tmp_path, pki, client_ctx) -> None:
-    # Porta chiusa: l'inoltro fallisce in locale.
+    # Closed port: forwarding fails locally.
     async with Forwarder(SERVICE_HOST, ["127.0.0.1"], port=1, ssl_context=client_ctx, timeout=3) as fwd:
         rec = recorder.Recorder(tmp_path / "cap", forwarder=fwd)
         runner, port = await _start(rec, pki)

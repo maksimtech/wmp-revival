@@ -1,4 +1,4 @@
-"""MusicBrainz finto per i test, alimentato dalle risposte vere registrate in fixtures/musicbrainz."""
+"""Fake MusicBrainz for the tests, fed with the real responses recorded in fixtures/musicbrainz."""
 
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ CD21 = Toc.from_wmp(
     "15+96+3AC4+8111+BAEF+F10C+12F5C+181FC+1B036+1F8B9+22FE3+2662D+299A8+2D446+30978+35545"
     "+3844F+3BCAF+3E2C9+42F56+466AA+49694+4CFA3"
 )
-USER_EDITION = "10f85058-4ff3-4e50-bb3e-28c3b4279217"  # Forever Young dell'utente (Digital Media)
+USER_EDITION = "10f85058-4ff3-4e50-bb3e-28c3b4279217"  # the user's Forever Young (Digital Media)
 
 
 def body(name: str) -> Any:
@@ -31,13 +31,13 @@ class FixtureMB:
             data = body(path.name)
             self.releases[data["id"]] = data
         self.discids = {
-            JOY.disc_id: body("discid_12_tracce_joy.json"),
-            CD14.disc_id: body("discid_14_tracce.json"),
-            CD21.disc_id: body("discid_21_tracce_stub.json"),
+            JOY.disc_id: body("discid_12_tracks_joy.json"),
+            CD14.disc_id: body("discid_14_tracks.json"),
+            CD21.disc_id: body("discid_21_tracks_stub.json"),
         }
         self.tocs = {
-            JOY.mb_toc: body("toc_12_tracce_joy.json")["releases"],
-            CD14.mb_toc: body("toc_14_tracce.json")["releases"],
+            JOY.mb_toc: body("toc_12_tracks_joy.json")["releases"],
+            CD14.mb_toc: body("toc_14_tracks.json")["releases"],
         }
 
     async def lookup_discid(self, disc_id: str) -> Any | None:
@@ -53,7 +53,7 @@ class FixtureMB:
         return self.releases.get(mbid)
 
     EXACT_QUERIES = {
-        'recording:"Arrival" AND artist:"ABBA"': "search_arrival_abba_senza_album.json",
+        'recording:"Arrival" AND artist:"ABBA"': "search_arrival_abba_no_album.json",
     }
 
     async def search_recordings(self, query: str, limit: int = 10) -> list[dict[str, Any]]:
@@ -66,7 +66,7 @@ class FixtureMB:
             ("Mine All Day", "search_mine_all_day.json"),
             ('recording:"Long Way to Happy"', "search_long_way_to_happy.json"),
             ('recording:"Stupid Girls"', "search_stupid_girls.json"),
-            ('artist:"ABBA, Abba"', "search_arrival_abba_doppio.json"),  # zero risultati, come dal vivo
+            ('artist:"ABBA, Abba"', "search_arrival_abba_doubled.json"),  # zero results, as live
             ('recording:"Arrival" AND artist:"ABBA"', "search_arrival_abba.json"),
         ):
             if needle in query:
@@ -77,7 +77,7 @@ class FixtureMB:
 
 class FailingMB(FixtureMB):
     async def lookup_discid(self, disc_id: str) -> Any | None:
-        raise OSError("MusicBrainz irraggiungibile")
+        raise OSError("MusicBrainz unreachable")
 
     async def search_recordings(self, query: str, limit: int = 10) -> list[dict[str, Any]]:
-        raise OSError("MusicBrainz irraggiungibile")
+        raise OSError("MusicBrainz unreachable")

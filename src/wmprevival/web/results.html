@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Trova informazioni sull'album</title>
+<title>Find album info</title>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -14,9 +14,9 @@ var writeId = {{ write_id|tojson }};
 var renameFiles = {{ rename_files|tojson }};
 </script>
 <script type="text/javascript" src="suggestions.js"></script>
-<div class="header">Trova informazioni sull'album <span class="source">dati da MusicBrainz</span></div>
+<div class="header">Find album info <span class="source">data from MusicBrainz</span></div>
 <div class="column left">
-  <div class="title">Elenco di tracce</div>
+  <div class="title">Track list</div>
   <div class="list">
     <table cellpadding="0" cellspacing="0">
       {% for track in tracks %}
@@ -45,8 +45,8 @@ var renameFiles = {{ rename_files|tojson }};
 </div>
 <div id="error" class="error"></div>
 <div class="footer">
-  <input id="finish" class="button" type="button" value="Fine" disabled="disabled" onclick="finish()">
-  <input id="cancel" class="button" type="button" value="Annulla" onclick="cancel()">
+  <input id="finish" class="button" type="button" value="Finish" disabled="disabled" onclick="finish()">
+  <input id="cancel" class="button" type="button" value="Cancel" onclick="cancel()">
 </div>
 </body>
 </html>

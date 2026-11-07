@@ -1,9 +1,9 @@
-"""CA locale con name constraints e certificato server per il servizio di WMP.
+"""Local CA with name constraints and server certificate for the WMP service.
 
-La CA può firmare certificati validi solo per ``musicmatch-ssl.xboxlive.com`` (e suoi
-sottodomini, per come funzionano i name constraints DNS) e per nessun indirizzo IP:
-anche se la sua chiave privata uscisse da questo PC, non servirebbe a intercettare
-altri siti. Chiavi ECDSA P-256: il server vero usa ECC, quindi Schannel le gestisce.
+The CA can sign certificates valid only for ``musicmatch-ssl.xboxlive.com`` (and its
+subdomains, given how DNS name constraints work) and for no IP address: even if its
+private key left this PC, it couldn't be used to intercept other sites. ECDSA P-256 keys:
+the real server uses ECC, so Schannel handles them.
 """
 
 from __future__ import annotations
@@ -60,7 +60,7 @@ def create_ca(hostname: str, now: dt.datetime | None = None) -> KeyPair:
     name = x509.Name(
         [
             x509.NameAttribute(NameOID.ORGANIZATION_NAME, "WMP Revival"),
-            x509.NameAttribute(NameOID.COMMON_NAME, f"WMP Revival CA locale (solo {hostname})"),
+            x509.NameAttribute(NameOID.COMMON_NAME, f"WMP Revival local CA ({hostname} only)"),
         ]
     )
     constraints = x509.NameConstraints(
@@ -138,8 +138,8 @@ def issue_server_cert(ca: KeyPair, hostname: str, now: dt.datetime | None = None
 
 
 def thumbprint(cert: x509.Certificate) -> str:
-    """Impronta SHA-1 in esadecimale maiuscolo, come la mostra Windows."""
-    return cert.fingerprint(hashes.SHA1()).hex().upper()  # noqa: S303 - identificativo, non sicurezza
+    """SHA-1 thumbprint in uppercase hex, as Windows shows it."""
+    return cert.fingerprint(hashes.SHA1()).hex().upper()  # noqa: S303 - identifier, not security
 
 
 def _key_pem(key: ec.EllipticCurvePrivateKey) -> bytes:
@@ -154,12 +154,12 @@ Restrict = Callable[[Path], None]
 
 
 def write_pki(files: PkiFiles, ca: KeyPair, server: KeyPair, restrict: Restrict) -> None:
-    """Scrive i quattro file. ``restrict`` limita i permessi delle chiavi private."""
+    """Writes the four files. ``restrict`` limits the permissions of the private keys."""
     files.ca_cert.parent.mkdir(parents=True, exist_ok=True)
     for path, data in ((files.ca_key, _key_pem(ca.key)), (files.server_key, _key_pem(server.key))):
         path.write_bytes(data)
         restrict(path)
-    # La CA in DER (.cer): è il formato che certutil e Windows aprono direttamente.
+    # The CA in DER (.cer): the format certutil and Windows open directly.
     files.ca_cert.write_bytes(ca.cert.public_bytes(serialization.Encoding.DER))
     files.server_cert.write_bytes(server.cert.public_bytes(serialization.Encoding.PEM))
 

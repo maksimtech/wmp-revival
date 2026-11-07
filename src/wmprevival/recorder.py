@@ -1,8 +1,8 @@
-"""Registratore HTTPS (fase 1): salva ogni richiesta di WMP in un file JSON.
+"""HTTPS recorder (phase 1): saves every WMP request to a JSON file.
 
-Senza inoltro risponde 404 senza corpo: veloce, e non è un 5xx, quindi non fa scattare
-il rallentamento di WMP. Con un ``Forwarder`` restituisce la risposta del server vero;
-se l'inoltro fallisce per un problema locale risponde comunque 404.
+Without forwarding it answers 404 with no body: fast, and not a 5xx, so it doesn't
+trigger WMP's backoff. With a ``Forwarder`` it returns the real server's response; if
+forwarding fails because of a local problem it still answers 404.
 """
 
 from __future__ import annotations
@@ -31,18 +31,18 @@ from wmprevival.forward import Forwarder, UpstreamResponse, response_headers_for
 SCHEMA_VERSION = 1
 
 Responder = Callable[[web.Request, bytes], Awaitable[web.Response]]
-"""Produce la risposta a WMP al posto del server vero (``wmprevival serve``)."""
+"""Produces the answer to WMP in place of the real server (``wmprevival serve``)."""
 MAX_BODY = 4 * 1024 * 1024
 
 _sni: weakref.WeakKeyDictionary[ssl.SSLObject, str] = weakref.WeakKeyDictionary()
 
 
 def server_context(cert: Path, key: Path, on_hello: Callable[[str | None], None] | None = None) -> ssl.SSLContext:
-    """Contesto TLS del server. ``on_hello`` viene chiamato a ogni ClientHello.
+    """Server TLS context. ``on_hello`` is called on every ClientHello.
 
-    Serve a diagnosticare un certificato rifiutato (CA non accettata, pinning): in quel
-    caso il client chiude durante l'handshake e nessuna richiesta HTTP arriva mai, quindi
-    senza questo avviso il registratore resterebbe muto.
+    It helps diagnose a rejected certificate (CA not accepted, pinning): in that case the
+    client closes during the handshake and no HTTP request ever arrives, so without this
+    notice the recorder would stay silent.
     """
     ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     ctx.minimum_version = ssl.TLSVersion.TLSv1_2
@@ -59,15 +59,15 @@ def server_context(cert: Path, key: Path, on_hello: Callable[[str | None], None]
 
 
 def check_listen(addresses: Sequence[str], allow_lan: bool) -> list[str]:
-    """Solo indirizzi IP letterali; fuori dal loopback solo se richiesto esplicitamente."""
+    """Literal IP addresses only; outside loopback only when explicitly requested."""
     result = []
     for addr in addresses:
         try:
             ip = ipaddress.ip_address(addr)
         except ValueError as exc:
-            raise ValueError(f"'{addr}' non è un indirizzo IP") from exc
+            raise ValueError(f"'{addr}' is not an IP address") from exc
         if not ip.is_loopback and not allow_lan:
-            raise ValueError(f"{addr} non è un indirizzo di loopback: serve --allow-lan")
+            raise ValueError(f"{addr} is not a loopback address: --allow-lan is needed")
         result.append(str(ip))
     return result
 
@@ -90,7 +90,7 @@ def _is_textual(content_type: str | None) -> bool:
 
 
 def _decode_text(plain: bytes, content_type: str | None) -> tuple[str, str, bool] | None:
-    """Testo, charset usato e se il charset è un'ipotesi; ``None`` se non è testo."""
+    """Text, charset used and whether the charset is a guess; ``None`` if it isn't text."""
     declared = _charset(content_type)
     if plain.startswith((b"\xff\xfe", b"\xfe\xff")):
         attempts = [("utf-16", False)]
@@ -99,8 +99,8 @@ def _decode_text(plain: bytes, content_type: str | None) -> tuple[str, str, bool
     elif declared:
         attempts = [(declared, False)]
     else:
-        # Niente charset dichiarato (es. HTML con solo <meta>): UTF-8, poi Windows-1252,
-        # ma solo per tipi testuali: cp1252 decodifica qualunque byte, anche un binario.
+        # No declared charset (e.g. HTML with only <meta>): UTF-8, then Windows-1252,
+        # but only for textual types: cp1252 decodes any byte, even a binary.
         attempts = [("utf-8", False)]
         if _is_textual(content_type):
             attempts.append(("cp1252", True))
@@ -116,7 +116,7 @@ def _decode_text(plain: bytes, content_type: str | None) -> tuple[str, str, bool
 
 
 def encode_body(data: bytes, content_encoding: str | None = None, content_type: str | None = None) -> dict[str, Any]:
-    """Corpo registrato: byte esatti in base64, più testo e campi del form se si può."""
+    """Recorded body: exact bytes in base64, plus text and form fields when possible."""
     out: dict[str, Any] = {"length": len(data), "base64": base64.b64encode(data).decode("ascii")}
     if not data:
         return out
@@ -167,7 +167,7 @@ class Recorder:
         responder: Responder | None = None,
     ) -> None:
         if forwarder is not None and responder is not None:
-            raise ValueError("inoltro e risposte proprie si escludono")
+            raise ValueError("forwarding and local answers are mutually exclusive")
         self.captures_dir = captures_dir
         self.forwarder = forwarder
         self.responder = responder
@@ -199,11 +199,11 @@ class Recorder:
             "request": {
                 "method": request.method,
                 "http_version": f"{request.version.major}.{request.version.minor}",
-                # raw_path: percorso e query esattamente come li ha scritti WMP.
+                # raw_path: path and query exactly as WMP wrote them.
                 "raw_path": request.raw_path,
                 "path": request.path,
-                # Query grezza: request.query_string di aiohttp è già decodificata e
-                # trasforma '+' in spazio, che nel TOC di WMP (E+96+1FA9...) è un separatore.
+                # Raw query: aiohttp's request.query_string is already decoded and turns
+                # '+' into a space, which in WMP's TOC (E+96+1FA9...) is a separator.
                 "query_string": request.raw_path.partition("?")[2],
                 "headers": _headers(request.raw_headers),
                 "body": encode_body(body, request.headers.get("Content-Encoding"), request.headers.get("Content-Type")),
@@ -215,7 +215,7 @@ class Recorder:
         if self.responder is not None:
             try:
                 response = await self.responder(request, body)
-            except Exception as exc:  # noqa: BLE001 - mai un 5xx verso WMP
+            except Exception as exc:  # noqa: BLE001 - never a 5xx to WMP
                 record["responder_error"] = f"{type(exc).__name__}: {exc}"
                 response = web.Response(status=404)
             served = response.body if isinstance(response.body, bytes) else b""
@@ -248,7 +248,7 @@ class Recorder:
                     headers=response_headers_for_client(upstream.headers),
                     body=upstream.body,
                 )
-            except Exception as exc:  # noqa: BLE001 - qualunque errore locale diventa un 404 registrato
+            except Exception as exc:  # noqa: BLE001 - any local error becomes a recorded 404
                 record["upstream_error"] = f"{type(exc).__name__}: {exc}"
                 response = web.Response(status=404)
         record["response"] = {"status": response.status}
@@ -267,7 +267,7 @@ def build_app(recorder: Recorder) -> web.Application:
 async def start(
     recorder: Recorder, listen: Sequence[str], port: int, ssl_ctx: ssl.SSLContext
 ) -> tuple[web.AppRunner, list[str], list[str]]:
-    """Avvia il server; restituisce runner, indirizzi attivi ed errori sugli altri."""
+    """Start the server; returns the runner, active addresses and errors on the others."""
     quiet_connection_resets(asyncio.get_running_loop())
     runner = web.AppRunner(build_app(recorder), access_log=None)
     await runner.setup()
@@ -281,11 +281,11 @@ async def start(
             errors.append(f"{host}:{port}: {exc}")
     if not started:
         await runner.cleanup()
-        raise OSError("impossibile ascoltare: " + "; ".join(errors))
+        raise OSError("cannot listen: " + "; ".join(errors))
     return runner, started, errors
 
 
-_RESET_WINERRORS = {10053, 10054, 10057}  # connessione interrotta, resettata, socket non connesso
+_RESET_WINERRORS = {10053, 10054, 10057}  # connection aborted, reset, socket not connected
 
 
 def is_connection_reset(exc: BaseException | None) -> bool:
@@ -295,11 +295,11 @@ def is_connection_reset(exc: BaseException | None) -> bool:
 
 
 def quiet_connection_resets(loop: asyncio.AbstractEventLoop) -> None:
-    """Zittisce il traceback del ProactorEventLoop quando il client chiude per primo.
+    """Silence the ProactorEventLoop traceback when the client closes first.
 
-    Su Windows, se WMP (o la sua pagina) chiude la connessione per primo,
-    ``_call_connection_lost`` prova ``shutdown()`` su un socket già resettato e asyncio
-    stampa un traceback innocuo. Gli altri errori restano visibili.
+    On Windows, if WMP (or its page) closes the connection first,
+    ``_call_connection_lost`` tries ``shutdown()`` on an already reset socket and asyncio
+    prints a harmless traceback. Other errors stay visible.
     """
 
     def handler(loop: asyncio.AbstractEventLoop, context: dict[str, Any]) -> None:

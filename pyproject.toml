@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "wmprevival"
 dynamic = ["version"]
-description = "Server locale di metadati per Windows Media Player Legacy (MusicBrainz, Discogs)"
+description = "Local metadata server for Windows Media Player Legacy (MusicBrainz, Discogs)"
 readme = "README.md"
 license = {file = "LICENSE"}
 requires-python = ">=3.13"
@@ -23,12 +23,12 @@ classifiers = [
 dependencies = [
     "typer>=0.12",
     "rich>=13.0",
-    # Server HTTPS del registratore e client della modalità --forward: il client
-    # accetta un resolver su misura, così si collega all'IP vero del servizio
-    # mantenendo SNI e verifica del certificato sul nome originale.
+    # The recorder's HTTPS server and the --forward client: the client accepts a
+    # custom resolver, so it connects to the service's real IP while keeping SNI and
+    # certificate verification on the original name.
     "aiohttp>=3.10",
     "cryptography>=43",
-    # Risoluzione DNS diretta per --forward: il file hosts punta il nome su 127.0.0.1.
+    # Direct DNS resolution for --forward: the hosts file points the name at 127.0.0.1.
     "dnspython>=2.6",
     "jinja2>=3.1",
     "defusedxml>=0.7",
@@ -64,7 +64,7 @@ target-version = "py313"
 select = ["E", "W", "F", "I", "UP", "B", "C4", "SIM"]
 
 [tool.ruff.lint.flake8-bugbear]
-# Typer dichiara le opzioni come chiamate nei valori predefiniti.
+# Typer declares options as calls in the default values.
 extend-immutable-calls = ["typer.Option", "typer.Argument"]
 
 [tool.mypy]
@@ -73,7 +73,7 @@ strict = true
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
-# Test: annotazioni facoltative su fixture e helper.
+# Tests: annotations optional on fixtures and helpers.
 module = "tests.*"
 disallow_untyped_defs = false
 disallow_untyped_calls = false

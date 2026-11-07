@@ -1,17 +1,17 @@
-"""Estrae le stringhe da un database della libreria di WMP (*.wmdb) e confronta due copie.
+"""Extracts the strings from a WMP library database (*.wmdb) and compares two copies.
 
-Il formato .wmdb non è ESE (firma a5 09 b6 f3, non ef cd ab 89) e non è documentato:
-invece di decodificarlo si estraggono le stringhe ASCII e UTF-16LE e si confronta
-una copia fatta prima di un'azione di WMP con una fatta dopo.
+The .wmdb format is not ESE (signature a5 09 b6 f3, not ef cd ab 89) and is undocumented:
+instead of decoding it, the ASCII and UTF-16LE strings are extracted and a copy made
+before a WMP action is compared with one made after.
 
-Uso:
-    python -I tools/wmdb_strings.py DB                 # tutte le stringhe
-    python -I tools/wmdb_strings.py PRIMA DOPO         # solo quelle comparse in DOPO
+Usage:
+    python -I tools/wmdb_strings.py DB                 # all strings
+    python -I tools/wmdb_strings.py BEFORE AFTER       # only those that appeared in AFTER
 
-Le stringhe che sembrano un TOC (numeri esadecimali separati da '+') o un documento
-MDR/MDQ sono marcate con '*'.
+Strings that look like a TOC (hex numbers separated by '+') or an MDR/MDQ document are
+marked with '*'.
 
-Lavorare sempre su una COPIA del database, con WMP chiuso: il file vivo sta in
+Always work on a COPY of the database, with WMP closed: the live file is at
 %LOCALAPPDATA%\\Microsoft\\Media Player\\CurrentDatabase_*.wmdb.
 """
 

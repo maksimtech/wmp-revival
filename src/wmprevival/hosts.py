@@ -1,8 +1,8 @@
-"""Righe del file hosts che puntano il servizio di WMP su questo PC.
+"""Hosts file lines that point the WMP service at this PC.
 
-Le funzioni sul testo sono pure; ``apply`` legge, fa il backup e riscrive il file
-**sul posto** (non con un file temporaneo rinominato) per non perdere i permessi
-che Windows assegna a hosts.
+The text functions are pure; ``apply`` reads, backs up and rewrites the file **in place**
+(not via a renamed temporary file) so as not to lose the permissions Windows gives to
+hosts.
 """
 
 from __future__ import annotations
@@ -25,7 +25,7 @@ def _is_marked(line: str) -> bool:
 
 
 def mapped_names(line: str) -> tuple[str, list[str]] | None:
-    """Indirizzo e nomi di una riga attiva di hosts; ``None`` per commenti e righe vuote."""
+    """Address and names of an active hosts line; ``None`` for comments and blank lines."""
     content = line.split("#", 1)[0].split()
     if len(content) < 2:
         return None
@@ -38,7 +38,7 @@ def remove_entries(text: str) -> str:
 
 
 def add_entries(text: str, hostname: str, addresses: tuple[str, ...] = LOOPBACK_ADDRESSES) -> str:
-    """Aggiunge le righe marcate; idempotente (toglie prima quelle già presenti)."""
+    """Adds the marked lines; idempotent (removes any existing ones first)."""
     nl = _newline(text)
     base = remove_entries(text)
     if base and not base.endswith(("\n", "\r")):
@@ -52,7 +52,7 @@ def marked_entries(text: str) -> list[str]:
 
 
 def foreign_entries(text: str, hostname: str) -> list[str]:
-    """Righe attive non nostre che mappano lo stesso nome: andrebbero in conflitto."""
+    """Active lines not ours that map the same name: they would conflict."""
     found = []
     for line in text.splitlines():
         parsed = mapped_names(line)
@@ -62,7 +62,7 @@ def foreign_entries(text: str, hostname: str) -> list[str]:
 
 
 def read(path: Path) -> str:
-    # surrogateescape: un byte strano in hosts sopravvive intatto alla riscrittura.
+    # surrogateescape: an odd byte in hosts survives the rewrite intact.
     return path.read_bytes().decode("utf-8", errors="surrogateescape")
 
 

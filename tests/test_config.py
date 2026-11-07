@@ -7,17 +7,17 @@ from wmprevival.config import PUBLIC_MB, Config, ConfigError, MusicBrainzConfig
 
 
 def test_defaults_without_file(tmp_path) -> None:
-    cfg = Config.load(tmp_path / "manca.toml").musicbrainz
+    cfg = Config.load(tmp_path / "missing.toml").musicbrainz
     assert cfg.base_url == PUBLIC_MB and cfg.is_public and cfg.min_interval >= 1.0
 
 
 def test_public_api_requires_a_contact() -> None:
-    with pytest.raises(ConfigError, match="contatto"):
+    with pytest.raises(ConfigError, match="contact"):
         MusicBrainzConfig().validate()
 
 
 def test_public_api_refuses_a_faster_rate() -> None:
-    with pytest.raises(ConfigError, match="1 secondo"):
+    with pytest.raises(ConfigError, match="1 second"):
         MusicBrainzConfig(contact="x@example.org", min_interval=0.5).validate()
 
 
@@ -36,6 +36,6 @@ def test_user_agent_follows_the_musicbrainz_format(tmp_path) -> None:
 
 def test_unknown_keys_are_errors(tmp_path) -> None:
     path = tmp_path / "config.toml"
-    path.write_text('[musicbrainz]\ncontatto = "x"\n', encoding="utf-8")
-    with pytest.raises(ConfigError, match="contatto"):
+    path.write_text('[musicbrainz]\nemail = "x"\n', encoding="utf-8")
+    with pytest.raises(ConfigError, match="email"):
         Config.load(path)

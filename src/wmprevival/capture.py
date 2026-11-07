@@ -1,8 +1,8 @@
-"""Da cattura a fixture di test: sostituisce i GUID con segnaposto stabili.
+"""From capture to test fixture: replaces GUIDs with stable placeholders.
 
-Lo stesso GUID diventa sempre lo stesso segnaposto all'interno di una cattura, così le
-relazioni tra campi restano visibili. I campi ``base64`` dei corpi testuali vengono
-ricalcolati dal testo anonimizzato; un corpo solo binario resta com'è e viene segnalato.
+The same GUID always becomes the same placeholder within a capture, so the relations
+between fields stay visible. The ``base64`` fields of text bodies are recomputed from the
+anonymized text; a binary-only body is left as is and reported.
 """
 
 from __future__ import annotations
@@ -50,17 +50,17 @@ class _Anonymizer:
             out["base64"] = base64.b64encode(data).decode("ascii")
             out["length"] = len(data)
         elif "text" in node:
-            # Corpo compresso: il testo si anonimizza, i byte originali si tolgono.
+            # Compressed body: the text is anonymized, the original bytes are dropped.
             out["text"] = self.text(node["text"])
             out["base64"] = None
-            self.warnings.append(f"{where}: corpo compresso, tolto il base64 originale")
+            self.warnings.append(f"{where}: compressed body, original base64 dropped")
         elif node["length"]:
-            self.warnings.append(f"{where}: corpo binario non anonimizzato")
+            self.warnings.append(f"{where}: binary body not anonymized")
         return out
 
 
 def anonymize(record: dict[str, Any]) -> tuple[dict[str, Any], int, list[str]]:
-    """Restituisce la cattura anonimizzata, il numero di GUID distinti e gli avvisi."""
+    """Returns the anonymized capture, the number of distinct GUIDs and the warnings."""
     anon = _Anonymizer()
     result = anon.walk(record)
     if isinstance(result, dict) and "client" in result:
@@ -68,14 +68,14 @@ def anonymize(record: dict[str, Any]) -> tuple[dict[str, Any], int, list[str]]:
     return result, len(anon.mapping), anon.warnings
 
 
-OMITTED = "omesso: contenuto del server Microsoft, non ridistribuito nel repository"
+OMITTED = "omitted: content from the Microsoft server, not redistributed in the repository"
 
 
 def drop_upstream_body(record: dict[str, Any]) -> dict[str, Any]:
-    """Toglie il corpo della risposta del server vero (HTML, CSS, JS di Microsoft).
+    """Drops the body of the real server's response (Microsoft HTML, CSS, JS).
 
-    Restano stato, header e lunghezza: bastano ai test, e il repository non ospita
-    materiale Microsoft (regola 2 di CLAUDE.md, estesa a pagine e script).
+    Status, headers and length remain: they're enough for the tests, and the repository
+    doesn't host Microsoft material (rule 2 in CLAUDE.md, extended to pages and scripts).
     """
     out = dict(record)
     upstream = out.get("upstream")

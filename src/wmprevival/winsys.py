@@ -1,7 +1,7 @@
-"""Operazioni di sistema su Windows: archivio certificati, permessi, DNS, privilegi.
+"""Windows system operations: certificate store, permissions, DNS, privileges.
 
-Tutte passano da un ``Runner`` iniettabile, così i test verificano i comandi senza
-eseguirli. I messaggi di certutil sono localizzati: si guarda solo il codice di uscita.
+All of them go through an injectable ``Runner``, so tests check the commands without
+running them. certutil's messages are localized: only the exit code is looked at.
 """
 
 from __future__ import annotations
@@ -26,7 +26,7 @@ def run(cmd: Sequence[str]) -> subprocess.CompletedProcess[str]:
 class SystemCommandError(RuntimeError):
     def __init__(self, cmd: Sequence[str], result: subprocess.CompletedProcess[str]) -> None:
         detail = (result.stderr or result.stdout or "").strip()
-        super().__init__(f"{' '.join(cmd)} -> codice {result.returncode}: {detail}")
+        super().__init__(f"{' '.join(cmd)} -> exit code {result.returncode}: {detail}")
 
 
 def _checked(runner: Runner, cmd: Sequence[str]) -> None:
@@ -40,7 +40,7 @@ def _store_args(store: Store) -> list[str]:
 
 
 def add_root(cert: Path, store: Store, runner: Runner = run) -> None:
-    """Installa la CA tra le radici attendibili. Con ``user`` Windows chiede conferma a video."""
+    """Installs the CA among the trusted roots. With ``user`` Windows asks for confirmation on screen."""
     _checked(runner, ["certutil", *_store_args(store), "-addstore", "-f", "Root", str(cert)])
 
 
@@ -53,7 +53,7 @@ def has_root(thumbprint: str, store: Store, runner: Runner = run) -> bool:
 
 
 def restrict_to_current_user(path: Path, runner: Runner = run) -> None:
-    """Toglie i permessi ereditati e lascia il controllo completo solo all'utente corrente."""
+    """Removes inherited permissions and leaves full control to the current user only."""
     if sys.platform != "win32":
         path.chmod(0o600)
         return
@@ -72,7 +72,7 @@ WMP_POLICY_VALUES = ("PreventCDDVDMetadataRetrieval", "PreventMusicFileMetadataR
 
 
 def wmp_policies() -> dict[str, object]:
-    """Criteri di gruppo che bloccano il recupero dei metadati, se impostati (HKLM e HKCU)."""
+    """Group policies that block metadata retrieval, if set (HKLM and HKCU)."""
     if sys.platform != "win32":
         return {}
     import winreg
@@ -91,16 +91,16 @@ def wmp_policies() -> dict[str, object]:
 
 
 WMP_PREFERENCES_KEY = r"Software\Microsoft\MediaPlayer\Preferences"
-# Opzioni del catalogo di WMP che rinominano e spostano i file secondo i dati della libreria
-# (visto il 2026-11-06: un file spostato a mano è stato rimesso dove diceva la libreria).
+# WMP library options that rename and move files according to the library data
+# (seen on 2026-11-06: a file moved by hand was put back where the library said).
 WMP_FILE_ORGANIZING = {
-    "AutoRename": "Rinomina i file musicali in base alle impostazioni di copia",
-    "AutoOrganize": "Ridisponi la musica nella cartella della musica copiata",
+    "AutoRename": "Rename music files using rip music settings",
+    "AutoOrganize": "Rearrange music in rip music folder, using rip music settings",
 }
 
 
 def wmp_file_organizing() -> dict[str, str]:
-    """Opzioni attive che fanno rinominare o spostare i file a WMP (HKCU)."""
+    """Active options that make WMP rename or move files (HKCU)."""
     if sys.platform != "win32":
         return {}
     import winreg

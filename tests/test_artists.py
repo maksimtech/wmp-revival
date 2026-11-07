@@ -1,7 +1,7 @@
-"""Artisti con valori multipli: "Arrival" degli ABBA non veniva trovato (2026-11-06).
+"""Multi-valued artists: ABBA's "Arrival" was not found (2026-11-06).
 
-Il tag artista dei FLAC conteneva due valori, che WMP unisce in "ABBA, Abba"; la ricerca
-artist:"ABBA, Abba" su MusicBrainz non dà risultati.
+The FLACs' artist tag held two values, which WMP joins as "ABBA, Abba"; the search
+artist:"ABBA, Abba" on MusicBrainz gives no results.
 """
 
 from __future__ import annotations
@@ -25,8 +25,8 @@ from wmprevival.service import (
 )
 
 CAPTURE = Path(__file__).parent / "fixtures" / "captures" / "auto_file_abba_arrival.json"
-# Dopo il guasto: libreria di WMP con "Panic" / Giovanni Allevi / Joy, file ancora "...Arrival.flac".
-CAPTURE_AS_PANIC = Path(__file__).parent / "fixtures" / "captures" / "fai_file_abba_come_panic.json"
+# After the breakage: WMP library with "Panic" / Giovanni Allevi / Joy, file still "...Arrival.flac".
+CAPTURE_AS_PANIC = Path(__file__).parent / "fixtures" / "captures" / "fai_file_abba_as_panic.json"
 USER_EDITION = "f121c662-eaa3-4b58-836f-c20eea68d78a"
 
 
@@ -36,9 +36,9 @@ USER_EDITION = "f121c662-eaa3-4b58-836f-c20eea68d78a"
         ("ABBA, Abba", "ABBA"),
         ("ABBA; ABBA", "ABBA"),
         ("Sigur Rós / Sigur Ros", "Sigur Rós"),
-        ("Earth, Wind & Fire", "Earth, Wind & Fire"),  # artista vero con la virgola
+        ("Earth, Wind & Fire", "Earth, Wind & Fire"),  # a real artist with a comma
         ("Simon & Garfunkel", "Simon & Garfunkel"),
-        ("Queen, David Bowie", "Queen, David Bowie"),  # due artisti diversi: si lascia
+        ("Queen, David Bowie", "Queen, David Bowie"),  # two different artists: left alone
         ("", ""),
     ],
 )
@@ -65,14 +65,14 @@ async def test_arrival_is_found_with_the_collapsed_artist() -> None:
     fake = FixtureMB()
     xml = await MetadataService(fake).file_automatic(query)
     assert [c[1] for c in fake.calls if c[0] == "search"] == [
-        'recording:"Arrival" AND artist:"ABBA, Abba" AND release:"Arrival"',  # zero risultati
+        'recording:"Arrival" AND artist:"ABBA, Abba" AND release:"Arrival"',  # zero results
         'recording:"Arrival" AND artist:"ABBA" AND release:"Arrival"',
     ]
     assert xml is not None
     m = ET.fromstring(xml).find("MDR-CD")
     assert m is not None
     assert (m.findtext("albumTitle"), m.findtext("albumArtist")) == ("Arrival", "ABBA")
-    # L'edizione che l'utente ha confermato come sua.
+    # The edition the user confirmed as theirs.
     assert m.findtext("dataProviderParams") == "musicbrainz-release=f121c662-eaa3-4b58-836f-c20eea68d78a"
     [track] = m.findall("track")
     assert (track.findtext("trackRequestID"), track.findtext("trackNumber"), track.findtext("trackTitle")) == (
@@ -97,7 +97,7 @@ def _named(filename: str, artist: str = "Giovanni Allevi", title: str = "Panic")
     [
         ("10. ABBA, Abba - Arrival.flac", ("ABBA, Abba", "Arrival"), 10),
         ("01. Stupid Girls.flac", ("", "Stupid Girls"), 1),
-        ("Giovanni Allevi - Panic.flac", ("", "Panic"), None),  # prefisso = artista del tag
+        ("Giovanni Allevi - Panic.flac", ("", "Panic"), None),  # prefix = tag artist
         ("1-03 Long Way to Happy.mp3", ("", "Long Way to Happy"), 3),
         ("Mine All Day [Edit].flac", ("", "Mine All Day [Edit]"), None),
     ],
@@ -110,22 +110,22 @@ def test_filename_guess(filename: str, guess: tuple[str, str], number: int | Non
 
 def test_suspect_only_when_the_file_name_names_another_artist_and_title() -> None:
     assert tag_is_suspect(_named("10. ABBA, Abba - Arrival.flac"))
-    assert not tag_is_suspect(_named("01. Panic.flac"))  # nessun artista nel nome
+    assert not tag_is_suspect(_named("01. Panic.flac"))  # no artist in the name
     assert not tag_is_suspect(_named("Giovanni Allevi - Panic.flac"))
     assert not tag_is_suspect(_named("ABBA - Arrival.flac", artist="ABBA", title="Arrival"))
-    # Titoli con " - " nel nome ma tag coerente: stesso titolo, quindi non sospetto.
+    # Titles with " - " in the name but a consistent tag: same title, so not suspect.
     assert not tag_is_suspect(_named("Peer Gynt - Morning.flac", artist="Grieg", title="Morning"))
 
 
 async def test_the_damaged_arrival_is_found_from_its_file_name() -> None:
     query = _panic_mdq()
     [track] = query.tracks
-    assert (track.title, track.artist, track.album) == ("Panic", "Giovanni Allevi", "Joy")  # il danno
+    assert (track.title, track.artist, track.album) == ("Panic", "Giovanni Allevi", "Joy")  # the damage
     assert track.filename == "10. ABBA, Abba - Arrival.flac"
     fake = FixtureMB()
     choices = await MetadataService(fake).file_choices(query)
     assert [c[1] for c in fake.calls if c[0] == "search"][:2] == [
-        'recording:"Arrival" AND artist:"ABBA, Abba"',  # niente album: anche quello del tag è sospetto
+        'recording:"Arrival" AND artist:"ABBA, Abba"',  # no album: the tag's one is suspect too
         'recording:"Arrival" AND artist:"ABBA"',
     ]
     assert choices and choices[0].title == "Arrival" and choices[0].artist == "ABBA"
@@ -138,4 +138,4 @@ async def test_the_damaged_arrival_is_found_from_its_file_name() -> None:
 async def test_no_automatic_write_when_the_tag_is_suspect() -> None:
     fake = FixtureMB()
     assert await MetadataService(fake).file_automatic(_panic_mdq()) is None
-    assert fake.calls == []  # nemmeno una richiesta a MusicBrainz
+    assert fake.calls == []  # not a single request to MusicBrainz

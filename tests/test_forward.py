@@ -9,7 +9,7 @@ from wmprevival.paths import SERVICE_HOST
 
 
 def test_check_public_accepts_real_akamai_addresses() -> None:
-    # Indirizzi visti il 2026-11-06 per musicmatch-ssl.xboxlive.com.
+    # Addresses seen on 2026-11-06 for musicmatch-ssl.xboxlive.com.
     assert forward.check_public(["184.25.52.9", "2a02:26f0:8d00:594::57"]) == ["184.25.52.9", "2a02:26f0:8d00:594::57"]
 
 
@@ -32,7 +32,7 @@ async def test_pinned_resolver_only_knows_its_name() -> None:
     assert [r["host"] for r in v4] == ["184.25.52.9"]
     both = await res.resolve(SERVICE_HOST, 443, socket.AF_UNSPEC)
     assert [r["family"] for r in both] == [socket.AF_INET, socket.AF_INET6]
-    with pytest.raises(OSError, match="conosce solo"):
+    with pytest.raises(OSError, match="only knows"):
         await res.resolve("www.example.com", 443)
 
 

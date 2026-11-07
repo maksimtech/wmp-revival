@@ -16,7 +16,7 @@ class FakeRunner:
 
     def __call__(self, cmd):
         self.calls.append(list(cmd))
-        return subprocess.CompletedProcess(list(cmd), self.returncode, stdout="", stderr="errore finto")
+        return subprocess.CompletedProcess(list(cmd), self.returncode, stdout="", stderr="fake error")
 
 
 def test_add_root_machine_and_user() -> None:
@@ -45,7 +45,7 @@ def test_failures_raise_with_the_command() -> None:
     assert not winsys.has_root("ABCD", "machine", FakeRunner(returncode=1))
 
 
-@pytest.mark.skipif(sys.platform != "win32", reason="solo Windows")
+@pytest.mark.skipif(sys.platform != "win32", reason="Windows only")
 def test_restrict_uses_icacls_for_current_user(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("USERNAME", "alice")
     monkeypatch.setenv("USERDOMAIN", "WORKSTATION")

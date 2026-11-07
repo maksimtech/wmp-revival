@@ -1,8 +1,8 @@
-"""Percorsi e costanti condivise.
+"""Shared paths and constants.
 
-Tutti i dati locali (PKI, catture, stato, backup di hosts) stanno fuori dal repository,
-in ``%LOCALAPPDATA%\\WMPRevival``. Le variabili d'ambiente ``WMPREVIVAL_HOME`` e
-``WMPREVIVAL_HOSTS`` servono ai test e a chi vuole provare senza toccare il sistema.
+All local data (PKI, captures, state, hosts backups) lives outside the repository, in
+``%LOCALAPPDATA%\\WMPRevival``. The ``WMPREVIVAL_HOME`` and ``WMPREVIVAL_HOSTS``
+environment variables are for tests and for trying things without touching the system.
 """
 
 from __future__ import annotations
@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 SERVICE_HOST = "musicmatch-ssl.xboxlive.com"
-"""L'unico nome a cui WMP chiede i metadati (da ``wmploc.dll.mui``)."""
+"""The only name WMP asks for metadata (from ``wmploc.dll.mui``)."""
 
 HOSTS_MARKER = "# wmprevival"
 

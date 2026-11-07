@@ -1,11 +1,11 @@
-"""Configurazione locale: ``%LOCALAPPDATA%\\WMPRevival\\config.toml`` (fuori dal repository).
+"""Local configuration: ``%LOCALAPPDATA%\\WMPRevival\\config.toml`` (outside the repository).
 
-Esempio::
+Example::
 
     [musicbrainz]
-    contact = "indirizzo@esempio.it"   # obbligatorio per l'API pubblica
-    # base_url = "http://localhost:5000/ws/2"   # mirror locale
-    # min_interval = 0                          # solo con un mirror
+    contact = "you@example.org"   # required for the public API
+    # base_url = "http://localhost:5000/ws/2"   # local mirror
+    # min_interval = 0                          # only with a mirror
 """
 
 from __future__ import annotations
@@ -20,7 +20,7 @@ from yarl import URL
 from wmprevival import __version__
 
 PUBLIC_MB = "https://musicbrainz.org/ws/2"
-PUBLIC_MIN_INTERVAL = 1.1  # regola: al massimo 1 richiesta al secondo, con un margine
+PUBLIC_MIN_INTERVAL = 1.1  # rule: at most 1 request per second, with a margin
 
 
 class ConfigError(ValueError):
@@ -46,11 +46,11 @@ class MusicBrainzConfig:
         if self.is_public:
             if not self.contact.strip():
                 raise ConfigError(
-                    "l'API pubblica di MusicBrainz vuole un contatto nello User-Agent: "
-                    "impostare [musicbrainz] contact in config.toml"
+                    "the public MusicBrainz API wants a contact in the User-Agent: "
+                    "set [musicbrainz] contact in config.toml"
                 )
             if self.min_interval < 1.0:
-                raise ConfigError("con l'API pubblica min_interval non può scendere sotto 1 secondo")
+                raise ConfigError("with the public API min_interval can't go below 1 second")
         return self
 
 
@@ -64,5 +64,5 @@ class Config:
         mb = data.get("musicbrainz", {})
         unknown = set(mb) - set(MusicBrainzConfig.__dataclass_fields__)
         if unknown:
-            raise ConfigError(f"chiavi sconosciute in [musicbrainz]: {', '.join(sorted(unknown))}")
+            raise ConfigError(f"unknown keys in [musicbrainz]: {', '.join(sorted(unknown))}")
         return cls(musicbrainz=MusicBrainzConfig(**mb))

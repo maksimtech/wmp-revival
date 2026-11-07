@@ -1,4 +1,4 @@
-"""Scelta del disco sulle risposte vere di MusicBrainz registrate il 2026-11-06."""
+"""Disc selection on real MusicBrainz responses recorded on 2026-11-06."""
 
 from __future__ import annotations
 
@@ -19,26 +19,26 @@ def _body(name: str) -> Any:
 
 
 def test_disc_ids_of_joy_and_cd14_are_not_attached() -> None:
-    assert _body("discid_12_tracce_joy.json") is None
-    assert _body("discid_14_tracce.json") is None
+    assert _body("discid_12_tracks_joy.json") is None
+    assert _body("discid_14_tracks.json") is None
 
 
 def test_joy_is_found_by_toc_search_and_confirmed_by_durations() -> None:
-    found = matching.candidates(JOY, _body("toc_12_tracce_joy.json")["releases"])
-    assert found, "la ricerca per TOC deve trovare Joy"
+    found = matching.candidates(JOY, _body("toc_12_tracks_joy.json")["releases"])
+    assert found, "the TOC search must find Joy"
     best = found[0]
-    assert (best.artist, best.title, best.country) == ("Giovanni Allevi", "Joy", "IT")  # confermato dall'utente
+    assert (best.artist, best.title, best.country) == ("Giovanni Allevi", "Joy", "IT")  # confirmed by the user
     assert best.accepted and not best.exact
     assert best.max_diff_ms is not None and best.max_diff_ms <= matching.MAX_TRACK_DIFF_MS
     assert {c.title for c in found if c.accepted} == {"Joy"}
 
 
 def test_cd14_noise_is_rejected_by_track_durations() -> None:
-    releases = _body("toc_14_tracce.json")["releases"]
+    releases = _body("toc_14_tracks.json")["releases"]
     found = matching.candidates(CD14, releases)
     accepted = [c for c in found if c.accepted]
     rejected = [c for c in found if not c.accepted]
-    # MusicBrainz propone molti dischi estranei: le durate traccia per traccia li scartano.
+    # MusicBrainz offers many unrelated discs: the track-by-track lengths reject them.
     assert len(rejected) >= 8
     assert all(c.max_diff_ms is None or c.max_diff_ms > matching.MAX_TRACK_DIFF_MS for c in rejected)
     assert len(accepted) <= 2
@@ -46,7 +46,7 @@ def test_cd14_noise_is_rejected_by_track_durations() -> None:
 
 
 def test_exact_disc_id_wins_over_durations() -> None:
-    releases = _body("toc_12_tracce_joy.json")["releases"]
+    releases = _body("toc_12_tracks_joy.json")["releases"]
     patched = json.loads(json.dumps(releases))
     target = patched[-1]
     for medium in target["media"]:
@@ -56,10 +56,10 @@ def test_exact_disc_id_wins_over_durations() -> None:
 
 
 def test_cd_stub_is_recognised() -> None:
-    stub = _body("discid_21_tracce_stub.json")
+    stub = _body("discid_21_tracks_stub.json")
     assert matching.is_cd_stub(stub)
     assert stub["title"] == "Miniclub Compilation" and stub["track-count"] == 21
-    assert not matching.is_cd_stub(_body("toc_12_tracce_joy.json"))
+    assert not matching.is_cd_stub(_body("toc_12_tracks_joy.json"))
     assert not matching.is_cd_stub(None)
 
 
