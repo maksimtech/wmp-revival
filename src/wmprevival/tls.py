@@ -3,8 +3,10 @@
 The name constraints limit the names in a leaf's SAN to ``musicmatch-ssl.xboxlive.com`` (and
 its subdomains, given how DNS name constraints work) and exclude every IP address. Windows
 does not apply them to a leaf without a SAN, whose host name is then taken from the CN
-(``tests/test_windows_trust.py``): the CA key could sign certificates valid for any site, so
-it must not leak. ECDSA P-256 keys: the real server uses ECC, so Schannel handles them.
+(``tests/test_windows_trust.py``): the CA key could sign certificates valid for any site. So
+the key is never saved: it signs the server certificate at setup and is dropped, and the CA
+lives just longer than that certificate. ECDSA P-256 keys: the real server uses ECC, so
+Schannel handles them.
 """
 
 from __future__ import annotations
@@ -14,15 +16,21 @@ import ipaddress
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Literal
 
 from cryptography import x509
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.x509.oid import ExtendedKeyUsageOID, NameOID
 
-CA_VALIDITY = dt.timedelta(days=3650)
 SERVER_VALIDITY = dt.timedelta(days=825)
+# The CA key is never kept, so the CA signs only the server certificate at setup: it has to
+# outlive that certificate and nothing more.
+CA_VALIDITY = SERVER_VALIDITY + dt.timedelta(days=30)
+EXPIRY_WARNING = dt.timedelta(days=30)
 _BACKDATE = dt.timedelta(hours=1)
+
+Expiry = Literal["valid", "expiring", "expired"]
 
 
 @dataclass(frozen=True)
@@ -34,21 +42,23 @@ class KeyPair:
 @dataclass(frozen=True)
 class PkiFiles:
     ca_cert: Path
-    ca_key: Path
     server_cert: Path
     server_key: Path
+    # Written by versions before 2026.11.1 and never read: setup deletes it.
+    ca_key: Path
 
     @classmethod
     def in_dir(cls, directory: Path) -> PkiFiles:
         return cls(
             ca_cert=directory / "ca.cer",
-            ca_key=directory / "ca.key",
             server_cert=directory / "server.pem",
             server_key=directory / "server.key",
+            ca_key=directory / "ca.key",
         )
 
-    def all_exist(self) -> bool:
-        return all(p.exists() for p in (self.ca_cert, self.ca_key, self.server_cert, self.server_key))
+    def ready(self) -> bool:
+        """The files the tool uses: the CA certificate and the server's certificate and key."""
+        return all(p.exists() for p in (self.ca_cert, self.server_cert, self.server_key))
 
 
 def _now() -> dt.datetime:
@@ -155,11 +165,12 @@ Restrict = Callable[[Path], None]
 
 
 def write_pki(files: PkiFiles, ca: KeyPair, server: KeyPair, restrict: Restrict) -> None:
-    """Writes the four files. ``restrict`` limits the permissions of the private keys."""
+    """Writes the CA certificate and the server's certificate and key; ``restrict`` limits the
+    permissions of the key. The CA key is not written: it has signed the server certificate and
+    is dropped with ``ca``, so nobody can sign anything else with this CA."""
     files.ca_cert.parent.mkdir(parents=True, exist_ok=True)
-    for path, data in ((files.ca_key, _key_pem(ca.key)), (files.server_key, _key_pem(server.key))):
-        path.write_bytes(data)
-        restrict(path)
+    files.server_key.write_bytes(_key_pem(server.key))
+    restrict(files.server_key)
     # The CA in DER (.cer): the format certutil and Windows open directly.
     files.ca_cert.write_bytes(ca.cert.public_bytes(serialization.Encoding.DER))
     files.server_cert.write_bytes(server.cert.public_bytes(serialization.Encoding.PEM))
@@ -171,3 +182,11 @@ def load_ca_cert(files: PkiFiles) -> x509.Certificate:
 
 def load_server_cert(files: PkiFiles) -> x509.Certificate:
     return x509.load_pem_x509_certificate(files.server_cert.read_bytes())
+
+
+def expiry(cert: x509.Certificate, now: dt.datetime | None = None) -> Expiry:
+    """``expired`` past ``not_valid_after``, ``expiring`` within ``EXPIRY_WARNING`` of it."""
+    left = cert.not_valid_after_utc - (now or _now())
+    if left <= dt.timedelta(0):
+        return "expired"
+    return "expiring" if left <= EXPIRY_WARNING else "valid"

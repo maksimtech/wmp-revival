@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+import datetime as dt
 import json
 import subprocess
 
 import pytest
 from typer.testing import CliRunner
 
-from wmprevival import cli, winsys
+from wmprevival import cli, tls, winsys
 from wmprevival.paths import HOSTS_MARKER, SERVICE_HOST, Paths
 from wmprevival.state import InstallState
 
@@ -158,6 +159,102 @@ def test_status_warns_when_wmp_moves_files(system, monkeypatch) -> None:
     result = runner.invoke(cli.app, ["status", "--port", "1"])
     assert result.exit_code == 0
     assert "AutoRename" in result.output and "AutoOrganize" in result.output
+
+
+@pytest.fixture
+def no_server(monkeypatch: pytest.MonkeyPatch) -> list[str]:
+    """record/serve get past their checks but don't listen: the coroutine is dropped."""
+    started: list[str] = []
+
+    def fake_run(coro) -> None:
+        started.append(coro.__qualname__)
+        coro.close()
+
+    monkeypatch.setattr("wmprevival.cli.asyncio.run", fake_run)
+    return started
+
+
+def _pki() -> tls.PkiFiles:
+    return tls.PkiFiles.in_dir(Paths.from_env().pki)
+
+
+def _write_config() -> None:
+    Paths.from_env().config_file.write_text('[musicbrainz]\ncontact = "x@example.org"\n', encoding="utf-8")
+
+
+def _setup_days_ago(days: int) -> None:
+    """setup as if run ``days`` days ago: the PKI is that old, and the CA is in the store."""
+    past = dt.datetime.now(dt.UTC) - dt.timedelta(days=days)
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(tls, "_now", lambda: past)
+        result = runner.invoke(cli.app, ["setup", "--yes"])
+    assert result.exit_code == 0, result.output
+
+
+def test_setup_keeps_no_ca_key_and_every_command_accepts_the_pki(system, no_server) -> None:
+    """Issue #2: the CA key isn't written, and nothing asks for it."""
+    assert runner.invoke(cli.app, ["setup", "--yes"]).exit_code == 0
+    files = _pki()
+    assert files.ready() and not files.ca_key.exists()
+
+    status = runner.invoke(cli.app, ["status", "--port", "1"])
+    assert status.exit_code == 0 and "missing" not in status.output and "old CA key" not in status.output
+    _write_config()
+    for command in ("record", "serve"):
+        result = runner.invoke(cli.app, [command, "--port", "1"])
+        assert result.exit_code == 0, result.output
+    assert len(no_server) == 2
+
+
+def test_setup_deletes_a_ca_key_left_by_an_older_version(system) -> None:
+    assert runner.invoke(cli.app, ["setup", "--yes"]).exit_code == 0
+    files = _pki()
+    files.ca_key.write_bytes(b"-----BEGIN PRIVATE KEY-----\nold\n")
+    thumb = InstallState.load(Paths.from_env().state_file).ca_thumbprint
+
+    status = runner.invoke(cli.app, ["status", "--port", "1"])
+    assert status.exit_code == 0 and "old CA key" in status.output
+    dry = runner.invoke(cli.app, ["setup", "--dry-run"])
+    assert "ca.key" in dry.output and files.ca_key.exists()
+
+    again = runner.invoke(cli.app, ["setup", "--yes"])
+    assert again.exit_code == 0, again.output
+    assert not files.ca_key.exists() and "ca.key" in again.output
+    assert "reuse the PKI" in again.output
+    assert InstallState.load(Paths.from_env().state_file).ca_thumbprint == thumb
+
+
+def test_an_expired_server_cert_is_reported_refused_and_replaced(system, no_server) -> None:
+    _setup_days_ago(tls.SERVER_VALIDITY.days + 2)
+    old = InstallState.load(Paths.from_env().state_file).ca_thumbprint
+
+    status = runner.invoke(cli.app, ["status", "--port", "1"])
+    assert status.exit_code == 0 and "expired" in status.output and "--rotate" in status.output
+    _write_config()
+    for command in ("record", "serve"):
+        result = runner.invoke(cli.app, [command, "--port", "1"])
+        assert result.exit_code == 1, result.output
+        text = " ".join(result.output.split())  # the console wraps at 80 columns
+        assert "expired" in text and "setup --rotate" in text
+    assert no_server == []
+
+    again = runner.invoke(cli.app, ["setup", "--yes"])
+    assert again.exit_code == 0, again.output
+    assert "expired" in again.output
+    new = InstallState.load(Paths.from_env().state_file).ca_thumbprint
+    assert new != old
+    assert {t for t, _s in system.roots} == {new}  # the expired CA left the store
+    assert tls.expiry(tls.load_server_cert(_pki())) == "valid"
+
+
+def test_a_server_cert_expiring_soon_is_only_a_warning(system, no_server) -> None:
+    _setup_days_ago(tls.SERVER_VALIDITY.days - 10)
+    status = runner.invoke(cli.app, ["status", "--port", "1"])
+    assert status.exit_code == 0 and "expires" in status.output and "expired" not in status.output
+    _write_config()
+    assert runner.invoke(cli.app, ["serve", "--port", "1"]).exit_code == 0
+    assert len(no_server) == 1
+    assert "reuse the PKI" in runner.invoke(cli.app, ["setup", "--yes"]).output
 
 
 def test_background_printer_never_blocks_the_caller() -> None:
