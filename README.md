@@ -42,9 +42,8 @@ To uninstall: `uv run wmprevival teardown --purge` from an elevated prompt.
 ## What `setup` does
 
 1. Creates in `%LOCALAPPDATA%\WMPRevival\pki` a local CA **restricted with name constraints**
-   to `musicmatch-ssl.xboxlive.com` (it cannot sign valid certificates for other names or
-   for IP addresses), and a server certificate for that name. The private keys are readable
-   by your user only.
+   to `musicmatch-ssl.xboxlive.com`, and a server certificate for that name. The private keys
+   are readable by your user only. See [How far the name constraints go](#how-far-the-name-constraints-go).
 2. Installs the CA among the "Trusted Root Certification Authorities" (of the computer, or of
    the user with `--store user`).
 3. Backs up the hosts file and adds `127.0.0.1` and `::1` for
@@ -52,6 +51,25 @@ To uninstall: `uv run wmprevival teardown --purge` from an elevated prompt.
 
 Every step is recorded in `state.json`, so `teardown` can undo even an interrupted `setup`.
 `setup --dry-run` shows what it would do without touching anything.
+
+### How far the name constraints go
+
+Measured with the Windows chain engine and its SSL policy, the same checks Schannel clients
+use ([tests/test_windows_trust.py](tests/test_windows_trust.py), run in CI also with the CA in
+the machine's Root store):
+
+| Certificate signed by the CA | Windows |
+| --- | --- |
+| SAN `musicmatch-ssl.xboxlive.com` or a subdomain | accepted |
+| SAN with another name, e.g. `example.com` | rejected (name constraint) |
+| SAN with an IP address | rejected (name constraint) |
+| **no SAN**, the name only in the subject CN, any site or IP | **accepted** |
+
+Without a SAN, Windows' SSL policy matches the host name against the CN, and the name
+constraints are not applied to the CN. So the constraints alone do not make the CA harmless:
+whoever has the CA's private key could sign certificates that Windows programs accept for any
+site. The CA key is kept in the `pki` folder, readable by your user only
+([issue #2](https://github.com/maksimtech/wmp-revival/issues/2)).
 
 ```powershell
 uv run wmprevival setup --dry-run

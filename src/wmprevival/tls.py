@@ -1,9 +1,10 @@
 """Local CA with name constraints and server certificate for the WMP service.
 
-The CA can sign certificates valid only for ``musicmatch-ssl.xboxlive.com`` (and its
-subdomains, given how DNS name constraints work) and for no IP address: even if its
-private key left this PC, it couldn't be used to intercept other sites. ECDSA P-256 keys:
-the real server uses ECC, so Schannel handles them.
+The name constraints limit the names in a leaf's SAN to ``musicmatch-ssl.xboxlive.com`` (and
+its subdomains, given how DNS name constraints work) and exclude every IP address. Windows
+does not apply them to a leaf without a SAN, whose host name is then taken from the CN
+(``tests/test_windows_trust.py``): the CA key could sign certificates valid for any site, so
+it must not leak. ECDSA P-256 keys: the real server uses ECC, so Schannel handles them.
 """
 
 from __future__ import annotations
