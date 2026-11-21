@@ -8,6 +8,9 @@ Versions: [CalVer](https://calver.org/) `YYYY.MM.PATCH`.
 
 ### Added
 
+- `tests/test_windows_trust.py`: the CA's name constraints judged by crypt32, with an
+  in-memory trust anchor everywhere on Windows and, in CI only, with the CA in the machine's
+  Root store as `setup` installs it.
 - **Phase 2, from WMP's TOC to the Disc ID** (`toc.py`), verified on the three real CDs.
 - **MusicBrainz lookups** through the public API: client limited to one request per second,
   User-Agent with a contact from `config.toml`, retries on 503/429 and an SQLite cache; the base
@@ -45,6 +48,11 @@ Versions: [CalVer](https://calver.org/) `YYYY.MM.PATCH`.
 
 ### Fixed
 
+- **An expired server certificate no longer fails silently**
+  ([#2](https://github.com/maksimtech/wmp-revival/issues/2)). `setup` used to reuse it,
+  printing a past "valid until" date, and WMP failed the TLS handshake without saying why.
+  Now `setup` replaces it (new CA, old one removed from the store), `serve` and `record` refuse
+  to start, and `status` shows it as expired, or as expiring in the last 30 days.
 - **The "Find album info" page of a CD no longer writes to other files.** It called
   `WriteNamesEx(2, "", …)` like Microsoft's page, and WMP applied the data to the previous
   request (the FLAC of *Arrival* became *Panic* from *Joy*). It now targets the CD by TOC
@@ -75,6 +83,19 @@ Versions: [CalVer](https://calver.org/) `YYYY.MM.PATCH`.
   `record` now print from a background thread.
 - `status` warns when WMP's "Rename music files…" or "Rearrange music…" options are on, since
   they make WMP rename and move files according to its library.
+
+### Security
+
+- **The name constraints are now tested on Windows, and they don't cover everything**
+  ([#1](https://github.com/maksimtech/wmp-revival/issues/1)). The Windows chain engine with
+  its SSL policy rejects leaves whose SAN names another site or an IP address, but accepts a
+  leaf without a SAN for any name in its CN. The README no longer says the CA "cannot sign
+  valid certificates for other names"; it shows what was measured.
+- **`setup` no longer saves the CA's private key**
+  ([#2](https://github.com/maksimtech/wmp-revival/issues/2)). The key signs the server
+  certificate and is dropped, so the CA can sign nothing else. A `ca.key` left by an older
+  version is deleted by the next `setup`, and `status` warns while it exists. The CA is now
+  valid for 30 days more than the server certificate (855 days) instead of 10 years.
 
 ## [2026.11.0] - 2026-11-06
 

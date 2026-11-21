@@ -34,3 +34,9 @@ jobs:
         run: uv run mypy src tests
       - name: Test
         run: uv run pytest -q
+      # The same name-constraint cases with the CA in the machine's Root store, as setup
+      # installs it. Changes the runner's store (the test removes the CA): CI only.
+      - name: Name constraints, machine root store
+        env:
+          WMPREVIVAL_TEST_MACHINE_ROOT: "1"
+        run: uv run pytest -q -rA tests/test_windows_trust.py

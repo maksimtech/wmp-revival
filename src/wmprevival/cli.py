@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import Any
 
 import typer
+from cryptography import x509
 from rich.console import Console
 from rich.table import Table
 
@@ -109,6 +110,28 @@ def _expiry(cert_date: dt.datetime) -> str:
     return cert_date.astimezone().strftime("%Y-%m-%d")
 
 
+def _server_cert_state(cert: x509.Certificate) -> str:
+    until = _expiry(cert.not_valid_after_utc)
+    state = tls.expiry(cert)
+    if state == "expired":
+        return f"[red]expired[/red] on {until}: wmprevival setup --rotate"
+    if state == "expiring":
+        return f"[yellow]expires[/yellow] on {until}: wmprevival setup --rotate"
+    return f"valid until {until}"
+
+
+def _usable_pki(paths: Paths) -> tls.PkiFiles:
+    """The PKI for record/serve: present, and with a server certificate WMP will accept."""
+    files = tls.PkiFiles.in_dir(paths.pki)
+    if not files.ready():
+        raise _fail("PKI missing: run 'wmprevival setup' first.")
+    server = tls.load_server_cert(files)
+    if tls.expiry(server) == "expired":
+        until = _expiry(server.not_valid_after_utc)
+        raise _fail(f"the server certificate expired on {until}: run 'wmprevival setup --rotate'.")
+    return files
+
+
 @app.command()
 def setup(
     store: StoreChoice = typer.Option(StoreChoice.machine, help="Root store: machine or current user."),
@@ -120,14 +143,21 @@ def setup(
     paths = Paths.from_env()
     files = tls.PkiFiles.in_dir(paths.pki)
     state = InstallState.load(paths.state_file)
-    create = rotate or not files.all_exist()
+    server_cert = tls.load_server_cert(files) if files.ready() else None
+    expired = server_cert is not None and tls.expiry(server_cert) == "expired"
+    create = rotate or server_cert is None or expired
 
     console.print("[bold]Plan[/bold]")
+    if expired and server_cert is not None:
+        console.print(f"  0. the server certificate expired on {_expiry(server_cert.not_valid_after_utc)}")
     if create:
         console.print(f"  1. create the CA (name constraints: {SERVICE_HOST} only) and certificate in {paths.pki}")
-    else:
-        until = _expiry(tls.load_server_cert(files).not_valid_after_utc)
+        console.print("     (the CA key signs the certificate and is not saved)")
+    elif server_cert is not None:
+        until = _expiry(server_cert.not_valid_after_utc)
         console.print(f"  1. reuse the PKI in {paths.pki} (certificate valid until {until})")
+    if files.ca_key.exists():
+        console.print("     and delete ca.key: an older version kept the CA key, nothing needs it")
     console.print(f"  2. install the CA among the trusted roots ({store.value})")
     console.print(f"  3. back up {paths.hosts_file} to {paths.backups}, then add:")
     for line in hosts.add_entries("", SERVICE_HOST).splitlines():
@@ -144,7 +174,11 @@ def setup(
     if create:
         ca = tls.create_ca(SERVICE_HOST)
         tls.write_pki(files, ca, tls.issue_server_cert(ca, SERVICE_HOST), winsys.restrict_to_current_user)
+        del ca  # the CA key goes no further: nothing else can be signed with this CA
         console.print("[green]✓[/green] PKI created")
+    if files.ca_key.exists():
+        files.ca_key.unlink()
+        console.print("[green]✓[/green] old CA key deleted (ca.key)")
 
     thumb = tls.thumbprint(tls.load_ca_cert(files))
     if state.ca_thumbprint and state.ca_store and (state.ca_thumbprint, state.ca_store) != (thumb, store.value):
@@ -238,15 +272,18 @@ def status(port: int = typer.Option(443, help="Recorder/server port.")) -> None:
     files = tls.PkiFiles.in_dir(paths.pki)
     table = Table(show_header=False, box=None)
 
-    if files.all_exist():
+    if files.ready():
         ca = tls.load_ca_cert(files)
         server = tls.load_server_cert(files)
         thumb = tls.thumbprint(ca)
-        table.add_row("PKI", f"{paths.pki}  (server valid until {_expiry(server.not_valid_after_utc)})")
+        table.add_row("PKI", str(paths.pki))
+        table.add_row("server cert", _server_cert_state(server))
         stores = [s for s in STORES if winsys.has_root(thumb, s)]
         table.add_row("CA in store", ", ".join(stores) if stores else "[yellow]no[/yellow]")
     else:
         table.add_row("PKI", "[yellow]missing[/yellow] (wmprevival setup)")
+    if files.ca_key.exists():
+        table.add_row("[yellow]old CA key[/yellow]", "ca.key is still there: wmprevival setup deletes it")
 
     text = hosts.read(paths.hosts_file)
     marked = hosts.marked_entries(text)
@@ -298,9 +335,7 @@ def record(
 ) -> None:
     """Record WMP's requests in %LOCALAPPDATA%\\WMPRevival\\captures."""
     paths = Paths.from_env()
-    files = tls.PkiFiles.in_dir(paths.pki)
-    if not files.all_exist():
-        raise _fail("PKI missing: run 'wmprevival setup' first.")
+    files = _usable_pki(paths)
     try:
         addresses = recorder.check_listen(listen, allow_lan)
     except ValueError as exc:
@@ -357,9 +392,7 @@ def serve(
 ) -> None:
     """Answer WMP with MusicBrainz data, recording every request and response."""
     paths = Paths.from_env()
-    files = tls.PkiFiles.in_dir(paths.pki)
-    if not files.all_exist():
-        raise _fail("PKI missing: run 'wmprevival setup' first.")
+    files = _usable_pki(paths)
     try:
         addresses = recorder.check_listen(listen, allow_lan)
         mb_config = Config.load(paths.config_file).musicbrainz.validate()

@@ -41,9 +41,12 @@ WMP (x86) ──HTTPS──> musicmatch-ssl.xboxlive.com
    agreements). Only MusicBrainz (core data CC0, supplementary data
    CC BY-NC-SA, personal use) and Discogs (API with a personal token).
 5. **The local CA must be restricted** with *name constraints* to
-   `musicmatch-ssl.xboxlive.com` only. The CA private key stays outside the
-   repo, with restricted permissions. The server listens **only on 127.0.0.1**
-   (or on the LAN IP if and when explicitly decided).
+   `musicmatch-ssl.xboxlive.com` only. Windows does not apply them to a leaf
+   without a SAN (the name in the CN is accepted for any site, see
+   `tests/test_windows_trust.py`), so **the CA private key is never saved**:
+   it signs the server certificate during `setup` and is dropped. The server's
+   key stays outside the repo, with restricted permissions. The server listens
+   **only on 127.0.0.1** (or on the LAN IP if and when explicitly decided).
 6. **Respect API limits**: public MusicBrainz 1 request/second with an
    identifying User-Agent (`WMPRevival/<version> ( <contact> )`, contact from
    configuration, no email in the code); Discogs ~60 requests/minute

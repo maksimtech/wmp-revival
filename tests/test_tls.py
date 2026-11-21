@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import datetime as dt
 import ipaddress
 import ssl
 
@@ -49,14 +50,39 @@ def test_thumbprint_is_windows_style(ca: tls.KeyPair) -> None:
     int(thumb, 16)
 
 
-def test_write_and_load_pki_restricts_private_keys(tmp_path, ca, server) -> None:
+def test_write_and_load_pki_keeps_no_ca_key(tmp_path, ca, server) -> None:
+    """The CA key is never written: once the server certificate exists nothing needs it (#2)."""
     files = tls.PkiFiles.in_dir(tmp_path / "pki")
     restricted = []
     tls.write_pki(files, ca, server, restrict=restricted.append)
-    assert files.all_exist()
-    assert restricted == [files.ca_key, files.server_key]
+    assert files.ready()
+    assert not files.ca_key.exists()
+    assert sorted(p.name for p in files.ca_cert.parent.iterdir()) == ["ca.cer", "server.key", "server.pem"]
+    assert restricted == [files.server_key]
     assert tls.load_ca_cert(files) == ca.cert
     assert tls.load_server_cert(files) == server.cert
+
+
+def test_pki_is_ready_without_a_ca_key(pki: tls.PkiFiles) -> None:
+    assert pki.ready()
+    pki.server_key.unlink()
+    assert not pki.ready()
+
+
+def test_ca_lives_just_longer_than_the_server_cert(ca: tls.KeyPair, server: tls.KeyPair) -> None:
+    """No key is kept, so the CA only has to outlive the one certificate it signed."""
+    assert ca.cert.not_valid_after_utc >= server.cert.not_valid_after_utc
+    margin = tls.CA_VALIDITY - tls.SERVER_VALIDITY
+    assert dt.timedelta(0) <= margin <= dt.timedelta(days=31)
+
+
+@pytest.mark.parametrize(
+    ("days_left", "expected"),
+    [(-1, "expired"), (0.5, "expiring"), (29, "expiring"), (31, "valid")],
+)
+def test_server_cert_expiry(server: tls.KeyPair, days_left: float, expected: str) -> None:
+    now = server.cert.not_valid_after_utc - dt.timedelta(days=days_left)
+    assert tls.expiry(server.cert, now) == expected
 
 
 async def _handshake(cert_files: tls.PkiFiles, client_ctx: ssl.SSLContext, hostname: str) -> None:
